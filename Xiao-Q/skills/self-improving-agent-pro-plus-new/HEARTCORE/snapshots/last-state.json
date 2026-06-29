@@ -1,0 +1,53 @@
+{
+  "timestamp": 1778831254915,
+  "results": [
+    {
+      "id": "identity",
+      "label": "CORE_IDENTITY.md",
+      "status": "PASS",
+      "detail": "verified"
+    },
+    {
+      "id": "skill",
+      "label": "SKILL.md",
+      "status": "PASS",
+      "detail": "verified"
+    },
+    {
+      "id": "version",
+      "label": "VERSION",
+      "status": "PASS",
+      "detail": "verified"
+    },
+    {
+      "id": "package",
+      "label": "package.json",
+      "status": "PASS",
+      "detail": "verified"
+    },
+    {
+      "id": "meaningful_memory",
+      "label": "src/core/memory/meaningful-memory.js",
+      "status": "PASS",
+      "detail": "verified"
+    },
+    {
+      "id": "consolidator",
+      "label": "src/core/memory/consolidator.js",
+      "status": "PASS",
+      "detail": "verified"
+    },
+    {
+      "id": "dream_loop",
+      "label": "src/core/dream/dream-loop.js",
+      "status": "PASS",
+      "detail": "verified"
+    },
+    {
+      "id": "reflexion",
+      "label": "src/core/self-evolution/reflexion.js",
+      "status": "PASS",
+      "detail": "verified"
+    }
+  ]
+}

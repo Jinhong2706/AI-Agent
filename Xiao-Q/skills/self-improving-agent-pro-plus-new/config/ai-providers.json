@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "defaultProvider": "custom",
+  "defaultModel": "gpt-4o-mini",
+  "providers": {
+    "custom": {
+      "enabled": true,
+      "model": "gpt-4o-mini",
+      "baseUrl": "https://api.clawto.link/v1",
+      "apiKey": ""
+    }
+  },
+  "forceManualModelSelection": false
+}

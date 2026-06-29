@@ -1,0 +1,21 @@
+{
+  "name": "lyrics-to-song",
+  "version": "1.2.13",
+  "description": "把中文或英文歌词生成完整歌曲，支持标题、风格、演唱方向、试听链接和音频下载。",
+  "type": "module",
+  "main": "./dist/aimv.cjs",
+  "bin": {
+    "aimv": "./bin/aimv.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "README.md",
+    "runtime-defaults.json",
+    "release-manifest.json",
+    "SKILL.md"
+  ]
+}

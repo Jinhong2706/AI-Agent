@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenClaw 智能自动化助手 - 演示仪表盘</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --bg: #0f172a;
+    --card: #1e293b;
+    --card-hover: #334155;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --gradient-start: #3b82f6;
+    --gradient-end: #8b5cf6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-brand { display: flex; align-items: center; gap: 12px; }
+  .header-logo {
+    width: 40px; height: 40px; background: rgba(255,255,255,0.2);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: bold;
+  }
+  .header h1 { font-size: 22px; font-weight: 600; }
+  .header p { font-size: 13px; opacity: 0.8; }
+  .header-status {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.15); padding: 8px 16px;
+    border-radius: 20px; font-size: 13px;
+  }
+  .status-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--success); animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+
+  /* Main Content */
+  .main { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+  /* Stats Row */
+  .stats-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--card); border-radius: 12px; padding: 20px;
+    border: 1px solid var(--border); transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .stat-card:hover { transform: translateY(-2px); border-color: var(--primary); }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%; border-radius: 4px 0 0 4px;
+  }
+  .stat-card.blue::before { background: var(--primary); }
+  .stat-card.green::before { background: var(--success); }
+  .stat-card.orange::before { background: var(--warning); }
+  .stat-card.purple::before { background: #8b5cf6; }
+  .stat-label { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+  .stat-value { font-size: 28px; font-weight: 700; }
+  .stat-trend {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px; margin-top: 8px; padding: 2px 8px; border-radius: 10px;
+  }
+  .trend-up { background: rgba(16,185,129,0.15); color: var(--success); }
+  .trend-down { background: rgba(239,68,68,0.15); color: var(--danger); }
+
+  /* Grid Layout */
+  .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+
+  /* Card */
+  .card {
+    background: var(--card); border-radius: 12px;
+    border: 1px solid var(--border); overflow: hidden;
+  }
+  .card-header {
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-title { font-size: 15px; font-weight: 600; }
+  .card-badge {
+    font-size: 11px; padding: 3px 10px; border-radius: 10px;
+    background: rgba(37,99,235,0.15); color: var(--primary);
+  }
+  .card-body { padding: 20px; }
+
+  /* Flow Canvas */
+  .flow-canvas {
+    min-height: 320px; position: relative;
+    background: linear-gradient(135deg, rgba(37,99,235,0.03), rgba(139,92,246,0.03));
+    border-radius: 8px; padding: 24px;
+  }
+  .flow-node {
+    position: absolute; background: var(--card-hover);
+    border: 2px solid var(--border); border-radius: 10px;
+    padding: 14px 20px; text-align: center; min-width: 130px;
+    cursor: pointer; transition: all 0.3s; z-index: 2;
+  }
+  .flow-node:hover { border-color: var(--primary); transform: scale(1.05); box-shadow: 0 8px 24px rgba(37,99,235,0.2); }
+  .flow-node.active { border-color: var(--success); box-shadow: 0 0 20px rgba(16,185,129,0.3); }
+  .flow-node-icon { font-size: 22px; margin-bottom: 6px; }
+  .flow-node-label { font-size: 12px; font-weight: 500; }
+  .flow-line {
+    position: absolute; height: 2px; background: var(--border);
+    transform-origin: left center; z-index: 1;
+  }
+  .flow-line.active { background: linear-gradient(90deg, var(--success), var(--primary)); }
+  .flow-line-arrow {
+    position: absolute; right: -1px; top: -4px;
+    width: 0; height: 0;
+    border-left: 8px solid var(--primary);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+  }
+
+  /* Progress Timeline */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 9px; top: 0;
+    width: 2px; height: 100%; background: var(--border);
+  }
+  .timeline-item {
+    position: relative; margin-bottom: 20px; padding-left: 8px;
+  }
+  .timeline-dot {
+    position: absolute; left: -25px; top: 4px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--card); border: 2px solid var(--border);
+  }
+  .timeline-item.done .timeline-dot { background: var(--success); border-color: var(--success); }
+  .timeline-item.running .timeline-dot {
+    background: var(--primary); border-color: var(--primary);
+    animation: pulse 1s infinite;
+  }
+  .timeline-item.pending .timeline-dot { background: var(--card); border-color: var(--border); }
+  .timeline-item-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .timeline-item-desc { font-size: 12px; color: var(--text-muted); }
+  .timeline-item-time { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Alert List */
+  .alert-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px; border-radius: 8px; margin-bottom: 10px;
+    background: rgba(255,255,255,0.02); border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .alert-item:hover { background: rgba(255,255,255,0.05); border-color: var(--border); }
+  .alert-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .alert-critical .alert-icon { background: rgba(239,68,68,0.15); }
+  .alert-error .alert-icon { background: rgba(245,158,11,0.15); }
+  .alert-info .alert-icon { background: rgba(37,99,235,0.15); }
+  .alert-success .alert-icon { background: rgba(16,185,129,0.15); }
+  .alert-content { flex: 1; min-width: 0; }
+  .alert-title { font-size: 13px; font-weight: 500; }
+  .alert-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .alert-time { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+
+  /* Data Table Mini */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th {
+    text-align: left; padding: 10px 12px; background: rgba(255,255,255,0.03);
+    font-weight: 500; color: var(--text-muted); font-size: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .tag {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 500;
+  }
+  .tag-success { background: rgba(16,185,129,0.15); color: var(--success); }
+  .tag-running { background: rgba(37,99,235,0.15); color: var(--primary); }
+  .tag-pending { background: rgba(148,163,184,0.15); color: var(--text-muted); }
+  .tag-error { background: rgba(239,68,68,0.15); color: var(--danger); }
+
+  /* Bottom Grid */
+  .bottom-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+
+  /* Efficiency Chart Placeholder */
+  .chart-area {
+    height: 200px; display: flex; align-items: flex-end;
+    gap: 12px; padding: 16px 0;
+  }
+  .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .bar-wrapper { width: 100%; height: 150px; display: flex; align-items: flex-end; gap: 4px; }
+  .bar {
+    border-radius: 4px 4px 0 0; transition: all 0.5s;
+    min-height: 4px;
+  }
+  .bar-manual { 
+    background: linear-gradient(180deg, #f97316, #ea580c); 
+    flex: 1;
+  }
+  .bar-auto {
+    background: linear-gradient(180deg, var(--success), #059669);
+    flex: 1;
+  }
+  .bar-label { font-size: 11px; color: var(--text-muted); text-align: center; }
+  .bar-value { font-size: 11px; font-weight: 600; }
+
+  /* Legend */
+  .legend { display: flex; gap: 20px; justify-content: center; margin-top: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .grid { grid-template-columns: 1fr; }
+    .bottom-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .stats-row { grid-template-columns: 1fr; }
+    .header { flex-direction: column; gap: 12px; text-align: center; }
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in { animation: fadeInUp 0.5s ease-out forwards; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-brand">
+    <div class="header-logo">OC</div>
+    <div>
+      <h1>OpenClaw 智能自动化助手</h1>
+      <p>销售演示版 · 实时监控仪表盘</p>
+    </div>
+  </div>
+  <div class="header-status">
+    <span class="status-dot"></span>
+    所有系统运行正常
+  </div>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- Stats Row -->
+  <div class="stats-row animate-in" style="animation-delay: 0.1s;">
+    <div class="stat-card blue">
+      <div class="stat-label">今日执行流程数</div>
+      <div class="stat-value">128</div>
+      <div class="stat-trend trend-up">↑ 12.5% 较昨日</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">自动化节省工时</div>
+      <div class="stat-value">86.5<span style="font-size:16px;color:var(--text-muted)"> 小时</span></div>
+      <div class="stat-trend trend-up">↑ 等效 10.8 人天</div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-label">数据同步记录</div>
+      <div class="stat-value">2.4<span style="font-size:16px;color:var(--text-muted)"> 万条</span></div>
+      <div class="stat-trend trend-up">↑ 准确率 99.97%</div>
+    </div>
+    <div class="stat-card purple">
+      <div class="stat-label">异常拦截次数</div>
+      <div class="stat-value">7</div>
+      <div class="stat-trend trend-down">↓ 较昨日减少 3 次</div>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="grid">
+
+    <!-- Flow Canvas -->
+    <div class="card animate-in" style="animation-delay: 0.2s;">
+      <div class="card-header">
+        <span class="card-title">🔄 自动化流程 — 销售日报汇总</span>
+        <span class="card-badge">运行中</span>
+      </div>
+      <div class="card-body">
+        <div class="flow-canvas" id="flowCanvas">
+          <!-- Node 1: 数据源 -->
+          <div class="flow-node done" style="left: 20px; top: 120px;">
+            <div class="flow-node-icon">📥</div>
+            <div class="flow-node-label">CRM数据拉取</div>
+          </div>
+          <!-- Line 1->2 -->
+          <div class="flow-line active" style="left: 155px; top: 145px; width: 80px;"></div>
+          <!-- Node 2: 清洗 -->
+          <div class="flow-node done" style="left: 240px; top: 120px;">
+            <div class="flow-node-icon">🧹</div>
+            <div class="flow-node-label">数据清洗</div>
+          </div>
+          <!-- Line 2->3 -->
+          <div class="flow-line active" style="left: 375px; top: 145px; width: 80px;"></div>
+          <!-- Node 3: 计算 -->
+          <div class="flow-node active" style="left: 460px; top: 120px;">
+            <div class="flow-node-icon">📊</div>
+            <div class="flow-node-label">聚合计算</div>
+          </div>
+          <!-- Line 3->4 -->
+          <div class="flow-line" style="left: 595px; top: 145px; width: 80px;"></div>
+          <!-- Node 4: 报表 -->
+          <div class="flow-node" style="left: 680px; top: 120px;">
+            <div class="flow-node-icon">📋</div>
+            <div class="flow-node-label">生成报表</div>
+          </div>
+          <!-- Line 4->5 -->
+          <div class="flow-line" style="left: 815px; top: 145px; width: 60px;"></div>
+          <!-- Node 5: 推送 -->
+          <div class="flow-node" style="left: 880px; top: 120px;">
+            <div class="flow-node-icon">📤</div>
+            <div class="flow-node-label">推送通知</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Execution Timeline -->
+    <div class="card animate-in" style="animation-delay: 0.3s;">
+      <div class="card-header">
+        <span class="card-title">⚡ 执行进度</span>
+        <span class="card-badge" style="background:rgba(16,185,129,0.15);color:var(--success);">60%</span>
+      </div>
+      <div class="card-body">
+        <div class="timeline">
+          <div class="timeline-item done">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-title">✅ CRM 数据拉取</div>
+            <div class="timeline-item-desc">拉取 1,247 条销售记录</div>
+            <div class="timeline-item-time">08:00:02 · 耗时 1.2s</div>
+          </div>
+          <div class="timeline-item done">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-title">✅ 数据清洗与去重</div>
+            <div class="timeline-item-desc">清洗完成，去除 23 条重复</div>
+            <div class="timeline-item-time">08:00:04 · 耗时 2.1s</div>
+          </div>
+          <div class="timeline-item running">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-title">🔄 聚合计算中...</div>
+            <div class="timeline-item-desc">按区域/产品线分组统计中</div>
+            <div class="timeline-item-time">08:00:06 · 执行中...</div>
+          </div>
+          <div class="timeline-item pending">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-title">⏳ 生成可视化报表</div>
+            <div class="timeline-item-desc">等待上游完成</div>
+          </div>
+          <div class="timeline-item pending">
+            <div class="timeline-dot"></div>
+            <div class="timeline-item-title">⏳ 推送至企微群</div>
+            <div class="timeline-item-desc">等待上游完成</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Grid -->
+  <div class="bottom-grid">
+
+    <!-- Recent Runs Table -->
+    <div class="card animate-in" style="animation-delay: 0.4s;">
+      <div class="card-header">
+        <span class="card-title">📋 近期执行记录</span>
+      </div>
+      <div class="card-body" style="padding: 0; overflow-x: auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>流程名称</th>
+              <th>状态</th>
+              <th>耗时</th>
+              <th>处理量</th>
+              <th>触发时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>销售日报自动汇总</td>
+              <td><span class="tag tag-running">运行中</span></td>
+              <td>--</td>
+              <td>--</td>
+              <td>08:00:00</td>
+            </tr>
+            <tr>
+              <td>库存同步（全渠道）</td>
+              <td><span class="tag tag-success">成功</span></td>
+              <td>18.3s</td>
+              <td>3,892 条</td>
+              <td>07:30:00</td>
+            </tr>
+            <tr>
+              <td>财务月报生成</td>
+              <td><span class="tag tag-success">成功</span></td>
+              <td>45.6s</td>
+              <td>12,450 条</td>
+              <td>06:00:00</td>
+            </tr>
+            <tr>
+              <td>客服工单分配</td>
+              <td><span class="tag tag-success">成功</span></td>
+              <td>3.2s</td>
+              <td>87 条</td>
+              <td>实时触发</td>
+            </tr>
+            <tr>
+              <td>ERP数据备份</td>
+              <td><span class="tag tag-error">异常</span></td>
+              <td>超时</td>
+              <td>0 条</td>
+              <td>02:00:00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Alerts + Efficiency -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <!-- Alerts -->
+      <div class="card animate-in" style="animation-delay: 0.5s;">
+        <div class="card-header">
+          <span class="card-title">🔔 最新告警</span>
+          <span class="card-badge">3 条未读</span>
+        </div>
+        <div class="card-body" style="padding: 12px 16px;">
+          <div class="alert-item alert-error">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-content">
+              <div class="alert-title">ERP数据备份超时</div>
+              <div class="alert-desc">连接超时，已自动重试 3 次</div>
+            </div>
+            <div class="alert-time">02:15</div>
+          </div>
+          <div class="alert-item alert-info">
+            <div class="alert-icon">ℹ️</div>
+            <div class="alert-content">
+              <div class="alert-title">库存预警：SKU-10234 低于安全线</div>
+              <div class="alert-desc">当前库存 12 件（安全线 50）</div>
+            </div>
+            <div class="alert-time">07:45</div>
+          </div>
+          <div class="alert-item alert-success">
+            <div class="alert-icon">✅</div>
+            <div class="alert-content">
+              <div class="alert-title">财务月报已发送</div>
+              <div class="alert-desc">已推送至 5 个收件人</div>
+            </div>
+            <div class="alert-time">06:01</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Efficiency Comparison -->
+  <div class="card animate-in" style="margin-top: 16px; animation-delay: 0.6s;">
+    <div class="card-header">
+      <span class="card-title">📈 效率对比：自动化 vs 人工</span>
+    </div>
+    <div class="card-body">
+      <div class="chart-area">
+        <div class="bar-group">
+          <div class="bar-wrapper">
+            <div class="bar bar-manual" style="height: 140px;"></div>
+            <div class="bar bar-auto" style="height: 8px;"></div>
+          </div>
+          <div class="bar-label">销售日报</div>
+          <div class="bar-value" style="color:#f97316">3h → 3min</div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-wrapper">
+            <div class="bar bar-manual" style="height: 130px;"></div>
+            <div class="bar bar-auto" style="height: 12px;"></div>
+          </div>
+          <div class="bar-label">库存同步</div>
+          <div class="bar-value" style="color:#f97316">2h → 18s</div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-wrapper">
+            <div class="bar bar-manual" style="height: 148px;"></div>
+            <div class="bar bar-auto" style="height: 18px;"></div>
+          </div>
+          <div class="bar-label">财务月报</div>
+          <div class="bar-value" style="color:#f97316">5d → 45s</div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-wrapper">
+            <div class="bar bar-manual" style="height: 90px;"></div>
+            <div class="bar bar-auto" style="height: 5px;"></div>
+          </div>
+          <div class="bar-label">工单分配</div>
+          <div class="bar-value" style="color:#f97316">1h → 3s</div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-wrapper">
+            <div class="bar bar-manual" style="height: 110px;"></div>
+            <div class="bar bar-auto" style="height: 10px;"></div>
+          </div>
+          <div class="bar-label">考勤核算</div>
+          <div class="bar-value" style="color:#f97316">8h → 2min</div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-wrapper">
+            <div class="bar bar-manual" style="height: 100px;"></div>
+            <div class="bar bar-auto" style="height: 6px;"></div>
+          </div>
+          <div class="bar-label">发票校验</div>
+          <div class="bar-value" style="color:#f97316">4h → 30s</div>
+        </div>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:linear-gradient(180deg,#f97316,#ea580c)"></div> 人工操作</div>
+        <div class="legend-item"><div class="legend-dot" style="background:linear-gradient(180deg,#10b981,#059669)"></div> OpenClaw 自动化</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Simple animation for flow execution simulation
+  setTimeout(() => {
+    const nodes = document.querySelectorAll('.flow-node');
+    const lines = document.querySelectorAll('.flow-line');
+    
+    let step = 2;
+    const interval = setInterval(() => {
+      if (step >= nodes.length) {
+        clearInterval(interval);
+        return;
+      }
+      
+      // Mark previous line as active
+      if (step > 0 && lines[step - 1]) {
+        lines[step - 1].classList.add('active');
+      }
+      
+      // Mark current node as active/done
+      nodes[step].classList.remove('pending');
+      nodes[step].classList.add(step === nodes.length - 1 ? 'done' : 'active');
+      
+      // Previous node becomes done
+      if (step > 0) {
+        nodes[step - 1].classList.remove('active');
+        nodes[step - 1].classList.add('done');
+      }
+      
+      step++;
+    }, 2000);
+  }, 3000);
+</script>
+
+</body>
+</html>

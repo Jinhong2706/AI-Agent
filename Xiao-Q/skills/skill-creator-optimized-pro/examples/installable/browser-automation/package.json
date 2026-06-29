@@ -1,0 +1,25 @@
+{
+  "name": "browser-automation-skill",
+  "version": "0.1.0",
+  "description": "浏览器自动化最小示例 Skill，覆盖网页定位、表单、截图、网络请求、登录权限、失败降级与交付契约。",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "main": "SKILL.md",
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "package.json"
+  ],
+  "keywords": [
+    "skill",
+    "browser",
+    "automation",
+    "web",
+    "screenshot",
+    "network"
+  ],
+  "scripts": {
+    "check": "node -e \"const fs=require('fs'); const s=fs.readFileSync('SKILL.md','utf8'); if(!s.startsWith('---\\n')) throw new Error('missing yaml front matter'); console.log('ok');\""
+  }
+}

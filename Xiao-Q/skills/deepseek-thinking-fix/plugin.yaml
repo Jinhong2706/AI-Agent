@@ -1,0 +1,32 @@
+name: deepseek-thinking-fix
+version: "2.2.0"
+description: >
+  DeepSeek V4 Flash/Pro thinking mode 400 error fix.
+  All fixes through Hermes plugin hook system (register()).
+  No monkey-patch, no auto file scanning.
+  v2.2 removes monkey-patch entirely, removes hardcoded paths,
+  DB migration requires explicit user-specified db_path.
+  v2.1 added: auto backup, dry-run, audit log for DB operations.
+author: Hermes-DeepSeek-Fix Team
+provides_hooks:
+  - before_api_call
+  - after_session_load  
+  - before_session_store
+provides_tools:
+  - deepseek_fix_status
+  - deepseek_fix_migrate
+requires:
+  hermes: ">=0.11.0"
+platforms:
+  - cli
+  - gateway
+  - cron
+tags:
+  - deepseek
+  - v4
+  - thinking
+  - reasoning_content
+  - 400-fix
+  - deepseek-thinking-fix
+homepage: https://github.com/hermes-deepseek-fix/hermes-deepseek-fix
+license: MIT

@@ -1,0 +1,110 @@
+{
+    "name": "stock-lianghuafenxi-tdx",
+    "version": "1.0.0",
+    "description": "双趋势共振量化选股系统 - 基于GMMA+一目均衡图+ADX+流动性过滤，输出S/A/B/C四级信号与动态止损，支持通达信本地数据扫描",
+    "author": "Stock Analysis Team",
+    "license": "MIT",
+    "python_version": ">=3.8",
+    "dependencies": [
+        "pandas>=1.5.0",
+        "numpy>=1.23.0"
+    ],
+    "skills": [
+        {
+            "name": "stock-lianghuafenxi-tdx",
+            "handler": "skill_handler.skill_handler",
+            "description": "双趋势共振量化选股系统，基于通达信本地数据或CSV数据进行GMMA+Ichimoku+ADX多因子选股分析",
+            "actions": [
+                {
+                    "name": "analyze",
+                    "description": "分析单只股票，返回信号等级、评分、止损位等",
+                    "parameters": {
+                        "code": {
+                            "type": "string",
+                            "required": true,
+                            "description": "股票代码，如 600519"
+                        },
+                        "tdx_path": {
+                            "type": "string",
+                            "required": false,
+                            "description": "通达信安装路径，如 D:\\new_tdx"
+                        },
+                        "data_dir": {
+                            "type": "string",
+                            "required": false,
+                            "description": "CSV数据目录路径"
+                        },
+                        "liquidity": {
+                            "type": "number",
+                            "required": false,
+                            "description": "流动性门槛（元），默认1亿"
+                        },
+                        "adx_threshold": {
+                            "type": "number",
+                            "required": false,
+                            "description": "ADX趋势强度门槛，默认20"
+                        }
+                    }
+                },
+                {
+                    "name": "batch_analyze",
+                    "description": "批量分析多只股票",
+                    "parameters": {
+                        "codes": {
+                            "type": "array",
+                            "required": true,
+                            "description": "股票代码列表，如 ['600519', '000858']"
+                        },
+                        "tdx_path": {
+                            "type": "string",
+                            "required": false,
+                            "description": "通达信安装路径"
+                        },
+                        "data_dir": {
+                            "type": "string",
+                            "required": false,
+                            "description": "CSV数据目录路径"
+                        }
+                    }
+                },
+                {
+                    "name": "scan_tdx",
+                    "description": "扫描通达信本地数据目录，全市场选股",
+                    "parameters": {
+                        "tdx_path": {
+                            "type": "string",
+                            "required": false,
+                            "description": "通达信安装路径，如 D:\\new_tdx"
+                        },
+                        "max_count": {
+                            "type": "integer",
+                            "required": false,
+                            "description": "最大扫描数量，0=全部"
+                        }
+                    }
+                },
+                {
+                    "name": "scan_csv",
+                    "description": "扫描CSV数据目录进行选股",
+                    "parameters": {
+                        "data_dir": {
+                            "type": "string",
+                            "required": false,
+                            "description": "CSV数据目录路径"
+                        }
+                    }
+                },
+                {
+                    "name": "test",
+                    "description": "使用模拟数据测试选股系统",
+                    "parameters": {}
+                }
+            ]
+        }
+    ],
+    "configuration": {
+        "default_liquidity": 100000000,
+        "default_adx_threshold": 20,
+        "min_kline_days": 60
+    }
+}

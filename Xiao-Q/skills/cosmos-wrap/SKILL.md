@@ -1,0 +1,14 @@
+# Cosmos Wrap
+
+*Author: q15004040209-creator*
+
+## Description
+NVIDIA Cosmos physical AI wrapper - NVIDIA????AI??????,???/????????
+
+## Version
+1.0.0
+
+## Tags
+- wrap
+- github
+- automation

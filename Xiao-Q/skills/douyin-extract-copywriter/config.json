@@ -1,0 +1,30 @@
+{
+  "output_dir": "",
+  "ffmpeg_path": "",
+
+  "filter": {
+    "rules": {
+      "min_digg": 20000,
+      "min_comment": 5000,
+      "min_share": 5000,
+      "logic": "digg AND (comment OR share)"
+    },
+    "process_count": 1,
+    "candidates": []
+  },
+
+  "browser": {
+    "wait_timeout": 10,
+    "api_pattern": "aweme/v1/web/aweme/detail/"
+  },
+
+  "download": {
+    "timeout": 90,
+    "chunk_size": 65536
+  },
+
+  "subtitle": {
+    "method": "api_first",
+    "max_length": 200
+  }
+}

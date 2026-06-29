@@ -1,0 +1,33 @@
+{
+  "name": "meeting-minutes-zh",
+  "displayName": "智能会议纪要(飞书/腾讯会议/钉钉)",
+  "version": "1.0.0",
+  "description": "把口语化会议讨论压成结构化纪要——决议、行动项、负责人、deadline、风险点五要素。支持腾讯会议/飞书会议/钉钉的不同纪要格式。",
+  "author": "ikun",
+  "license": "MIT",
+  "category": "productivity",
+  "tags": [
+    "会议纪要",
+    "飞书",
+    "腾讯会议",
+    "钉钉",
+    "结构化"
+  ],
+  "keywords": [
+    "会议纪要",
+    "MOM",
+    "Action Items",
+    "飞书会议",
+    "腾讯会议",
+    "钉钉会议",
+    "纪要模板"
+  ],
+  "platforms": [
+    "openclaw",
+    "skillhub",
+    "claude-code",
+    "cursor"
+  ],
+  "language": "zh-CN",
+  "minAgentVersion": "0.1.0"
+}

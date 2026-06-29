@@ -1,0 +1,7 @@
+interface:
+  display_name: "Stock Catalyst Hunter"
+  short_description: "Map news events to A-share themes and stocks"
+  default_prompt: "Use $stock-catalyst-hunter to analyze which A-share themes and stocks may react to this news, rumor, event, or screenshot."
+
+policy:
+  allow_implicit_invocation: true

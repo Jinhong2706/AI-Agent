@@ -1,0 +1,66 @@
+# .consistency.yml — SCK 自审规则
+# 让 SCK 跑 SCK 自己。覆盖版本同步、文件完整性、文档一致性。
+# 这份文件本身就是 SCK 自审机制的入口。
+
+rules:
+  # 规则 1：CHANGELOG 最新条目版本 = SKILL.md frontmatter.version
+  - id: changelog-version-sync
+    type: cross_reference
+    description: "CHANGELOG 最新条目版本号与 SKILL.md frontmatter.version 一致"
+    source_file: SKILL.md
+    source_pattern: '^version:\s*["\']?([\d.]+)'
+    source_group: 1
+    target_file: CHANGELOG.md
+    target_pattern: '^##\s*\[([\d.]+)\]'
+    target_group: 1
+    severity: error
+
+  # 规则 2：plugin.json version = SKILL.md frontmatter.version
+  - id: plugin-json-version-sync
+    type: cross_reference
+    description: "plugin.json 的 version 字段与 SKILL.md frontmatter.version 一致"
+    source_file: SKILL.md
+    source_pattern: '^version:\s*["\']?([\d.]+)'
+    source_group: 1
+    target_file: plugin.json
+    target_pattern: '"version":\s*"([\d.]+)"'
+    target_group: 1
+    severity: error
+
+  # 规则 3：引擎鲁棒性自测——用 `^` 锚定 pattern（捕获今天发现的 re.MULTILINE latent bug）
+  - id: engine-anchored-pattern
+    type: cross_reference
+    description: "测试 cross_reference 引擎对 ^ 锚定 pattern 的处理（覆盖 re.MULTILINE 潜在 bug）"
+    source_file: SKILL.md
+    source_pattern: '^name:\s*(\S+)'
+    source_group: 1
+    target_file: README.md
+    target_pattern: 'skill-creator-king'
+    target_group: 1
+    severity: warning
+
+  # ── 内容同步规则（参考 research-writing 的 rule-count-sync / mode-count-sync 模式）──
+
+  # 规则 4：SKILL.md 维度数（如"14维"）与 README.md 声明一致
+  - id: dimension-readme-sync
+    type: cross_reference
+    description: "质量审计维度数在 SKILL.md 与 README.md 之间一致"
+    source_file: SKILL.md
+    source_pattern: '(\d+)\s*维[度质量]'
+    source_group: 1
+    target_file: README.md
+    target_pattern: '(\d+)维度'
+    target_group: 1
+    severity: error
+
+  # 规则 5：SKILL.md 维度数与 DESIGN.md 声明一致
+  - id: dimension-design-sync
+    type: cross_reference
+    description: "质量审计维度数在 SKILL.md 与 DESIGN.md 之间一致"
+    source_file: SKILL.md
+    source_pattern: '(\d+)\s*维[度质量]'
+    source_group: 1
+    target_file: DESIGN.md
+    target_pattern: '(\d+)维度'
+    target_group: 1
+    severity: error

@@ -1,0 +1,64 @@
+{
+    "name": "design-to-h5",
+    "title": "多源设计H5生成器",
+    "version": "1.0.0",
+    "description": "参考页面布局截图、文案文档（PPT/txt/doc/pdf）、标注文案图片素材，生成带动画的响应式H5网页",
+    "summary": "支持多种输入源生成带动画效果的响应式H5网页，自动实现移动端+PC端自适应，支持淡入淡出、文字呼吸等动效",
+    "author": "WorkBuddy",
+    "tags": [
+        "H5",
+        "响应式",
+        "多源输入",
+        "截图识别",
+        "文档解析",
+        "图片素材",
+        "动效",
+        "PC端",
+        "移动端",
+        "淡入淡出",
+        "呼吸效果",
+        "设计还原"
+    ],
+    "triggers": [
+        "设计转H5",
+        "截图转网页",
+        "文档生成H5",
+        "图片标注转H5",
+        "参考图生成网页",
+        "多源素材H5",
+        "设计稿还原",
+        "平面设计H5",
+        "PSD转H5",
+        "设计图转代码"
+    ],
+    "allowedFileTypes": [
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".ppt",
+        ".pptx",
+        ".txt",
+        ".doc",
+        ".docx",
+        ".pdf"
+    ],
+    "outputFormat": [
+        "html",
+        "css",
+        "js"
+    ],
+    "capabilities": [
+        "多源输入解析",
+        "布局识别",
+        "文案提取",
+        "响应式设计",
+        "动画效果",
+        "分享功能"
+    ],
+    "dependencies": {
+        "python": ["python-pptx", "python-docx", "PyPDF2", "Pillow"],
+        "node": ["serve"]
+    },
+    "created": "2026-04-08",
+    "updated": "2026-04-08"
+}

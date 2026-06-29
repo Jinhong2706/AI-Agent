@@ -1,0 +1,98 @@
+// RSDKv5 Moving Platform Template
+// Object Name: MovingPlatform
+// Type ID: [TYPE_ID]
+// Description: Platform that moves along a path
+
+Create:
+    // Starting position (saved for range checking)
+    self.startX = self.position.x
+    self.startY = self.position.y
+    
+    // Movement parameters
+    self.moveSpeed = 2        // Pixels per frame
+    self.moveDistance = 128    // Max travel distance
+    self.movingForward = true  // Direction flag
+    self.moveType = 0          // 0=horizontal, 1=vertical, 2=circular
+    
+    // Platform properties
+    self.collisionMode = 0      // 0=top only, 1=all sides
+    self.drawOrder = 3
+    self.active = true
+    self.visible = true
+    
+    // Collision
+    self.hitbox[0].left = -48
+    self.hitbox[0].top = -16
+    self.hitbox[0].right = 48
+    self.hitbox[0].bottom = 0
+    
+    // Animation
+    self.spriteIndex = [SPRITE_INDEX]
+    self.animIndex = 0
+    
+    return
+
+Update:
+    // Movement logic based on moveType
+    if self.moveType == 0
+        // Horizontal movement
+        if self.movingForward
+            self.position.x += self.moveSpeed
+            if self.position.x >= self.startX + self.moveDistance
+                self.movingForward = false
+            endif
+        else
+            self.position.x -= self.moveSpeed
+            if self.position.x <= self.startX
+                self.movingForward = true
+            endif
+        endif
+        
+    elif self.moveType == 1
+        // Vertical movement
+        if self.movingForward
+            self.position.y += self.moveSpeed
+            if self.position.y >= self.startY + self.moveDistance
+                self.movingForward = false
+            endif
+        else
+            self.position.y -= self.moveSpeed
+            if self.position.y <= self.startY
+                self.movingForward = true
+            endif
+        endif
+        
+    elif self.moveType == 2
+        // Circular movement
+        self.timer = (self.timer + 1) % 360
+        angle = self.timer
+        self.position.x = self.startX + cos(angle) * self.moveDistance
+        self.position.y = self.startY + sin(angle) * self.moveDistance
+    endif
+    
+    // Check for player standing on platform
+    player = GetPlayer()
+    if player
+        // Simple check: is player on top of platform?
+        playerBottom = player.position.y + player.hitbox[0].bottom
+        platformTop = self.position.y + self.hitbox[0].top
+        
+        if abs(playerBottom - platformTop) < 4
+            if player.velocity.y >= 0  // Player falling or standing
+                // Move player with platform
+                player.position.x += self.velocity.x
+                player.position.y = platformTop - player.hitbox[0].bottom
+                player.onGround = true
+            endif
+        endif
+    endif
+    
+    Animate()
+    return
+
+Draw:
+    DrawSprite(self.spriteIndex, self.animIndex, self.position.x, self.position.y, 0, 0)
+    return
+
+StageLoad:
+    return

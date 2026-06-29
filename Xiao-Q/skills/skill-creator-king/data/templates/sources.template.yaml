@@ -1,0 +1,13 @@
+# {{SKILL_NAME}} 数据源配置
+
+sources:
+  {{SOURCE_1_NAME}}:
+    name: "{{SOURCE_1_LABEL}}"
+    type: {{SOURCE_1_TYPE}}
+    primary: {{SOURCE_1_PRIMARY}}
+    description: "{{SOURCE_1_DESC}}"
+    format: "{{SOURCE_1_FORMAT}}"
+    cache_ttl: {{SOURCE_1_CACHE}}
+    update_trigger: "{{SOURCE_1_UPDATE}}"
+    forbidden:
+      - "{{SOURCE_1_FORBIDDEN}}"

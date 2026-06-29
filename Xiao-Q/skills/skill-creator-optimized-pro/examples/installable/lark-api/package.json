@@ -1,0 +1,23 @@
+{
+  "name": "lark-api",
+  "version": "0.1.0",
+  "description": "最小可安装的飞书 API 类 Skill 示例包，强调 docs v2 版本约束、权限 token 边界、异常处理与交付契约。",
+  "private": true,
+  "type": "module",
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "check": "node -e \"const fs=require('fs'); const path='SKILL.md'; const s=fs.readFileSync(path,'utf8'); if(!s.startsWith('---\\n')) throw new Error('SKILL.md 缺少 YAML front matter 起始 ---'); const end=s.indexOf('\\n---\\n',4); if(end<0) throw new Error('SKILL.md 缺少 YAML front matter 结束 ---'); const y=s.slice(4,end).trim(); for (const k of ['name:', 'description:', 'version:', 'trigger:']) if(!y.includes(k)) throw new Error('front matter 缺少 '+k); console.log('OK: front matter boundary and required keys found');\""
+  },
+  "keywords": [
+    "skill",
+    "lark",
+    "feishu",
+    "api",
+    "docs-v2"
+  ],
+  "license": "UNLICENSED"
+}

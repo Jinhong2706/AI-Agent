@@ -1,0 +1,16 @@
+{
+  "urls": {
+    "logreplay": "http://api.tone.woa.com",
+    "utest_perf": "http://utest.openapi.woa.com",
+    "utest_topology": "http://api.tone.woa.com",
+    "utest_user_center": "http://utest.openapi.woa.com"
+  },
+  "defaults": {
+    "execution_group_id": "128",
+    "direct_replay_domain": "https://testone.woa.com"
+  },
+  "auth": {
+    "user_token": "",
+    "project_token": ""
+  }
+}

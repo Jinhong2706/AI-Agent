@@ -1,0 +1,6 @@
+name: 智能邮件管家
+description: AI总结未读邮件、智能回复、多邮箱管理、自动标记已读、垃圾邮件自动清理、每日凌晨定时清理
+author: OpenClaw 用户
+version: 1.0.0
+category: 工具
+tags: 邮件,AI,总结,智能回复,多邮箱,垃圾清理

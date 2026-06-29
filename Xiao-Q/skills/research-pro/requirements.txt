@@ -1,0 +1,8 @@
+﻿# ResearchPro 依赖包 (v1.4.5 安全增强版)
+# 锁定已知安全版本，避免 CVE 漏洞
+
+# HTTP 请求库 - 修复 CVE-2023-32681, CVE-2024-35195
+requests>=2.32.3
+
+# PostHog 数据分析（可选）- v3+ API 支持
+posthog>=3.11.0

@@ -1,0 +1,69 @@
+{
+  "version": "1.0",
+  "source": "高德开放平台API + 用户提供",
+  "last_updated": "2026-05-27",
+  "description": "非官方6峰配置（茶山、喜鹊梁、麻田岭、白谷查山、冰山梁、东猴顶）",
+  "notes": "station_elev为Open-Meteo API返回的真实海拔，非山顶海拔。坐标来自高德API，为山脚/居民点坐标，在0.25°网格精度下偏差可接受。",
+  "peaks": [
+    {
+      "rank": 1,
+      "name": "茶山",
+      "latitude": 39.7808,
+      "longitude": 114.9470,
+      "summit_elev": 2524,
+      "station_elev": 2381,
+      "area": "蔚县",
+      "features": "张家口最高峰，蔚县茶山"
+    },
+    {
+      "rank": 2,
+      "name": "喜鹊梁",
+      "latitude": 40.8306,
+      "longitude": 115.3673,
+      "summit_elev": 2078,
+      "station_elev": 1932,
+      "area": "崇礼区",
+      "features": "崇礼滑雪场附近，日出云海"
+    },
+    {
+      "rank": 3,
+      "name": "麻田岭",
+      "latitude": 39.7190,
+      "longitude": 114.8326,
+      "summit_elev": 2122,
+      "station_elev": 1761,
+      "area": "蔚县",
+      "features": "蔚县南山，云海观测点"
+    },
+    {
+      "rank": 4,
+      "name": "白谷查山",
+      "latitude": 40.0033,
+      "longitude": 115.1123,
+      "summit_elev": 2190,
+      "station_elev": 2088,
+      "area": "涿鹿县",
+      "features": "涿鹿县最高峰"
+    },
+    {
+      "rank": 5,
+      "name": "冰山梁",
+      "latitude": 41.2638,
+      "longitude": 115.8045,
+      "summit_elev": 2211,
+      "station_elev": 2072,
+      "area": "赤城县",
+      "features": "赤城冰山梁，风车矩阵"
+    },
+    {
+      "rank": 6,
+      "name": "东猴顶",
+      "latitude": 41.3558,
+      "longitude": 116.1469,
+      "summit_elev": 2292.6,
+      "station_elev": 2070,
+      "area": "赤城县",
+      "features": "河北第二高峰，赤城东猴顶"
+    }
+  ]
+}

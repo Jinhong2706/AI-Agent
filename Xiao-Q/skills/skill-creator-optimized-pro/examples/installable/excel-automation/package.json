@@ -1,0 +1,16 @@
+{
+  "name": "excel-automation",
+  "version": "0.1.0",
+  "description": "Excel 自动化类最小可安装 Skill 示例包",
+  "type": "module",
+  "files": [
+    "SKILL.md",
+    "README.md"
+  ],
+  "keywords": [
+    "excel",
+    "automation",
+    "skill"
+  ],
+  "license": "UNLICENSED"
+}

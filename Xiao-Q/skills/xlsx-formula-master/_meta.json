@@ -1,0 +1,34 @@
+{
+  "name": "xlsx-formula-master",
+  "displayName": "Excel 公式翻译官(人话→公式)",
+  "version": "1.0.0",
+  "description": "你描述需求(人话),它给你 Excel/WPS 公式 + 解释 + 不踩坑的边界条件。专攻 VLOOKUP/INDEX-MATCH/SUMIFS/数组公式/动态数组等高频但易错的场景。",
+  "author": "ikun",
+  "license": "MIT",
+  "category": "productivity",
+  "tags": [
+    "Excel",
+    "公式",
+    "WPS",
+    "VLOOKUP",
+    "翻译"
+  ],
+  "keywords": [
+    "Excel 公式",
+    "WPS 公式",
+    "VLOOKUP",
+    "INDEX MATCH",
+    "SUMIFS",
+    "数组公式",
+    "动态数组",
+    "Excel 翻译"
+  ],
+  "platforms": [
+    "openclaw",
+    "skillhub",
+    "claude-code",
+    "cursor"
+  ],
+  "language": "zh-CN",
+  "minAgentVersion": "0.1.0"
+}

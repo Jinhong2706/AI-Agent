@@ -1,0 +1,53 @@
+# skill-creator-king v3.0 自反思检查清单（Ralph Loop）
+# Phase 3 DESIGN 和 Phase 5 VERIFY 使用
+
+# 双层：客观检查（可脚本化）+ 主观自检（AI对话）
+# 最多 3 轮，全过或 3 轮后冻结
+
+objective:
+  - id: req_alignment
+    label: "REQ-哲学对齐"
+    check: "每个 REQ 可追溯到 PRINCIPLES 信念"
+    severity: P0
+  - id: req_coverage
+    label: "需求覆盖"
+    check: "SPEC 中所有 P0 REQ 在 DESIGN 有对应 ADR"
+    severity: P0
+  - id: adr_conflict
+    label: "ADR 互斥检测"
+    check: "没有两个 ADR 给出相互矛盾的决策"
+    severity: P0
+  - id: token_measured
+    label: "Token 实测"
+    check: "Token 数据来自 estimate-tokens.py 实测，非估算"
+    severity: P0
+  - id: file_structure
+    label: "文件结构"
+    check: "所有必需文件已创建（SKILL/README/CHANGELOG + 通道对应文件）"
+    severity: P0
+  - id: fm_safety
+    label: "Frontmatter 安全"
+    check: "validate.py 通过（0 Critical/0 High）"
+    severity: P0
+
+subjective:
+  - id: consequence_chain
+    label: "后果链"
+    check: "每个 ADR 的「后果」段评估了✅正面影响和⚠️风险"
+    question: "这个决策的后果有没有进入不可回退的歧路？"
+  - id: user_experience
+    label: "用户体验"
+    check: "触发词口语化？路由消歧清晰？用户不会困惑"
+    question: "如果你是第一次用这个 skill 的用户，你知道怎么说吗？"
+  - id: false_promise
+    label: "诚实检查"
+    check: "没有承诺当前架构做不到的能力"
+    question: "每个 REQ 的验证标准都是 v1.0 能做到的吗？"
+  - id: upgrade_path
+    label: "升级路径"
+    check: "轻量→完整的升级路径清晰"
+    question: "轻量版用户升级时，不会丢失已有工作？"
+
+round_limit: 3
+short_circuit: "lightweight 通道 + 客观全过 → 可跳过主观自检"
+freeze_rule: "3轮或全过后 SPEC/DESIGN 冻结，后续改动需要新的 ADR"

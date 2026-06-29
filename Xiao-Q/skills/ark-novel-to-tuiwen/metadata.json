@@ -1,0 +1,13 @@
+{
+  "name": "ark-novel-to-tuiwen",
+  "slug": "ark-novel-to-tuiwen",
+  "version": "5.0.0",
+  "description": "30秒上手：把小说原文丢过来→自动出推文。输出：标题+人物卡+场景卡+口播叙事+逐段分镜。支持6种风格自定义，内置输入校验+抖音合规+爆点节奏。",
+  "author": "ark",
+  "tags": ["小说推文", "抖音", "口播文案", "分镜脚本", "爆款文案", "内容合规", "小说改写", "30秒上手"],
+  "category": "content-creation",
+  "compatibility": {
+    "workbuddy": ">=2025.1.0"
+  },
+  "license": "MIT"
+}

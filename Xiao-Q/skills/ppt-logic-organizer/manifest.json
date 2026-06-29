@@ -1,0 +1,16 @@
+{
+  "id": "ppt-logic-organizer",
+  "name": "ppt-logic-organizer",
+  "displayName": "PPT逻辑梳理师",
+  "version": "1.0.0",
+  "description": "帮助用户梳理PPT逻辑框架的实用工具。根据使用场景、制作目的、目标受众等维度，快速整理出清晰的PPT结构和内容逻辑。",
+  "type": "skill",
+  "author": "your-name",
+  "tags": ["ppt", "presentation", "logic", "structure"],
+  "category": "productivity",
+  "entry": "SKILL.md",
+  "output": ["text"],
+  "config": {
+    "file": "config.json"
+  }
+}

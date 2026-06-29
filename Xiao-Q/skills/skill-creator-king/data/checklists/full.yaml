@@ -1,0 +1,101 @@
+# 完整通道检查清单
+# 继承轻量通道全部检查点，额外增加完整版的深度检查
+
+# ---- Phase 1 完整版额外检查 ----
+phase_1_positioning_extra:
+  - id: p1f_principles
+    label: "PRINCIPLES.md"
+    check: "含核心信念 + 不可回退原则 + 价值维度映射"
+    severity: P0
+  - id: p1f_belief_trace
+    label: "信念可追溯"
+    check: "每条信念可对应到后续 REQ"
+    severity: P1
+
+# ---- Phase 2 完整版额外检查 ----
+phase_2_requirements_extra:
+  - id: p2f_spec_complete
+    label: "SPEC.md 完整"
+    check: "含 REQ + NFR + 哲学追溯表"
+    severity: P0
+  - id: p2f_sources_yaml
+    label: "data/sources.yaml"
+    check: "含 source 定义 + 缓存策略 + 禁止项"
+    severity: P0
+  - id: p2f_data_scope
+    label: "数据源范围"
+    check: "严格限定 vs 不限定的选择已明确"
+    severity: P0
+  - id: p2f_req_verify
+    label: "每个 REQ 有验证标准"
+    check: "验证标准可测试，不是模糊描述"
+    severity: P1
+  - id: p2f_nfr_priority
+    label: "NFR 优先级"
+    check: "最重要的 3 个 NFR 已由用户确认"
+    severity: P1
+
+# ---- Phase 3 完整版额外检查 ----
+phase_3_design_extra:
+  - id: p3f_design_complete
+    label: "DESIGN.md 完整"
+    check: "含 ADR + 实测 Token + 模块关系图 + 数据流图"
+    severity: P0
+  - id: p3f_token_measured
+    label: "Token 实测"
+    check: "每个 L2 文件实际 Token 数已测算，不是估算"
+    severity: P0
+  - id: p3f_adr_irreversible
+    label: "不可回退 ADR 标注"
+    check: "关键决策标注 ❗不可回退"
+    severity: P1
+  - id: p3f_fallback_path
+    label: "降级路径"
+    check: "数据流图中包含脚本失败降级路径"
+    severity: P1
+
+# ---- Phase 4 完整版额外检查 ----
+phase_4_implementation_extra:
+  - id: p4f_config_yaml
+    label: "config.yaml"
+    check: "所有可调参数集中在配置文件中"
+    severity: P0
+  - id: p4f_scripts
+    label: "scripts 有降级"
+    check: "每个脚本有 _fallback_config() 或等价降级策略"
+    severity: P1
+  - id: p4f_tests
+    label: "测试覆盖"
+    check: "≥3 个测试，覆盖核心路径 + 文件结构"
+    severity: P1
+  - id: p4f_l2_structure
+    label: "L2 文件结构合理"
+    check: "按功能/领域拆分，每个文件独立可加载"
+    severity: P1
+  - id: p4f_script_llm_boundary
+    label: "脚本-LLM 边界"
+    check: "脚本只做计量，语义判断交给 LLM"
+    severity: P1
+
+# ---- Phase 5 完整版额外检查 ----
+phase_5_delivery_extra:
+  - id: p5f_version_aligned
+    label: "版本号对齐"
+    check: "SKILL.md/SPEC/DESIGN/config/PRINCIPLES/sources 全部一致"
+    severity: P0
+  - id: p5f_readme_full
+    label: "README.md 完整版"
+    check: "含工作流说明 + L2 索引 + 场景适配"
+    severity: P0
+  - id: p5f_changelog_standard
+    label: "CHANGELOG.md 标准格式"
+    check: "按版本条目，含 Changed/Added/Removed 分类"
+    severity: P1
+  - id: p5f_report
+    label: "交付报告"
+    check: "SESSION-REPORT.md 含全部字段"
+    severity: P0
+  - id: p5f_upgrade_hint
+    label: "下次建议"
+    check: "交付报告含具体可执行的改进项"
+    severity: P1

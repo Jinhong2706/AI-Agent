@@ -1,0 +1,213 @@
+# 反模式定义（Anti-Patterns）— v3.12.2 重编号
+# 本轮以 validate.py 实际检测逻辑为真相源，对齐 13 个 AP 条目。
+# 平台可通过 profile.yaml 的 anti_patterns.exclude_ids 跳过特定 AP。
+
+patterns:
+  - id: AP-001
+    name: 缺少 triggers 触发词
+    severity: high
+    description: SKILL.md frontmatter 中 triggers 字段缺失或为空，导致 skill 无法被自动匹配加载
+    detection: frontmatter.triggers 为 null/空列表/空字符串
+    fix: 在 frontmatter 中添加 `triggers: ["关键词1", "关键词2"]` 并填入至少一个触发词
+    platforms_applicable: [workbuddy]
+
+  - id: AP-002
+    name: 缺少 L0_trigger Token 预算
+    severity: medium
+    description: token_budget 中 L0_trigger 字段缺失或为 falsy 值
+    detection: token_budget.L0_trigger 不存在或为 null/0/空
+    fix: 在 token_budget 中添加 `L0_trigger: 200`
+    platforms_applicable: [workbuddy]
+
+  - id: AP-003
+    name: 缺少 template 字段
+    severity: medium
+    description: frontmatter 中缺少 template 字段，影响多场景模板识别
+    detection: frontmatter.template 缺失或为 falsy
+    fix: 添加 `template: basic` 或 `template: multi-scene`
+    platforms_applicable: [workbuddy]
+
+  - id: AP-004
+    name: 缺少 token_budget 整体配置
+    severity: medium
+    description: frontmatter 中完全缺少 token_budget 字段（含嵌套键展平后的兜底检测）
+    detection: frontmatter 不含 token_budget 键，且 raw frontmatter 中不含 "token_budget:" 字符串
+    fix: 添加完整的四级 token_budget 声明（L0_trigger/L1_core/L2_deep/hard_cap）
+    platforms_applicable: [workbuddy]
+
+  - id: AP-005
+    name: 缺少 hard_cap Token 硬上限
+    severity: low
+    description: token_budget 已声明但缺少 hard_cap 字段
+    detection: token_budget 存在但 hard_cap 缺失或为 falsy
+    fix: 在 token_budget 中添加 `hard_cap: 10000`
+    platforms_applicable: [workbuddy]
+
+  - id: AP-006
+    name: triggers 存在重复项
+    severity: low
+    description: triggers 列表中存在大小写不敏感的重复触发词
+    detection: 遍历 triggers 数组，小写化后检测重复
+    fix: 移除重复的触发词条目
+    platforms_applicable: [workbuddy]
+
+  - id: AP-007
+    name: 凭证泄露风险
+    severity: high
+    description: 代码或配置中包含疑似 API key / token / password 等敏感信息
+    detection: 正则匹配 API Key 模式（OpenAI sk-、GitHub ghp_、AWS AKIA、通用 key=value 格式）
+    fix: 使用环境变量或外部配置替代硬编码凭证
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-008
+    name: 危险 Shell 命令
+    severity: high
+    description: SKILL.md 中包含 sudo、rm -rf、curl|sh 等危险命令模式
+    detection: 正则匹配 sudo / rm -rf / chmod 777 / curl|bash / wget|bash / dd if= / mkfs. / fork bomb
+    fix: 避免在 skill 中硬编码危险命令，如确需使用则在 allowed-tools 中声明
+    platforms_applicable: [workbuddy]
+
+  - id: AP-009
+    name: SKILL.md 超长
+    severity: medium
+    description: SKILL.md 超过 500 行，可能超出合理 token 预算
+    detection: content.count('\n') > 500
+    fix: 将详细内容拆分到 references/ 中，SKILL.md 保持 L1 精简
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-010
+    name: 硬编码路径引用
+    severity: medium
+    description: 代码中硬编码了特定平台的路径（如 ~/.workbuddy/skills/、/Users/xxx/），降低可移植性
+    detection: 正则匹配平台专属路径 + 通用硬编码路径（排除 skill 自身所在目录的合法引用）
+    fix: 使用相对路径或可配置的路径变量替代硬编码绝对路径
+    platforms_applicable: [openclaw, hermes, universal]
+
+  - id: AP-011
+    name: 缺少 README.md
+    severity: medium
+    description: skill 根目录缺少 README.md 文件
+    detection: skill_dir/README.md 不存在
+    fix: 创建 README.md 包含 skill 概述、适用场景、安装说明
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-012
+    name: triggers 不含中文关键词
+    severity: low
+    description: triggers 列表中无中文关键词，可能无法匹配中文用户的自然语言查询
+    detection: 遍历 triggers，检查是否包含 CJK 字符（\u4e00-\u9fff）
+    fix: 添加至少一个中文触发词
+    platforms_applicable: [workbuddy]
+
+  - id: AP-013
+    name: SPEC 与 DESIGN 版本不一致（仅双文件架构）
+    severity: medium
+    description: 当 SPEC.md 和 DESIGN.md 同时存在时（旧架构），两者版本声明不匹配。v3.14+ 合并架构仅有 DESIGN.md 时不触发
+    detection: 正则提取两文件中的 version 声明并比对
+    fix: 同步两者的版本号，或迁移到合并架构（删除 SPEC.md，将内容合并到 DESIGN.md）
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-014
+    name: description 过短
+    severity: medium
+    description: SKILL.md frontmatter 的 description 字段少于 80 个字符，影响 SkillHub 上架展示和搜索发现
+    detection: len(frontmatter.description) < 80
+    fix: 将 description 扩展至 80-200 字，包含核心功能、适用场景、关键特性
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-015
+    name: description 单行过长
+    severity: medium
+    description: SKILL.md frontmatter 的 description 为长单行字符串（非 YAML 块标量 > 或 |），部分平台的 YAML 解析器有单行长度限制（如 1024 字符），可能导致安装失败
+    detection: frontmatter.description 不包含 '>' 或 '|' 且为单行字符串且 len > 120
+    fix: 将 description 改为 YAML 折叠标量格式（description: >），多行书写
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-016
+    name: SKILL.md 修改后下游文件未同步
+    severity: medium
+    description: SKILL.md 修改时间晚于 README.md / DESIGN.md 超过 5 分钟，下游文件可能包含过时的功能描述或设计决策
+    detection: SKILL.md mtime - downstream_file mtime > 300s
+    fix: 同步更新下游文件（README 方式/功能清单/核心概念、DESIGN 版本号/文件树）
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-017
+    name: 缺少作者署名
+    severity: low
+    description: SKILL.md frontmatter 中缺少 author 字段，skill 未标注创建者/来源
+    detection: frontmatter 中无 author 键
+    fix: 在 frontmatter 中添加 `author: 你的署名`（公众号/作者名）
+    ask_user: true
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-018
+    name: 过期内容或死代码
+    severity: medium
+    description: 检测三件事：①references/中文件的独立版本声明与SKILL.md不一致 ②SKILL.md/README/DESIGN中引用的文件不存在 ③references/下存在未在任何文档中声明的孤立文件
+    detection: 扫描references/下.md文件头的版本号→对比frontmatter；扫描文档中的文件路径引用→验证存在性；扫描references/实际文件→验证有文档声明
+    fix: 更新版本号、删除断裂引用、在文档中补充孤立文件的声明
+    platforms_applicable: [workbuddy]
+
+  - id: AP-019
+    name: README/CHANGELOG 未同步
+    severity: high
+    description: SKILL.md 修改后 README.md 和 CHANGELOG.md 必须在同一次改动中同步更新。检测mtime——如果SKILL.md比下游文件新超过5分钟，且没有当日CHANGELOG条目，视为未同步。
+    detection: SKILL.md mtime > README.md mtime + 300s 或 SKILL.md mtime > CHANGELOG.md mtime + 300s，且CHANGELOG中无当日条目
+    fix: 更新README.md（功能描述/文件树/版本引用）和CHANGELOG.md（添加当日条目描述本次变更）
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-020
+    name: description 缺少 Use when 场景触发语
+    severity: medium
+    description: description 仅描述功能，未嵌入具体使用场景触发语。pm-skills 的 description 均含 "Use when X, Y, or Z"，大幅提高 AI 自动匹配精度
+    detection: description 不含 "Use when" / "use when" / "当…时" / "适用场景"
+    fix: 在 description 末尾追加 "Use when {场景1}, {场景2}, or {场景3}。" 至少 2 个场景
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-021
+    name: 正文缺少 Output 输出模板段
+    severity: medium
+    description: 正文无 "## Output" 或 "输出格式" 段落。明确输出模板确保 AI 每次执行结果格式一致
+    detection: body 不含 "## Output" / "输出格式" / "输出模板" 二级标题
+    fix: 添加 "## Output" 章节 + ``` 代码块包裹具体输出示例
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-022
+    name: description 版本史堆积
+    severity: medium
+    description: description 中嵌入 ≥2 个旧版本号/旧特性描述（如 "v5.10.3 冗余清理。v5.10.2 新增约束偏好入口"）。版本史应放 CHANGELOG.md，description 应保持稳定的功能+场景摘要。每次迭代在 description 末尾追加版本特性会导致触发噪音持续膨胀
+    detection: description 中提取所有 vX.Y.Z 模式版本号，与 frontmatter 当前版本比对，≥2 个非当前版本号即命中
+    fix: 将旧版本特性描述移至 CHANGELOG.md，description 仅保留当前核心能力（建议 ≤3 句）+ 触发词
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-023
+    name: 输出文件约定未声明
+    severity: medium
+    description: Skill 涉及文件产出动作（生成/导出/保存/输出/写入等），但正文中未声明输出文件的目录、命名规则、格式和错误输出方式。AP-021 检测 Output 内容格式段落，AP-023 检测文件路径落地约定，两者互补
+    detection: body 含文件产出关键词（生成|导出|保存|输出|写入|create|export|save|generate）+ 文件语义（报告|文件|csv|json|md|代码|配置|图片），且 body 无 "输出文件约定" 或 "文件输出约定" 二级标题
+    fix: 在 SKILL.md 中添加 "## 输出文件约定" 章节，明确四要素：输出目录 / 文件命名规则 / 文件格式 / 错误输出方式，并给出路径示例
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-024
+    name: 危险 shell 调用
+    severity: critical
+    description: SKILL.md 正文中包含指示 AI 执行任意 shell 命令的模式（bash -c / eval / exec / os.system / subprocess / shell=True / 命令替换）。这些模式可使恶意 skill 在用户环境执行任意代码
+    detection: body 匹配 bash\s+-c | eval\s+["' ] | exec\( | os\.system | subprocess\. | shell\s*=\s*True | \$\(
+    fix: 移除直接 shell 调用，改用平台提供的安全执行接口或声明前置条件。如确需 shell 命令，在 SKILL.md 中显式声明安全边界和用户确认流程
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-025
+    name: 网络调用模式
+    severity: medium
+    description: SKILL.md 正文中存在从网络下载或执行远程代码的模式（curl / wget / fetch / requests.get / urlopen / socket.connect）。恶意 skill 可通过网络调用下载并执行未审查的代码
+    detection: body 匹配 curl\s | wget\s | \bfetch\( | requests\.(get|post) | urlopen | socket\.connect
+    fix: 改用平台提供的安全网络接口或声明数据来源。如确需网络调用，在 SKILL.md 中显式声明安全边界和用户确认流程
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]
+
+  - id: AP-026
+    name: 文件系统越界
+    severity: high
+    description: SKILL.md 正文中存在访问敏感系统路径或危险文件操作的模式（~/.ssh / /etc/passwd / ~/.aws / ~/.kube / chmod 777 / rm -rf /）。恶意 skill 可通过文件越界窃取凭证或破坏系统
+    detection: body 匹配 ~/\.(?:ssh|aws|kube|config) | /etc/(?:passwd|shadow) | chmod\s+777 | rm\s+-rf\s+/
+    fix: 限制文件操作范围为 skill 工作目录。如确需访问外部路径，在 SKILL.md 中显式声明安全边界和用户确认流程
+    platforms_applicable: [workbuddy, openclaw, hermes, universal]

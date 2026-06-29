@@ -1,0 +1,11 @@
+{
+  "assetType": "skill",
+  "name": "ppt-logic-organizer",
+  "displayName": "PPT逻辑梳理师",
+  "semver": "1.0.0",
+  "description": "帮助用户梳理PPT逻辑框架，五维度快速整理PPT结构。",
+  "author": "your-name",
+  "tags": ["ppt", "presentation", "logic"],
+  "category": "productivity",
+  "entry": "SKILL.md"
+}

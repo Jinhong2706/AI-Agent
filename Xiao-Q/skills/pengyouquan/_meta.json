@@ -1,0 +1,9 @@
+{
+  "name": "朋友圈-学员版",
+  "version": "1.0.0",
+  "description": "一段素材转朋友圈文案，4种风格（金句/观点/场景/感悟）自动匹配，结合老板行业和语气",
+  "author": "aiqinghuage01-dev",
+  "platforms": ["workbuddy", "qclaw", "openclaw", "codex", "claude-code"],
+  "requirements": {},
+  "entry": "SKILL.md"
+}

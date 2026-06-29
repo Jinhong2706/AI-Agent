@@ -1,0 +1,31 @@
+# Universal 平台 Profile（跨平台默认/回退）
+
+platform_id: universal
+platform_name: Universal (agentskills.io)
+skill_dir: "~/.agents/skills/"
+
+frontmatter:
+  triggers: []
+
+quality:
+  skip_dimensions:
+    - token_budget
+    - semantic_consistency
+    - readme_sync
+    - changelog_today
+  max_score: 81
+  lightweight_max_score: 43
+
+anti_patterns:
+  exclude_ids:
+    - AP-001
+    - AP-002
+    - AP-003
+    - AP-004
+    - AP-005
+    - AP-006
+    - AP-008
+    - AP-010
+    - AP-012
+
+cross_platform_markers: []

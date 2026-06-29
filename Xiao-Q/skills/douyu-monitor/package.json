@@ -1,0 +1,9 @@
+{
+  "name": "douyu-monitor",
+  "version": "1.0.0",
+  "description": "斗鱼主播开播提醒技能，支持添加/删除主播监控、查看监控列表、定时轮询斗鱼API、开播后通过QQ消息推送提醒",
+  "main": "SKILL.md",
+  "keywords": ["skill", "agent", "douyu", "直播", "开播提醒", "斗鱼"],
+  "author": "小Q",
+  "license": "MIT"
+}

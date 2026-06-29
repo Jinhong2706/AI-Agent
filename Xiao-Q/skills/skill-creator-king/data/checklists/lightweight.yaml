@@ -1,0 +1,8 @@
+# 轻量通道检查清单（衍生自 audit.yaml lightweight_skip，以此为 SSOT）
+channel: lightweight
+skip_dimensions:
+  - trigger_coverage
+  - script_llm_boundary
+  - l2_organization
+  - readme_quality
+total_weight: 79

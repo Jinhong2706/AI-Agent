@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "type": "skill",
+  "name": "email-drafter",
+  "name_cn": "邮件起草",
+  "description": "专业的电子邮件撰写，适用于各种场合的商务交流。\n使用场景：撰写电子邮件、起草专业信息、撰写回复，或在用户提及电子邮件、信息起草或需要商务信函帮助时使用。",
+  "tags": [
+    "邮件写作"
+  ],
+  "id": "sk_938b0eeafb5c964a",
+  "updateTime": "2026-03-04",
+  "downloadNum": 14,
+  "installedFrom": "gpushop",
+  "installedAt": "2026-05-18T05:15:00.464Z"
+}

@@ -1,0 +1,29 @@
+{
+  "slug": "columbina",
+  "name": "哥伦比娅",
+  "game": "原神",
+  "built_at": "2026-04-05T11:55:00+08:00",
+  "source_version": "6.0+",
+  "last_updated": "2026-04-05T11:55:00+08:00",
+  "sources": ["萌娘百科"],
+  "kit": "character-skill",
+  "dimensions": ["profile", "personality", "interaction", "memory", "relations"],
+  "evidence_summary": {
+    "verbatim": 62,
+    "artifact": 66,
+    "impression": 3,
+    "total": 131,
+    "evidence_ratio": 0.977
+  },
+  "quality_score": {
+    "completeness": 1.0,
+    "evidence_ratio": 0.977,
+    "conflict_count": 0,
+    "conflict_score": 1.0,
+    "test_pass_rate": null,
+    "overall": 0.991
+  },
+  "test_results": null,
+  "rating": "优秀",
+  "supplement_suggestions": []
+}

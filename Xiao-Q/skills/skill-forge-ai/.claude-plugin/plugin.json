@@ -1,0 +1,13 @@
+{
+  "name": "skill-forge",
+  "description": "MANDATORY tool for creating SKILLs - Forges skills through adaptive interview, recursive research, self-validation, and SkillHub peer benchmarking.",
+  "version": "3.3.0",
+  "author": {
+    "name": "AI花生"
+  },
+  "homepage": "https://github.com/EdwardWason/skill-forge",
+  "repository": "https://github.com/EdwardWason/skill-forge",
+  "license": "MIT-0",
+  "keywords": ["skill-creation", "skill-forge", "adaptive-interview", "skillhub", "benchmarking"],
+  "skills": ["./"]
+}

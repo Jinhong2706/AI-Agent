@@ -1,0 +1,32 @@
+[
+  {
+    "name": "fast_bug_fix",
+    "prompt": "bf-fast 修复订单接口 500 报错",
+    "expected_mode": "Bug/生产问题排查",
+    "expected_policy": "快速"
+  },
+  {
+    "name": "autonomous_new_service",
+    "prompt": "bf-a 从 0 到 1 创建一个 FastAPI 订单服务，安全默认方案自动推进",
+    "expected_mode": "新项目共创",
+    "expected_policy": "全自动"
+  },
+  {
+    "name": "architecture_leadership",
+    "prompt": "bf- 帮我作为后端架构负责人设计模块边界、数据所有权和权限模型",
+    "expected_mode": "后端架构负责人",
+    "expected_policy": "标准"
+  },
+  {
+    "name": "migration_task",
+    "prompt": "bf- 给用户表增加索引并补 Alembic 迁移",
+    "expected_mode": "数据模型与迁移",
+    "expected_policy": "标准"
+  },
+  {
+    "name": "auth_task",
+    "prompt": "bf- 给管理接口加 JWT 鉴权并防越权访问",
+    "expected_mode": "认证鉴权",
+    "expected_policy": "标准"
+  }
+]

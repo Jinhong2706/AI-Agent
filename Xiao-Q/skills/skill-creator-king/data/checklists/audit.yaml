@@ -1,0 +1,262 @@
+# Skill Coach — 质量审计维度定义
+# 此文件是 AUDIT_DIMENSIONS 的单源真相（Single Source of Truth）
+# quality-audit.py 从此文件加载维度定义
+
+total_weight: 135
+lightweight_total_weight: 95
+
+dimensions:
+  - id: frontmatter_safety
+    name: Frontmatter 安全
+    weight: 15
+    max_score: 15
+    category: security
+    description: 检查 YAML frontmatter 语法正确性和安全性
+    fix_hint: |
+      检查 SKILL.md frontmatter 的 YAML 语法、YAML 块标量（|）、特殊字符转义
+      原因: Frontmatter YAML 错误可能导致 skill 加载失败
+      EN: Check SKILL.md frontmatter for YAML syntax errors, block scalars, and special character escaping
+
+  - id: token_budget
+    name: Token 预算合规
+    weight: 15
+    max_score: 15
+    category: performance
+    description: 检查 Token 预算声明的完整性和合规性
+    fix_hint: |
+      纯语言 skill（无脚本/API）此维度不适用；有脚本则定义 L0_trigger/L1_core/L2_deep/hard_cap 四级预算
+      原因: 缺少 Token 预算声明会影响上下文分配优化
+      EN: Define L0_trigger/L1_core/L2_deep/hard_cap budget levels for scripted skills
+
+  - id: file_completeness
+    name: 文件完整性
+    weight: 10
+    max_score: 10
+    category: structure
+    description: 检查必需文件和文件结构表完整性
+    fix_hint: |
+      确保所有必需文件存在且文件结构表准确反映实际文件
+      原因: 缺文件会导致加载失败或功能缺失
+      EN: Ensure all required files exist and file table matches actual files
+
+  - id: version_consistency
+    name: 版本一致性
+    weight: 10
+    max_score: 10
+    category: consistency
+    description: 检查跨文件版本号一致性
+    fix_hint: |
+      统一 SKILL.md/DESIGN.md（或 SPEC.md）/README.md/CHANGELOG.md 中的版本声明
+      原因: 版本不一致会导致用户困惑和缓存失效
+      EN: Align version declarations across all documents
+
+  - id: trigger_coverage
+    name: 触发覆盖
+    weight: 8
+    max_score: 8
+    category: ux
+    manual: true
+    description: 检查触发词覆盖是否充分（需 AI 裁定）
+    rubric:
+      - score: 8
+        criteria: triggers ≥5 且 description 含 "Use when" + ≥2 个具体场景，覆盖中英文/口语变体
+      - score: 6
+        criteria: triggers 3-4 或 description 含 "Use when" + ≥2 个场景
+      - score: 4
+        criteria: triggers 1-2 或 description 含简要使用场景描述
+      - score: 2
+        criteria: triggers 0-1 且 description 无具体使用场景
+      - score: 0
+        criteria: 无 triggers 定义且 description 纯功能描述
+    fix_hint: |
+      触发词应覆盖用户常见的表达方式，不要只放一个词
+      原因: 触发词不足会导致 skill 加载失败
+      EN: Trigger words should cover common user expressions
+
+  - id: script_llm_boundary
+    name: 脚本/LLM 边界
+    weight: 8
+    max_score: 8
+    category: architecture
+    manual: true
+    description: 检查脚本与 LLM 提示的职责边界是否清晰（需 AI 裁定）
+    rubric:
+      - score: 8
+        criteria: SKILL.md 明确声明哪些任务走脚本（确定性计算）vs LLM（模糊判断），实际实现一致
+      - score: 6
+        criteria: 边界大致清晰，偶有模糊地带但主体职责分明
+      - score: 4
+        criteria: 脚本和 LLM 指令混合，不易区分边界
+      - score: 2
+        criteria: 无明显边界，LLM 在承担脚本应做的工作（或反之）
+      - score: 0
+        criteria: 无脚本且无 LLM 工作流说明，或边界完全混乱
+    fix_hint: |
+      判断哪些操作适合脚本（确定性计算）vs LLM（模糊判断）
+      原因: 边界不清会导致不可预期的行为
+      EN: Clarify which operations use scripts (deterministic) vs LLM (fuzzy)
+
+  - id: l2_organization
+    name: L2 深度参考组织
+    weight: 8
+    max_score: 8
+    category: structure
+    manual: true
+    description: 检查 references/ 的组织和内容质量（需 AI 裁定）
+    rubric:
+      - score: 8
+        criteria: references/ 文件按主题拆分，每文件有清晰标题和单一职责，无单文件 >200 行
+      - score: 6
+        criteria: references/ 有多文件但部分文件职责重叠或过长
+      - score: 4
+        criteria: references/ 存在但文件数少（1-2）或组织不佳
+      - score: 2
+        criteria: references/ 仅 1 个文件或文件缺乏清晰结构
+      - score: 0
+        criteria: 无 references/ 目录
+    fix_hint: |
+      references/ 文件应按主题拆分，每个文件有清晰的标题和用途
+      原因: 混乱的 L2 参考会增加检索成本
+      EN: Organize references/ files by topic with clear titles
+
+  - id: anti_patterns
+    name: 反模式扫描
+    weight: 8
+    max_score: 8
+    category: quality
+    description: 扫描 data/anti-patterns.yaml 中的反模式
+    fix_hint: |
+      扫描 data/anti-patterns.yaml 中的模式，逐一检查是否命中
+      原因: 反模式是已知的 skill 设计陷阱
+      EN: Scan anti-patterns.yaml for known design pitfalls
+
+  - id: body_structure
+    name: 正文结构完整性
+    weight: 6
+    max_score: 6
+    category: structure
+    manual: true
+    description: 检查 Purpose/Context/Instructions/Output/Notes/Further Reading 六段完整度（需 AI 裁定）
+    rubric:
+      - score: 6
+        criteria: 六段齐全（Purpose+Context+Instructions+Output+Notes+Further Reading），每段内容充实
+      - score: 4
+        criteria: 缺 1-2 段，或部分段落内容过简
+      - score: 2
+        criteria: 缺 3-4 段，结构明显不完整
+      - score: 0
+        criteria: 仅 Instructions 段，无 Purpose/Context/Output 等关键段落
+    fix_hint: |
+      确保正文含 Purpose/Context/Instructions/Output/Notes 段，方法论类 skill 建议加 Further Reading
+      原因: 清晰的段落结构提高 AI 指令质量和输出一致性
+      EN: Ensure body has Purpose/Context/Instructions/Output/Notes sections
+
+  - id: version_consistency
+    name: 跨文件版本一致性
+    weight: 4
+    max_score: 4
+    category: consistency
+    manual: true
+    description: 非 SKILL.md 文件中的 vX.Y.Z 引用与当前版本一致（需 LLM 逐条区分"声明"与"注释"）
+    rubric:
+      - score: 4
+        criteria: 所有版本引用与 SKILL.md 一致，或旧版本号全部为注释性引用（功能引入说明等）
+      - score: 3
+        criteria: 存在 1-2 条孤立版本号需 LLM 确认，但大概率是注释性引用
+      - score: 2
+        criteria: 存在 3-5 条版本号疑似过期的版本声明，需人工逐条检查
+      - score: 1
+        criteria: 多个文件中存在明显过期的版本声明，可能导致用户困惑
+      - score: 0
+        criteria: 版本声明大面积滞后，文件间版本信息严重不一致
+    fix_hint: |
+      LLM 需逐条审阅每条 vX.Y.Z 引用的上下文：注释性引用（如 "v3.12.0 新增此功能"、发行历史行）可保留，孤立版本声明须更新为当前版本
+      原因: 正则无法区分"声明"与"注释"，LLM 的语义理解是唯一的可靠裁断手段
+      EN: LLM must review each vX.Y.Z reference in context — annotation references are fine, standalone version declarations must be updated
+
+  - id: template_compliance
+    name: 模板合规
+    weight: 4
+    max_score: 4
+    category: structure
+    description: 检查模板使用是否符合规范
+    fix_hint: |
+      确保 frontmatter 中的 template 值与实际结构匹配
+      原因: 模板不匹配会导致生成器行为异常
+      EN: Match frontmatter template value with actual structure
+
+  - id: data_sources
+    name: 数据源声明
+    weight: 4
+    max_score: 4
+    category: data
+    description: 检查数据源声明的完整性和有效性
+    fix_hint: |
+      data-driven 模板需有 sources.yaml 且格式正确
+      原因: 数据源声明缺失会导致运行时数据获取失败
+      EN: Data-driven skills need valid sources.yaml
+
+  - id: readme_quality
+    name: README 质量
+    weight: 6
+    max_score: 6
+    category: documentation
+    manual: true
+    description: 检查 README 的内容质量和完整性，按 readme-standard.md 5 必须 + 4 推荐标准评估（需 AI 裁定）
+    rubric:
+      - score: 6
+        criteria: 5 必须段全覆盖（是什么/怎么用含快速开始与触发方式/核心能力/资源引用/文件结构）+ 至少 1 推荐段，内容最新
+      - score: 4
+        criteria: 5 必须段全覆盖，但缺推荐段或有轻微过时
+      - score: 2
+        criteria: 覆盖 3-4 项必须段，缺关键段落
+      - score: 1
+        criteria: README 存在但仅有 1-2 项，内容极简
+      - score: 0
+        criteria: 无 README.md
+    fix_hint: |
+      README 需覆盖 5 必须段（是什么/怎么用/核心能力/资源引用/文件结构），怎么用需含独立的「快速开始」和「触发方式」子段落
+      原因: README 是用户看到的第一个文档，决定 skill 的第一印象和可用性
+      EN: README must cover 5 required sections (what/usage/core capabilities/references/file structure); usage must include separate "Quick Start" and "Trigger" subsections
+
+  - id: semantic_consistency
+    name: 声明一致性
+    weight: 8
+    max_score: 8
+    category: consistency
+    description: 跨文件交叉声明检测（SPEC/DESIGN/README/checklist 间的潜在冲突）
+    fix_hint: |
+      检查 SPEC/DESIGN/README 中的声明是否一致，提取差异对供 AI 裁定
+      原因: 文档之间的不一致会误导用户
+      EN: Cross-check declarations across SPEC/DESIGN/README for conflicts
+
+  - id: readme_sync
+    name: README 同步检测
+    weight: 8
+    max_score: 8
+    category: consistency
+    description: 检查 README 是否与 SKILL.md 保持同步
+    fix_hint: |
+      检查 SKILL.md 和 references/ 自 README.md 最后修改以来的变更，同步内容后 touch README.md
+      原因: README 落后于 SKILL.md 会导致用户看到过时的信息
+      EN: Sync README with SKILL.md changes since README was last modified
+
+  - id: changelog_today
+    name: CHANGELOG 当日更新
+    weight: 5
+    max_score: 5
+    category: process
+    description: 检查 CHANGELOG 是否包含当日变更记录
+    fix_hint: |
+      确保今天的变更已记录在 CHANGELOG.md 中
+      原因: 缺少当日记录会导致变更追溯困难
+      EN: Ensure today's changes are recorded in CHANGELOG.md
+
+# 轻量通道跳过的维度（快速检查模式）
+lightweight_skip:
+  - trigger_coverage
+  - script_llm_boundary
+  - l2_organization
+  - readme_quality
+  - body_structure
+  - version_consistency

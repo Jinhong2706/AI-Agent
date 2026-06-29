@@ -1,0 +1,39 @@
+# 发布内容脱敏规则（内置通用版）
+#
+# 此文件随 skillhub-publish 一起发布到 SkillHub。
+# 仅包含通用的、无害的替换模式，不涉及任何具体人物/组织/政治词。
+#
+# 如需补充敏感词规则（人名、组织名、政治触发词等），请在用户私有路径
+# ~/.workbuddy/principles/sanitize_rules.yaml 中添加。
+# Phase 3.5 加载时：私有规则优先 → 内置规则兜底（空规则时自动跳过）。
+#
+# 规则格式：
+#   id:          唯一标识
+#   category:    触发词分类（便于 review）
+#   patterns:    正则模式，支持 | 多选
+#   replace:     替换为
+#   note:        为什么需要脱敏
+#
+# 执行规则：按文件中的顺序依次匹配。同一行的多个模式优先匹配较长的。
+
+rules:
+
+  # ===== 通用内容安全 =====
+  # 以下模式不涉及具体人物/组织/政治，属于内容安全通用词
+
+  - id: "violence_sex_terms"
+    category: "content_safety"
+    patterns:
+      - "暴力/性"
+      - "暴力性"
+    replace: "不当类比"
+    note: "「性」单独出现会触发自动过滤器"
+
+  # ===== 内部工作流术语 =====
+  - id: "review_imitation"
+    category: "content_safety"
+    patterns:
+      - "对标验证"
+      - "审核记录"
+    replace: "对照记录"
+    note: "表格格式 + 审核术语容易被误判为内容审核行为"

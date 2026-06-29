@@ -1,0 +1,5 @@
+,name,type,description,author
+sample-cli,cli,A sample CLI tool,Test Author
+sample-api,fastapi,A sample FastAPI API,Test Developer
+sample-scraper,scraper,A web scraper,Test Scraper
+sample-bot,bot,A sample bot,Test Bot

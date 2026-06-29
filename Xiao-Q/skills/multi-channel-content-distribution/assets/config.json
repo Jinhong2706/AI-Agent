@@ -1,0 +1,339 @@
+{
+  "version": "1.0.0",
+  "skill_id": "multi-channel-content-distribution",
+  "last_updated": "2026-05-27",
+  "platforms": {
+    "wechat": {
+      "name_cn": "微信公众号",
+      "name_en": "WeChat Official Account",
+      "content_type": "long_form_article",
+      "specs": {
+        "char_limits": {
+          "min": 800,
+          "max": 5000,
+          "ideal_min": 1500,
+          "ideal_max": 3000
+        },
+        "title": {
+          "min_length": 10,
+          "max_length": 64,
+          "ideal_length": "18-30",
+          "style": "信息量丰富，可使用分隔符"
+        },
+        "cover_image": {
+          "primary": {"width": 900, "height": 383, "format": "JPG/PNG"},
+          "secondary": {"width": 200, "height": 200, "format": "JPG/PNG"}
+        },
+        "body_images": {
+          "min_count": 2,
+          "max_count": 12,
+          "ideal_count": "3-8",
+          "width": 900,
+          "format": "JPG/PNG"
+        },
+        "hashtag": {
+          "enabled": false,
+          "min": 0,
+          "max": 0
+        },
+        "paragraph": {
+          "max_chars": 200,
+          "line_height": "1.5-2.0"
+        },
+        "optimal_publish_times": [
+          {"start": "07:30", "end": "08:30", "level": 3, "content_type": "资讯速递"},
+          {"start": "12:00", "end": "13:00", "level": 4, "content_type": "知识分享"},
+          {"start": "17:30", "end": "18:30", "level": 3, "content_type": "行业分析"},
+          {"start": "20:00", "end": "22:00", "level": 5, "content_type": "深度长文"}
+        ],
+        "algorithm_weights": {
+          "completion_rate": 0.35,
+          "share_rate": 0.25,
+          "original_bonus": 0.15,
+          "title_ctr": 0.25
+        },
+        "cta_types": ["关注引导", "留言讨论", "转发分享"]
+      }
+    },
+    "xiaohongshu": {
+      "name_cn": "小红书",
+      "name_en": "Xiaohongshu (RED)",
+      "content_type": "visual_note",
+      "specs": {
+        "char_limits": {
+          "min": 100,
+          "max": 1000,
+          "ideal_min": 300,
+          "ideal_max": 800
+        },
+        "title": {
+          "min_length": 8,
+          "max_length": 30,
+          "ideal_length": "15-25",
+          "style": "吸睛短标题，使用Emoji和符号"
+        },
+        "cover_image": {
+          "primary": {"width": 1080, "height": 1440, "ratio": "3:4", "format": "JPG"},
+          "alternative": {"width": 1080, "height": 1080, "ratio": "1:1", "format": "JPG"}
+        },
+        "body_images": {
+          "min_count": 1,
+          "max_count": 18,
+          "ideal_count": "5-9",
+          "width": 1080,
+          "format": "JPG"
+        },
+        "hashtag": {
+          "enabled": true,
+          "prefix": "#",
+          "min": 5,
+          "max": 8,
+          "strategy": {
+            "trending_ratio": "20-30%",
+            "vertical_ratio": "50-60%",
+            "longtail_ratio": "10-20%"
+          }
+        },
+        "emoji": {
+          "recommended": true,
+          "density": "每段1-2个",
+          "categories": ["表情", "手势", "符号"]
+        },
+        "optimal_publish_times": [
+          {"start": "12:00", "end": "13:00", "level": 4, "content_type": "午休阅读"},
+          {"start": "18:00", "end": "20:00", "level": 5, "content_type": "下班浏览"},
+          {"start": "21:00", "end": "23:00", "level": 5, "content_type": "深夜种草"}
+        ],
+        "algorithm_weights": {
+          "cover_click_rate": 0.30,
+          "save_rate": 0.25,
+          "like_rate": 0.20,
+          "comment_rate": 0.15,
+          "initial_2h_engagement": 0.10
+        },
+        "cta_types": ["点赞收藏", "评论区互动", "关注引导"]
+      }
+    },
+    "douyin": {
+      "name_cn": "抖音",
+      "name_en": "Douyin (TikTok China)",
+      "content_type": "short_video_script",
+      "specs": {
+        "char_limits": {
+          "min": 50,
+          "max": 500,
+          "ideal_min": 100,
+          "ideal_max": 300
+        },
+        "video": {
+          "min_duration_sec": 15,
+          "max_duration_sec": 600,
+          "ideal_duration_sec": "30-180",
+          "aspect_ratio": "9:16",
+          "resolution": {"width": 1080, "height": 1920}
+        },
+        "title": {
+          "min_length": 5,
+          "max_length": 30,
+          "ideal_length": "10-20",
+          "style": "悬念式，引发好奇心"
+        },
+        "hashtag": {
+          "enabled": true,
+          "prefix": "#",
+          "min": 3,
+          "max": 5
+        },
+        "hook": {
+          "critical_window_sec": 3,
+          "types": ["悬念型", "反常识型", "利益型", "共鸣型"]
+        },
+        "script_structure": {
+          "sections": ["3秒钩子", "核心展开", "反转/惊喜", "行动号召"],
+          "speaking_rate": "200-250字/分钟"
+        },
+        "bgm": {
+          "required": true,
+          "preference": "平台热门音乐"
+        },
+        "optimal_publish_times": [
+          {"start": "07:00", "end": "09:00", "level": 3, "content_type": "早通勤"},
+          {"start": "12:00", "end": "13:00", "level": 4, "content_type": "午休"},
+          {"start": "19:00", "end": "21:00", "level": 5, "content_type": "晚间娱乐"},
+          {"start": "21:00", "end": "23:00", "level": 4, "content_type": "睡前刷手机"}
+        ],
+        "algorithm_weights": {
+          "completion_rate": 0.35,
+          "first_3sec_retention": 0.25,
+          "engagement_rate": 0.20,
+          "share_rate": 0.10,
+          "trend_bonus": 0.10
+        },
+        "cta_types": ["点赞评论", "关注引导", "转发分享"]
+      }
+    },
+    "bilibili": {
+      "name_cn": "B站",
+      "name_en": "Bilibili",
+      "content_type": "mid_long_video_script",
+      "specs": {
+        "char_limits": {
+          "min": 500,
+          "max": 5000,
+          "ideal_min": 800,
+          "ideal_max": 2000
+        },
+        "video": {
+          "min_duration_sec": 60,
+          "max_duration_sec": 3600,
+          "ideal_duration_sec": "300-900",
+          "aspect_ratio": "16:9",
+          "resolution": {"width": 1920, "height": 1080}
+        },
+        "title": {
+          "min_length": 10,
+          "max_length": 40,
+          "ideal_length": "20-35",
+          "style": "知识性+趣味性，可使用括号补充"
+        },
+        "cover_image": {
+          "primary": {"width": 1920, "height": 1080, "format": "JPG/PNG"},
+          "alternative": {"width": 1146, "height": 717, "format": "JPG/PNG"}
+        },
+        "hashtag": {
+          "enabled": true,
+          "prefix": "",
+          "min": 5,
+          "max": 10
+        },
+        "danmaku": {
+          "trigger_points_required": true,
+          "min_count": 3,
+          "types": ["提问触发", "感叹触发", "互动触发"]
+        },
+        "multi_part": {
+          "supported": true,
+          "ideal_parts": "2-3",
+          "ideal_duration_per_part_sec": "480-720"
+        },
+        "optimal_publish_times": [
+          {"start": "17:00", "end": "19:00", "level": 4, "content_type": "放学下班后"},
+          {"start": "20:00", "end": "23:00", "level": 5, "content_type": "晚间黄金时段"},
+          {"start": "00:00", "end": "23:59", "level": 4, "content_type": "周末全天"}
+        ],
+        "algorithm_weights": {
+          "coin_rate": 0.25,
+          "favorite_rate": 0.25,
+          "danmaku_density": 0.20,
+          "completion_rate": 0.15,
+          "share_rate": 0.15
+        },
+        "cta_types": ["一键三连", "关注引导", "评论区互动"]
+      }
+    },
+    "zhihu": {
+      "name_cn": "知乎",
+      "name_en": "Zhihu",
+      "content_type": "deep_analysis",
+      "specs": {
+        "char_limits": {
+          "min": 1000,
+          "max": 10000,
+          "ideal_min": 2000,
+          "ideal_max": 5000
+        },
+        "title": {
+          "min_length": 10,
+          "max_length": 35,
+          "ideal_length": "15-30",
+          "style": "问句式或陈述式，体现专业性"
+        },
+        "hashtag": {
+          "enabled": true,
+          "prefix": "",
+          "min": 1,
+          "max": 3
+        },
+        "citation": {
+          "required_for_data": true,
+          "format": "标注来源"
+        },
+        "structure": {
+          "sections": ["背景引入", "问题分析", "论据展开", "结论建议"],
+          "emphasis": "逻辑严密、数据支撑"
+        },
+        "optimal_publish_times": [
+          {"start": "08:00", "end": "10:00", "level": 4, "content_type": "早间阅读"},
+          {"start": "12:00", "end": "14:00", "level": 4, "content_type": "午休深度阅读"},
+          {"start": "20:00", "end": "23:00", "level": 5, "content_type": "晚间深度阅读"}
+        ],
+        "algorithm_weights": {
+          "upvote_rate": 0.30,
+          "quality_score": 0.25,
+          "content_length_bonus": 0.15,
+          "professional_verification": 0.15,
+          "thanks_rate": 0.15
+        },
+        "cta_types": ["赞同感谢", "收藏", "评论讨论"]
+      }
+    },
+    "weibo": {
+      "name_cn": "微博",
+      "name_en": "Weibo",
+      "content_type": "short_post",
+      "specs": {
+        "char_limits": {
+          "min": 50,
+          "max": 2000,
+          "ideal_min": 100,
+          "ideal_max": 300
+        },
+        "title": {
+          "min_length": 5,
+          "max_length": 50,
+          "ideal_length": "一句话观点",
+          "style": "含话题标签，引发讨论"
+        },
+        "images": {
+          "min_count": 0,
+          "max_count": 9,
+          "ideal_count": "1-4",
+          "width": 1080,
+          "height": 1080,
+          "format": "JPG/PNG"
+        },
+        "hashtag": {
+          "enabled": true,
+          "prefix": "#",
+          "suffix": "#",
+          "min": 2,
+          "max": 3
+        },
+        "optimal_publish_times": [
+          {"start": "07:00", "end": "09:00", "level": 4, "content_type": "早间新闻"},
+          {"start": "12:00", "end": "13:00", "level": 4, "content_type": "午间浏览"},
+          {"start": "17:00", "end": "19:00", "level": 5, "content_type": "下班高峰"},
+          {"start": "21:00", "end": "23:00", "level": 4, "content_type": "晚间互动"}
+        ],
+        "algorithm_weights": {
+          "repost_rate": 0.35,
+          "engagement_rate": 0.25,
+          "trending_topic_bonus": 0.20,
+          "fan_interaction": 0.20
+        },
+        "cta_types": ["转发引导", "评论互动", "话题参与"]
+      }
+    }
+  },
+  "sensitive_words": {
+    "marketing": ["加微信", "私聊", "转账", "红包", "免费领取", "限时优惠"],
+    "exaggeration": ["第一", "唯一", "绝对", "100%", "保证", "最好"],
+    "medical": ["治愈", "根治", "药到病除", "特效"],
+    "financial": ["稳赚", "翻倍", "零风险", "保本"]
+  },
+  "publish_strategy": {
+    "recommended_order": ["zhihu", "bilibili", "wechat", "xiaohongshu", "douyin", "weibo"],
+    "interval_hours": 2,
+    "hot_content_deadline_hours": 24
+  }
+}

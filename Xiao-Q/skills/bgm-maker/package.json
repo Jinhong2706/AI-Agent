@@ -1,0 +1,21 @@
+{
+  "name": "bgm-maker",
+  "version": "1.3.2",
+  "description": "为视频、直播、播客、游戏和商业内容生成纯音乐 BGM 与背景配乐。",
+  "type": "module",
+  "main": "./dist/aimv.cjs",
+  "bin": {
+    "aimv": "./bin/aimv.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "README.md",
+    "runtime-defaults.json",
+    "release-manifest.json",
+    "SKILL.md"
+  ]
+}

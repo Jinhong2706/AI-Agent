@@ -1,0 +1,59 @@
+{
+  "name": "health-poster-generator-pro",
+  "version": "1.0.0",
+  "description": "专业版健康科普海报生成器，可配置组织名称，不包含定时任务和固定通道配置",
+  "author": "OpenClaw Community",
+  "license": "MIT",
+  "keywords": [
+    "health",
+    "poster",
+    "generator",
+    "seedream",
+    "volcengine",
+    "education",
+    "prevention"
+  ],
+  "dependencies": [
+    "seedream-image-generation"
+  ],
+  "requirements": [
+    "火山引擎API key（通过seedream技能配置）"
+  ],
+  "files": [
+    "SKILL.md",
+    "manifest.json",
+    "scripts/generate_health_poster_pro.py",
+    "references/health_knowledge_enhanced_fixed.json"
+  ],
+  "entry_points": {
+    "generate": "scripts/generate_health_poster_pro.py"
+  },
+  "config_schema": {
+    "organization_name": {
+      "type": "string",
+      "description": "组织/商会名称，显示在图片左上角",
+      "default": ""
+    },
+    "output_base": {
+      "type": "string",
+      "description": "输出目录基础路径",
+      "default": "~/health_posters"
+    },
+    "knowledge_file": {
+      "type": "string",
+      "description": "自定义知识库文件路径",
+      "default": null,
+      "nullable": true
+    }
+  },
+  "changelog": {
+    "1.0.0": [
+      "基于现有技能重构，符合技能市场要求",
+      "移除定时任务和固定通道配置",
+      "添加组织名称配置功能",
+      "完善依赖检查和错误提示",
+      "优化配置管理系统",
+      "使用修复后的知识库（无'预防'字样问题）"
+    ]
+  }
+}

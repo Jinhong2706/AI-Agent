@@ -1,0 +1,30 @@
+Skill: ppt-to-video
+Version: 20260415
+Packed: Wed Apr 15 21:29:37 CST 2026
+Python: 3.8+
+Platform: macOS / Linux / Windows
+
+Files:
+MANIFEST.txt
+README.md
+SKILL.md
+assets/.gitkeep
+scripts/check_environment.py
+scripts/run_pipeline.py
+scripts/step1_extract_voice.py
+scripts/step2_process_speech.py
+scripts/step3_clone_voice.py
+scripts/step4_generate_video.py
+scripts/step5_merge_all.py
+scripts/validate_inputs.py
+
+Install:
+  1. 解压到 ~/.codebuddy/skills/ 或 <project>/.codebuddy/skills/
+  2. 运行 python scripts/check_environment.py 检查依赖
+  3. 在 CodeBuddy 中使用自然语言触发
+
+Quick Start:
+  python scripts/run_pipeline.py \
+    --speech_md speech.md \
+    --slides_pdf slides.pdf \
+    --output_dir output/

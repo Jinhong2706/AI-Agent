@@ -1,0 +1,25 @@
+{
+  "name": "skill-creator-optimized-pro",
+  "version": "1.2.0",
+  "description": "AI Skill 技能包创建、优化、审计与打包发布工作流。",
+  "license": "UNLICENSED",
+  "private": true,
+  "keywords": [
+    "skill",
+    "skillhub",
+    "yaml",
+    "frontmatter",
+    "validation",
+    "packaging"
+  ],
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "references/",
+    "templates/",
+    "examples/",
+    "minimal-skills/",
+    "scripts/",
+    "_meta.json"
+  ]
+}

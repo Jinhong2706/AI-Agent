@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "summary": {
+    "pass": 24,
+    "warn": 0,
+    "fail": 0
+  },
+  "root_dir": ".",
+  "zip_file": "/Users/shawnliang/AI 工作区/商汤小浣熊工作区/output/skill-creator-optimized/skill-creator-optimized.zip",
+  "checks": [
+    {"status":"PASS","check":"file:SKILL.md","message":"required file exists and is non-empty"},
+    {"status":"PASS","check":"file:AGENTS.md","message":"required file exists and is non-empty"},
+    {"status":"PASS","check":"file:README.md","message":"required file exists and is non-empty"},
+    {"status":"PASS","check":"file:package.json","message":"required file exists and is non-empty"},
+    {"status":"PASS","check":"file:examples/usage.md","message":"required file exists and is non-empty"},
+    {"status":"PASS","check":"file:references/workflow.md","message":"required file exists and is non-empty"},
+    {"status":"PASS","check":"file:references/qa-checklist.md","message":"required file exists and is non-empty"},
+    {"status":"PASS","check":"file:references/error-handling.md","message":"required file exists and is non-empty"},
+    {"status":"PASS","check":"file:references/progress-template.md","message":"required file exists and is non-empty"},
+    {"status":"PASS","check":"front_matter:block","message":"YAML front matter block exists"},
+    {"status":"PASS","check":"front_matter:name","message":"name exists"},
+    {"status":"PASS","check":"front_matter:description","message":"description exists"},
+    {"status":"PASS","check":"capability:input_diagnosis","message":"pattern found in SKILL.md"},
+    {"status":"PASS","check":"capability:front_matter","message":"pattern found in SKILL.md"},
+    {"status":"PASS","check":"capability:self_healing","message":"pattern found in SKILL.md"},
+    {"status":"PASS","check":"capability:qa_gate","message":"pattern found in SKILL.md"},
+    {"status":"PASS","check":"capability:progress_recovery","message":"pattern found in SKILL.md"},
+    {"status":"PASS","check":"reference:qa_checklist","message":"pattern found in references/qa-checklist.md"},
+    {"status":"PASS","check":"reference:error_handling","message":"pattern found in references/error-handling.md"},
+    {"status":"PASS","check":"reference:progress_template","message":"pattern found in references/progress-template.md"},
+    {"status":"PASS","check":"content:no_placeholders","message":"unexpected pattern not found"},
+    {"status":"PASS","check":"content:no_empty_files","message":"no empty files found"},
+    {"status":"PASS","check":"zip:integrity","message":"zip integrity test passed"},
+    {"status":"PASS","check":"zip:root_skill","message":"zip contains root skill directory with SKILL.md"}
+  ]
+}

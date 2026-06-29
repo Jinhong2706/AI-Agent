@@ -1,0 +1,30 @@
+{
+  "id": "agent-ecosystem",
+  "name": "高级代理生态系统管理",
+  "version": "1.0.0",
+  "description": "专门用于设计、构建和管理OpenClaw高级代理生态系统的完整解决方案。基于19个专业代理的实际生态系统构建经验。",
+  "author": "银月 (silvermoon)",
+  "created_date": "2026-04-16",
+  "category": [
+    "system",
+    "agents",
+    "management"
+  ],
+  "tags": [
+    "代理管理",
+    "生态系统",
+    "架构设计",
+    "专业代理",
+    "协调机制"
+  ],
+  "dependencies": [],
+  "features": [
+    "代理架构设计和分层管理",
+    "19个专业代理的配置和协调",
+    "游戏开发专家团队构建",
+    "系统扩展和维护策略"
+  ],
+  "license": "MIT",
+  "repository": "https://github.com/openclaw/skills",
+  "documentation": "https://docs.openclaw.ai/tools/skills"
+}

@@ -1,0 +1,108 @@
+# 微信公众号AI内容创作与发布 Skill 配置模板
+# 复制此文件为 config.toml 并填写你的信息
+
+[wechat]
+# 微信公众号API凭证
+# 获取方式：登录公众号后台 → 设置与开发 → 基本配置
+app_id = "your_wechat_app_id_here"
+app_secret = "your_wechat_app_secret_here"
+
+[author]
+# 作者信息（用于文章署名和品牌签名）
+name = "你的名字"
+title = "你的称号（如：AI实战派、技术博主等）"
+
+# 个人背景介绍（多行用三引号）
+background = """
+[你的学历/工作经历背景]
+[你的AI相关经验]
+[你的成就/案例]
+"""
+
+# 专业领域
+expertise = "你擅长的AI领域（如：AI落地、企业培训、工具测评等）"
+
+[brand]
+# 公众号品牌信息
+public_account = "你的公众号名称"
+slogan = "你的口号（如：AI实战派，每天带你读懂AI圈）"
+
+# 品牌签名（显示在每篇文章末尾）
+signature = """
+[你的个人介绍]
+
+[你的机构/项目介绍]
+
+[引导关注语]
+
+👉 点击关注，开启你的[关键词]之旅
+"""
+
+# 引导关注图片路径（相对路径或绝对路径）
+# 建议尺寸：900x386（21:9），小于2MB
+footer_image = "images/footer-guide.png"
+
+[content]
+# 内容策略
+# 文章类型：深度解读、工具推荐、观点专栏、实战案例
+article_types = ["深度解读", "工具推荐", "观点专栏", "实战案例"]
+
+# 每日发布上限
+daily_limit = 1
+
+# 最少字数要求
+min_word_count = 800
+
+# 深度文章最少字数
+depth_min_word_count = 1500
+
+[image]
+# 配图设置
+ratio = "21:9"
+resolution = "2k"
+max_size_kb = 600
+
+[publish]
+# 发布设置
+# 作者名（显示在文章底部）
+author_name = "你的名字"
+
+# 默认主题（orange、default、github等）
+theme = "orange"
+
+# 是否自动追加品牌签名
+auto_append_signature = true
+
+# 是否自动插入引导关注图
+auto_append_footer_image = true
+
+[news]
+# 新闻源配置
+# 优先新闻源
+primary_sources = ["腾讯科技"]
+
+# 次要新闻源
+secondary_sources = ["36氪", "品玩", "Solidot"]
+
+# 技术新闻源
+tech_sources = ["GitHub Trending", "Hacker News"]
+
+# 排除的新闻源（低时效性）
+excluded_sources = ["知乎"]
+
+[quality]
+# 质量控制
+# 禁用词列表（避免极端化表述）
+forbidden_words = ["登顶", "碾压", "颠覆", "跪求", "震惊", "绝了"]
+
+# 段落最大行数
+max_lines_per_paragraph = 4
+
+# 检查清单（发布前自动检查）
+checklist = [
+    "标题符合规范",
+    "有实战视角板块",
+    "品牌签名已追加",
+    "没有敏感词",
+    "段落不超过4行"
+]

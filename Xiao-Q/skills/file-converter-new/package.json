@@ -1,0 +1,20 @@
+{
+  "name": "file-converter-skill",
+  "version": "1.0.0",
+  "description": "文件格式转换技能 - 支持图片转换、视频转GIF、PDF处理",
+  "main": "converter.js",
+  "bin": {
+    "file-convert": "./converter.js"
+  },
+  "scripts": {
+    "test": "node converter.js help"
+  },
+  "keywords": ["convert", "image", "video", "pdf", "sharp", "ffmpeg"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "sharp": "^0.33.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "pdf-lib": "^1.17.1"
+  }
+}

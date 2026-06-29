@@ -1,0 +1,5 @@
+{
+  "playwright_browser_path": null,
+  "use_system_chrome": true,
+  "fallback_to_requests": true
+}

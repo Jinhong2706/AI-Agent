@@ -1,0 +1,11 @@
+{
+  "environment": "production",
+  "baseUrl": "https://music.68zysm.cn/api/v3",
+  "webBaseUrl": "https://lexuan.club",
+  "skillSlug": "suno-ai-music",
+  "displayName": "Suno AI音乐生成",
+  "marketplaceTitle": "Suno AI音乐生成",
+  "marketplaceOnly": true,
+  "autoUpdate": true,
+  "latestUrl": "https://cdn.68zysm.cn/music-mv/skill/prod/packages/suno-ai-music/latest.json"
+}

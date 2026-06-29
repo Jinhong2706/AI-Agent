@@ -1,0 +1,4 @@
+interface:
+  display_name: "Obsidian Project Sync"
+  short_description: "Sync project content into an Obsidian wiki"
+  default_prompt: "Use $obsidian-project-sync to sync durable project content into an Obsidian or Markdown wiki."

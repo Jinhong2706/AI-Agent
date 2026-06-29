@@ -1,0 +1,54 @@
+
+---
+
+## 2. 第二个文件：`skill.yaml`（平台标准配置）
+```yaml
+# 腾讯云 SkillHub 标准配置文件
+skillId: one-person-company-finance-expert
+displayName: 一人公司财税投融资专家
+version: 1.0.0
+description: 60年行业经验沉淀的财税合规决策引擎，专为个体创业者解决财务混同、税务盲区、融资受限等高危风险，实时适配2026年最新政策
+category: Business & Content
+icon: https://example.com/icon.png
+permissions:
+  - read_financial_data
+  - access_policy_database
+
+# 入口函数配置
+handler: handler.main
+runtime: python3.9
+
+# 接口声明（对外暴露能力）
+functions:
+  - name: check_asset_mingling
+    description: 检测一人公司公私财产混同风险
+    parameters:
+      - name: bank_statements
+        type: string
+        description: 银行流水文件链接
+      - name: min_transaction
+        type: number
+        description: 风险交易金额阈值
+
+  - name: tax_health_check
+    description: 企业税务健康度诊断
+    parameters:
+      - name: annual_income
+        type: number
+        description: 年度总收入(元)
+      - name: industry
+        type: string
+        description: 所属行业
+
+  - name: vc_ready_check
+    description: 股权与融资合规性检测
+    parameters:
+      - name: registered_capital
+        type: number
+        description: 注册资本(元)
+      - name: paid_in_capital
+        type: number
+        description: 实缴资本(元)
+      - name: company_age
+        type: number
+        description: 公司成立年限

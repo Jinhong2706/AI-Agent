@@ -1,0 +1,4 @@
+requests>=2.31.0
+playwright>=1.40.0
+click>=8.1.0
+Pillow>=10.0.0

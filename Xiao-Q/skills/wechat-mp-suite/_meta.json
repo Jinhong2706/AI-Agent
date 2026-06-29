@@ -1,0 +1,11 @@
+{
+  "ownerId": "kn79n21c59k6jh6e3v9wjrzkzx823h3f",
+  "slug": "wechat-mp-suite",
+  "version": "1.0.1",
+  "publishedAt": 1775433600000,
+  "name": "微信公众号终极工作台",
+  "description": "集成搜索、爬虫、写作（刘润/爆款/真人/财经）、洗稿、AI配图、专业排版、发布（本地/远程MCP）八大模块",
+  "author": "SkillHub Community",
+  "license": "MIT",
+  "tags": ["wechat", "公众号", "写作", "排版", "发布", "洗稿", "爬虫", "AI配图"]
+}

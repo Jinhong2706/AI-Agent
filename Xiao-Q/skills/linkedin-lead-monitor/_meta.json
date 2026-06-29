@@ -1,0 +1,30 @@
+{
+  "name": "linkedin-lead-monitor",
+  "version": "1.0.0",
+  "description": "LinkedIn 潜客自动监控与商机提醒 - 监控目标潜客的职位变动、公司动态、内容发布等关键信号",
+  "author": "Hamburger",
+  "source": "openclaw-workspace",
+  "tags": ["外贸", "LinkedIn", "潜客监控", "商机提醒", "B2B 销售"],
+  "license": "MIT",
+  "minOpenclawVersion": "2026.2.26",
+  "requirements": [
+    "Python 3.x",
+    "OpenClaw 浏览器支持",
+    "飞书渠道已配置（用于通知推送）"
+  ],
+  "files": [
+    "SKILL.md",
+    "_meta.json",
+    "README.md",
+    "FEISHU_SETUP.md",
+    "requirements.txt",
+    ".env.template",
+    "scripts/analyze.py",
+    "scripts/check_config.py",
+    "scripts/cli.py",
+    "scripts/monitor.py",
+    "scripts/notify.py",
+    "references/linkedin-selectors.md",
+    "references/opportunity-rules.md"
+  ]
+}

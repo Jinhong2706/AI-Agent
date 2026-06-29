@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{SKILL_NAME}} — Iteration {{ITERATION_N}} 评测报告</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand-primary: #4F46E5;
+    --brand-primary-light: #7C7BFF;
+    --brand-primary-soft: #EEF2FF;
+    --brand-secondary: #10B981;
+    --brand-secondary-soft: #ECFDF5;
+    --brand-warn: #F59E0B;
+    --brand-warn-soft: #FFFBEB;
+    --brand-danger: #EF4444;
+    --brand-danger-soft: #FEF2F2;
+    --bg: #F8FAFC;
+    --bg-elev: #FFFFFF;
+    --bg-warm: #EEF1FF;
+    --ink: #0F172A;
+    --ink-soft: #475569;
+    --ink-mute: #94A3B8;
+    --line: #E2E8F0;
+    --line-strong: #CBD5E1;
+    --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.06), 0 4px 16px rgba(79, 70, 229, 0.08);
+    --shadow-section: 0 1px 2px rgba(15, 23, 42, 0.04);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Noto Sans SC', 'Inter', sans-serif;
+    line-height: 1.6;
+    font-size: 14px;
+  }
+
+  code, pre, .mono { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; }
+
+  .container { max-width: 1080px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* === 顶部品牌条 + 决策徽章 === */
+  .brand-bar {
+    background: var(--ink);
+    color: #fff;
+    padding: 20px 32px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 24px;
+  }
+  .brand-bar h1 {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+  }
+  .brand-bar h1 .dot { color: var(--brand-primary-light); }
+  .brand-bar .meta {
+    font-size: 12px;
+    color: var(--ink-mute);
+    text-align: right;
+    font-family: 'Inter', monospace;
+  }
+  .brand-bar .meta .k { color: #94A3B8; margin-right: 4px; }
+
+  /* === 报告头部 (skill + iteration + decision badge) === */
+  .header-card {
+    background: var(--bg-elev);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-card);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: center;
+  }
+  .header-card .skill-info h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .header-card .skill-info .iter {
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-family: 'Inter', monospace;
+  }
+  .header-card .skill-info .iter strong {
+    color: var(--brand-primary);
+    font-weight: 700;
+  }
+
+  .decision-badge {
+    padding: 14px 24px;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 160px;
+  }
+  .decision-badge .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .decision-badge .value {
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1.1;
+  }
+  .decision-badge.keep { background: var(--brand-secondary-soft); color: var(--brand-secondary); }
+  .decision-badge.revert { background: var(--brand-danger-soft); color: var(--brand-danger); }
+  .decision-badge.unchanged { background: var(--brand-warn-soft); color: var(--brand-warn); }
+
+  /* === 通用区块 === */
+  .section {
+    background: var(--bg-elev);
+    border-radius: 14px;
+    padding: 24px 32px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-section);
+  }
+  .section h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section h3 .num {
+    font-family: 'Inter', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--brand-primary);
+    padding: 3px 9px;
+    border-radius: 5px;
+    letter-spacing: 0.05em;
+  }
+  .section h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    margin: 18px 0 10px;
+  }
+
+  /* === 分数概览 (before / after / delta) === */
+  .score-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr 1fr;
+    gap: 18px;
+    align-items: center;
+  }
+  .score-cell {
+    background: var(--bg-warm);
+    border-radius: 12px;
+    padding: 18px 20px;
+    text-align: center;
+  }
+  .score-cell .label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-mute);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .score-cell .value {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1.1;
+    font-family: 'Inter', sans-serif;
+  }
+  .score-cell .stddev {
+    font-size: 11px;
+    color: var(--ink-mute);
+    margin-top: 4px;
+    font-family: 'Inter', monospace;
+  }
+  .score-arrow {
+    font-size: 28px;
+    color: var(--ink-mute);
+    text-align: center;
+    font-weight: 300;
+  }
+  .score-cell.delta-positive .value { color: var(--brand-secondary); }
+  .score-cell.delta-negative .value { color: var(--brand-danger); }
+  .score-cell.delta-neutral .value { color: var(--brand-warn); }
+
+  /* === Sparkline 走势 === */
+  .sparkline-wrapper {
+    background: var(--bg-warm);
+    border-radius: 12px;
+    padding: 18px 24px;
+    margin-top: 18px;
+  }
+  .sparkline-wrapper .legend {
+    font-size: 11px;
+    color: var(--ink-mute);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+  svg.sparkline {
+    width: 100%;
+    height: 60px;
+    overflow: visible;
+  }
+  svg.sparkline .line { fill: none; stroke: var(--brand-primary); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  svg.sparkline .area { fill: var(--brand-primary); opacity: 0.08; }
+  svg.sparkline .pt { fill: #fff; stroke: var(--brand-primary); stroke-width: 2; }
+  svg.sparkline .pt-current { fill: var(--brand-primary); stroke: #fff; stroke-width: 2; r: 5; }
+  svg.sparkline .pt-revert { fill: var(--brand-danger); stroke: #fff; stroke-width: 2; r: 4; }
+  svg.sparkline text.label { font-family: 'Inter', monospace; font-size: 10px; fill: var(--ink-mute); }
+  svg.sparkline text.value { font-family: 'Inter', monospace; font-size: 10px; fill: var(--ink-soft); font-weight: 600; }
+
+  /* === 表格 === */
+  table.data {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  table.data th, table.data td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  table.data th {
+    background: var(--bg-warm);
+    font-weight: 700;
+    color: var(--ink-soft);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  table.data tr:last-child td { border-bottom: none; }
+  table.data td .mono { font-size: 12px; color: var(--ink-soft); }
+  table.data td.num { font-family: 'Inter', monospace; font-variant-numeric: tabular-nums; text-align: right; }
+
+  /* === 状态徽章 === */
+  .pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    font-family: 'Inter', sans-serif;
+  }
+  .pill.pass { background: var(--brand-secondary-soft); color: var(--brand-secondary); }
+  .pill.fail { background: var(--brand-danger-soft); color: var(--brand-danger); }
+  .pill.tie  { background: var(--brand-warn-soft); color: var(--brand-warn); }
+  .pill.high { background: var(--brand-danger-soft); color: var(--brand-danger); }
+  .pill.medium { background: var(--brand-warn-soft); color: var(--brand-warn); }
+  .pill.low { background: var(--brand-primary-soft); color: var(--brand-primary); }
+  .pill.confidence-high { background: var(--brand-secondary-soft); color: var(--brand-secondary); }
+  .pill.confidence-medium { background: var(--brand-warn-soft); color: var(--brand-warn); }
+  .pill.confidence-low { background: var(--brand-danger-soft); color: var(--brand-danger); }
+
+  /* === Winner 横幅 === */
+  .winner-banner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 18px;
+    align-items: center;
+    background: var(--brand-primary-soft);
+    border-radius: 12px;
+    padding: 18px 22px;
+    border-left: 4px solid var(--brand-primary);
+  }
+  .winner-banner.tie { background: var(--brand-warn-soft); border-left-color: var(--brand-warn); }
+  .winner-banner .who {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--brand-primary);
+    font-family: 'Inter', monospace;
+  }
+  .winner-banner.tie .who { color: var(--brand-warn); }
+  .winner-banner .reason {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .winner-banner .conf {
+    text-align: right;
+    font-size: 11px;
+    color: var(--ink-mute);
+  }
+
+  /* === Rubric 雷达替代版 (横向条形) === */
+  .rubric-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 14px;
+  }
+  .rubric-col {
+    background: var(--bg-warm);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .rubric-col .head {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-mute);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .rubric-col .head .label {
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 800;
+    margin-left: 6px;
+  }
+  .rubric-bar {
+    margin-bottom: 8px;
+  }
+  .rubric-bar .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .rubric-bar .row .v {
+    font-family: 'Inter', monospace;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .rubric-bar .track {
+    height: 6px;
+    background: rgba(148, 163, 184, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .rubric-bar .fill {
+    height: 100%;
+    background: var(--brand-primary);
+    border-radius: 3px;
+    transition: width 0.4s;
+  }
+
+  /* === 健康卡片 (D10.3 / N stats) === */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .stat-card {
+    background: var(--bg-warm);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .stat-card .k {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  .stat-card .v {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--ink);
+    font-family: 'Inter', monospace;
+    line-height: 1.1;
+  }
+  .stat-card .v.danger { color: var(--brand-danger); }
+  .stat-card .v.warn { color: var(--brand-warn); }
+  .stat-card .v.success { color: var(--brand-secondary); }
+  .stat-card .sub { font-size: 11px; color: var(--ink-mute); margin-top: 2px; }
+
+  /* === critique 列表 === */
+  ul.bullet { list-style: none; padding: 0; margin: 0; }
+  ul.bullet > li {
+    padding: 10px 0 10px 20px;
+    border-bottom: 1px dashed var(--line);
+    position: relative;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  ul.bullet > li:before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--brand-primary);
+    font-weight: 700;
+  }
+  ul.bullet > li:last-child { border-bottom: none; }
+  ul.bullet > li.danger:before { color: var(--brand-danger); }
+  ul.bullet > li.warn:before { color: var(--brand-warn); }
+  ul.bullet > li .meta { font-size: 11px; color: var(--ink-mute); display: block; margin-top: 2px; }
+  ul.bullet > li .meta strong { color: var(--ink-soft); }
+
+  /* === Analyzer 三栏 (strengths / weaknesses / improvements) === */
+  .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  .col-card {
+    background: var(--bg-warm);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .col-card.strengths { border-top: 3px solid var(--brand-secondary); }
+  .col-card.weaknesses { border-top: 3px solid var(--brand-danger); }
+  .col-card.improvements { border-top: 3px solid var(--brand-primary); }
+  .col-card h5 {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--ink-mute);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .col-card ul.bullet > li { padding: 6px 0 6px 16px; font-size: 12px; }
+
+  /* === Feedback 时间线 === */
+  .timeline {
+    border-left: 2px solid var(--line);
+    padding-left: 20px;
+    margin-left: 4px;
+  }
+  .timeline .item {
+    position: relative;
+    padding-bottom: 16px;
+  }
+  .timeline .item:before {
+    content: "";
+    position: absolute;
+    left: -27px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--brand-primary);
+  }
+  .timeline .item.accepted:before { border-color: var(--brand-secondary); }
+  .timeline .item.rejected:before { border-color: var(--brand-danger); }
+  .timeline .item .ts {
+    font-size: 11px;
+    color: var(--ink-mute);
+    font-family: 'Inter', monospace;
+    margin-bottom: 4px;
+  }
+  .timeline .item .body {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* === 折叠 transcript === */
+  details.transcript {
+    background: var(--bg-warm);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  details.transcript summary {
+    cursor: pointer;
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+  }
+  details.transcript summary:hover { background: var(--brand-primary-soft); }
+  details.transcript summary::-webkit-details-marker { display: none; }
+  details.transcript summary:before {
+    content: "▶";
+    font-size: 10px;
+    color: var(--brand-primary);
+    transition: transform 0.2s;
+  }
+  details.transcript[open] summary:before { transform: rotate(90deg); }
+  details.transcript .body {
+    padding: 4px 18px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 480px;
+    overflow-y: auto;
+  }
+  details.transcript .body::-webkit-scrollbar { width: 6px; }
+  details.transcript .body::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 3px; }
+
+  /* === 页脚 === */
+  footer.report-footer {
+    margin-top: 32px;
+    padding: 16px 24px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--ink-mute);
+    font-family: 'Inter', monospace;
+  }
+  footer.report-footer a { color: var(--brand-primary); text-decoration: none; }
+
+  /* === 响应式 === */
+  @media (max-width: 800px) {
+    .container { padding: 16px 12px 32px; }
+    .header-card { grid-template-columns: 1fr; }
+    .score-grid { grid-template-columns: 1fr 1fr; }
+    .score-arrow { display: none; }
+    .three-col { grid-template-columns: 1fr; }
+    .rubric-pair { grid-template-columns: 1fr; }
+  }
+
+  /* === 打印 === */
+  @media print {
+    body { background: #fff; }
+    .container { max-width: 100%; padding: 0; }
+    .section, .header-card, .brand-bar { box-shadow: none; border: 1px solid var(--line); break-inside: avoid; }
+    details.transcript[open] .body { max-height: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- === 顶部品牌条 === -->
+  <div class="brand-bar">
+    <h1>Skill<span class="dot">·</span>Assistant <span style="opacity:0.5;font-weight:500;font-size:13px;margin-left:8px;">迭代评测报告</span></h1>
+    <div class="meta">
+      <div><span class="k">version</span>{{SKILL_ASSISTANT_VERSION}}</div>
+      <div><span class="k">eval_mode</span>{{EVAL_MODE}}</div>
+    </div>
+  </div>
+
+  <!-- === 报告头部 === -->
+  <div class="header-card">
+    <div class="skill-info">
+      <h2>{{SKILL_NAME}}</h2>
+      <div class="iter">
+        Iteration <strong>{{ITERATION_N}}</strong> / {{MAX_ITERATIONS}}
+        &nbsp;·&nbsp; short_board: <span class="mono">{{SHORT_BOARD}}</span>
+        &nbsp;·&nbsp; strategy: <span class="mono">{{STRATEGY_ID}}</span>
+        &nbsp;·&nbsp; <span class="mono">{{TIMESTAMP_HUMAN}}</span>
+      </div>
+    </div>
+    <div class="decision-badge {{DECISION_CLASS}}">
+      <div class="label">棘轮决策</div>
+      <div class="value">{{DECISION_LABEL}}</div>
+    </div>
+  </div>
+
+  <!-- === 1. 分数概览 === -->
+  <div class="section">
+    <h3><span class="num">01</span>分数概览</h3>
+
+    <div class="score-grid">
+      <div class="score-cell">
+        <div class="label">本轮前 mean</div>
+        <div class="value">{{SCORE_BEFORE}}</div>
+        <div class="stddev">σ {{STDDEV_BEFORE}} · N={{N_BEFORE}}</div>
+      </div>
+      <div class="score-arrow">→</div>
+      <div class="score-cell">
+        <div class="label">本轮后 mean</div>
+        <div class="value">{{SCORE_AFTER}}</div>
+        <div class="stddev">σ {{STDDEV_AFTER}} · N={{N_AFTER}}</div>
+      </div>
+      <div class="score-cell {{DELTA_CLASS}}">
+        <div class="label">Δ (mean)</div>
+        <div class="value">{{DELTA_VALUE}}</div>
+        <div class="stddev">阈值: ±{{THRESHOLD_FORMULA}} = {{THRESHOLD_VALUE}}</div>
+      </div>
+    </div>
+
+    <!-- 分数走势 sparkline -->
+    <div class="sparkline-wrapper">
+      <div class="legend">分数走势 · 全部历史 iteration</div>
+      <svg class="sparkline" viewBox="0 0 600 60" preserveAspectRatio="none">
+        <!-- AGENT 渲染时填充 path / circles / labels；下面是占位结构示例 -->
+        <!-- <path class="area" d="M 0 50 L 100 30 L 200 35 L 300 20 L 400 25 L 500 18 L 600 18 L 600 60 L 0 60 Z"/> -->
+        <!-- <path class="line" d="M 0 50 L 100 30 L 200 35 L 300 20 L 400 25 L 500 18 L 600 18"/> -->
+        <!-- <circle class="pt" cx="0"   cy="50" r="3"/> -->
+        <!-- <circle class="pt" cx="100" cy="30" r="3"/> -->
+        <!-- <circle class="pt-revert" cx="200" cy="35" r="4"/> -->
+        <!-- <circle class="pt-current" cx="600" cy="18" r="5"/> -->
+        {{SPARKLINE_SVG}}
+      </svg>
+    </div>
+  </div>
+
+  <!-- === 2. 各场景 benchmark === -->
+  <div class="section">
+    <h3><span class="num">02</span>各场景 benchmark · N={{N_REPEATS}} 重复跑</h3>
+
+    <table class="data">
+      <thead>
+        <tr>
+          <th>scenario</th>
+          <th>baseline mean</th>
+          <th>with_skill mean</th>
+          <th>Δ</th>
+          <th>stddev (with)</th>
+          <th>min / max</th>
+          <th>Grader pass_rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- AGENT 填充每条 scenario 一行 -->
+        <!-- 占位示例：
+        <tr>
+          <td><strong>cet4-news-report</strong><div class="mono">happy_path</div></td>
+          <td class="num">5.7</td>
+          <td class="num">8.3</td>
+          <td class="num"><span class="pill pass">+2.6</span></td>
+          <td class="num">0.32</td>
+          <td class="num mono">7.9 / 8.7</td>
+          <td class="num">4/5 (80%)</td>
+        </tr>
+        -->
+        {{BENCHMARK_ROWS}}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- === 3. Comparator 盲评（仅 blind_hybrid 时存在） === -->
+  <div class="section" id="blind-eval">
+    <h3><span class="num">03</span>Comparator 盲评 <span class="pill confidence-{{CONFIDENCE_CLASS}}">{{CONFIDENCE_LABEL}}</span></h3>
+
+    <div class="winner-banner {{WINNER_BANNER_CLASS}}">
+      <div class="who">{{WINNER_LABEL}}</div>
+      <div class="reason">{{WINNER_REASONING}}</div>
+      <div class="conf">
+        揭盲后:<br>
+        <strong>A = {{A_ROLE}}</strong><br>
+        <strong>B = {{B_ROLE}}</strong>
+      </div>
+    </div>
+
+    <h4>Rubric 评分</h4>
+    <div class="rubric-pair">
+      <div class="rubric-col">
+        <div class="head">输出 <span class="label">A</span> · score {{A_OVERALL_SCORE}}/10</div>
+        <!-- AGENT 填充每个 criterion 一条 .rubric-bar -->
+        <!-- 占位示例：
+        <div class="rubric-bar">
+          <div class="row"><span>正确性</span><span class="v">5/5</span></div>
+          <div class="track"><div class="fill" style="width: 100%"></div></div>
+        </div>
+        -->
+        {{A_RUBRIC_BARS}}
+      </div>
+      <div class="rubric-col">
+        <div class="head">输出 <span class="label">B</span> · score {{B_OVERALL_SCORE}}/10</div>
+        {{B_RUBRIC_BARS}}
+      </div>
+    </div>
+  </div>
+
+  <!-- === 4. Grader 评分 + critique evals (D10.3) === -->
+  <div class="section">
+    <h3><span class="num">04</span>Grader 评分 &amp; critique evals · D10.3 测试集判别力</h3>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="k">expectation pass</div>
+        <div class="v">{{GRADER_PASSED}}/{{GRADER_TOTAL}}</div>
+        <div class="sub">{{GRADER_PASS_RATE}}%</div>
+      </div>
+      <div class="stat-card">
+        <div class="k">test set health</div>
+        <div class="v {{HEALTH_CLASS}}">{{HEALTH_SCORE}}</div>
+        <div class="sub">/ 100 (D10.3 = {{D10_3_SCORE}}/25)</div>
+      </div>
+      <div class="stat-card">
+        <div class="k">discriminating</div>
+        <div class="v success">{{DISCRIMINATING_COUNT}}</div>
+        <div class="sub">judgment 强的 assertion</div>
+      </div>
+      <div class="stat-card">
+        <div class="k">loose / missing</div>
+        <div class="v warn">{{LOOSE_COUNT}} / {{MISSING_COUNT}}</div>
+        <div class="sub">建议优化</div>
+      </div>
+    </div>
+
+    <h4>critique evals · 改进建议</h4>
+    <ul class="bullet">
+      <!-- AGENT 填充每条 suggestion -->
+      <!-- 占位示例：
+      <li class="warn">
+        <strong>太宽松：</strong>"review.json 中包含 8 个评分维度" — baseline 输出 8 段散文也能 PASS。建议改为「每个维度有 evidence_quotes 数组且非空」
+        <span class="meta"><strong>discriminating_power:</strong> low &nbsp;·&nbsp; <strong>assertion_id:</strong> #2</span>
+      </li>
+      -->
+      {{CRITIQUE_SUGGESTIONS}}
+    </ul>
+  </div>
+
+  <!-- === 5. Analyzer post-hoc 归因（仅 blind_hybrid + Analyzer 已跑时显示） === -->
+  <div class="section" id="post-hoc">
+    <h3><span class="num">05</span>Analyzer post-hoc 归因</h3>
+
+    <div class="three-col">
+      <div class="col-card strengths">
+        <h5>Winner 优势</h5>
+        <ul class="bullet">
+          <!-- AGENT 填充：每条 winner_strength.claim + evidence_skill_md -->
+          {{WINNER_STRENGTHS}}
+        </ul>
+      </div>
+      <div class="col-card weaknesses">
+        <h5>Loser 弱点</h5>
+        <ul class="bullet">
+          {{LOSER_WEAKNESSES}}
+        </ul>
+      </div>
+      <div class="col-card improvements">
+        <h5>下轮改进建议</h5>
+        <ul class="bullet">
+          <!-- AGENT 填充：每条 improvement_suggestion，priority 用 .pill -->
+          {{IMPROVEMENT_SUGGESTIONS}}
+        </ul>
+      </div>
+    </div>
+
+    <h4>Carry-over 给下一轮（被注入下轮 strategy prompt）</h4>
+    <table class="data">
+      <thead>
+        <tr><th style="width:140px">类别</th><th>条目</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>should_keep</strong><br><span class="mono" style="font-size:11px;color:var(--ink-mute);">已对的，下轮勿动</span></td>
+          <td>{{CARRY_KEEP}}</td>
+        </tr>
+        <tr>
+          <td><strong>should_strengthen</strong><br><span class="mono" style="font-size:11px;color:var(--ink-mute);">还有空间，主攻</span></td>
+          <td>{{CARRY_STRENGTHEN}}</td>
+        </tr>
+        <tr>
+          <td><strong>should_drop</strong><br><span class="mono" style="font-size:11px;color:var(--ink-mute);">反而坏事，建议删</span></td>
+          <td>{{CARRY_DROP}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- === 6. 反馈时间线 === -->
+  <div class="section">
+    <h3><span class="num">06</span>反馈累积 · feedback timeline</h3>
+    <div class="timeline">
+      <!-- AGENT 填充每个 feedback_history 条目 -->
+      <!-- 占位示例：
+      <div class="item accepted">
+        <div class="ts">2026-04-28 16:06:00 · iteration-1</div>
+        <div class="body">改进合理，继续</div>
+      </div>
+      <div class="item rejected">
+        <div class="ts">2026-04-28 16:51:00 · iteration-2</div>
+        <div class="body">回退；过度修改了 SKILL.md description 字段</div>
+      </div>
+      -->
+      {{FEEDBACK_TIMELINE}}
+    </div>
+  </div>
+
+  <!-- === 7. 折叠 transcript === -->
+  <div class="section">
+    <h3><span class="num">07</span>子 Agent transcript（默认折叠）</h3>
+
+    <!-- AGENT 渲染：每条 scenario × {baseline, with_skill} × N_repeats 一个 details -->
+    <!-- 占位示例：
+    <details class="transcript">
+      <summary>cet4-news-report · with_skill · run 1 of 3 · 142s · 5 tool calls</summary>
+      <div class="body">[transcript markdown 全文，已经 escape 过 HTML 特殊字符]</div>
+    </details>
+    -->
+    {{TRANSCRIPT_DETAILS}}
+  </div>
+
+  <!-- === 8. 元数据 (manifest 摘要) === -->
+  <div class="section">
+    <h3><span class="num">08</span>元数据</h3>
+    <table class="data">
+      <tbody>
+        <tr><td style="width:200px"><strong>workspace</strong></td><td class="mono">{{WORKSPACE_PATH}}</td></tr>
+        <tr><td><strong>skill commit (开始)</strong></td><td class="mono">{{INITIAL_COMMIT}}</td></tr>
+        <tr><td><strong>skill commit (本轮 HEAD)</strong></td><td class="mono">{{CURRENT_COMMIT}}</td></tr>
+        <tr><td><strong>CLI provider (本轮)</strong></td><td class="mono">{{CLI_PROVIDER}} · fidelity={{FIDELITY}}</td></tr>
+        <tr><td><strong>session_lock</strong></td><td class="mono">pid={{LOCK_PID}} · acquired={{LOCK_ACQUIRED}}</td></tr>
+        <tr><td><strong>本轮耗时</strong></td><td class="mono">{{ITER_DURATION}}（含 {{N_REPEATS}}×双跑 + Grader + Comparator + Analyzer）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="report-footer">
+    Generated by <a href="https://iwiki.woa.com/p/4019623347" target="_blank">Skill Assistant</a> v{{SKILL_ASSISTANT_VERSION}} · iteration-report.html template v1.0
+    <br>
+    <span style="font-size:10px;">报告路径: {{REPORT_PATH}}</span>
+  </footer>
+
+</div>
+
+<script>
+  // 默认折叠所有 transcript；用户也可点击 summary 自行展开
+  // 提供一键全部展开 / 折叠的快捷键 (E / C)
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    const allDetails = document.querySelectorAll('details.transcript');
+    if (e.key === 'e' || e.key === 'E') {
+      allDetails.forEach(d => d.open = true);
+    } else if (e.key === 'c' || e.key === 'C') {
+      allDetails.forEach(d => d.open = false);
+    }
+  });
+</script>
+
+</body>
+</html>

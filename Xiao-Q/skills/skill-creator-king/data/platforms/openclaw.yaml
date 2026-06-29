@@ -1,0 +1,33 @@
+# OpenClaw 平台 Profile
+
+platform_id: openclaw
+platform_name: OpenClaw
+skill_dir: "~/.openclaw/skills/"
+
+frontmatter:
+  triggers: []
+  metadata.openclaw: true
+
+quality:
+  skip_dimensions:
+    - token_budget          # OpenClaw 无四级 Token 预算机制
+    - semantic_consistency  # 声明一致性检查依赖 WB 特定文档
+    - readme_sync           # README 同步检测依赖 WB 时间戳对比
+    - changelog_today       # 当日 CHANGELOG 检查依赖 WB 日期约定
+  max_score: 81
+  lightweight_max_score: 43
+
+anti_patterns:
+  exclude_ids:
+    - AP-001   # triggers 不适用
+    - AP-002   # L0_trigger 不适用
+    - AP-003   # template 不适用
+    - AP-004   # token_budget 不适用
+    - AP-005   # hard_cap 不适用
+    - AP-006   # triggers 数组检查不适用
+    - AP-008   # sudo 白名单不适用
+    - AP-010   # 硬编码路径检测策略不同
+    - AP-012   # triggers 重复检查不适用
+
+cross_platform_markers:
+  - "metadata.openclaw:"

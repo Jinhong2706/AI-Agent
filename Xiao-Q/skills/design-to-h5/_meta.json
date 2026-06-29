@@ -1,0 +1,46 @@
+{
+    "id": "design-to-h5",
+    "name": "多源设计H5生成器",
+    "category": "web-development",
+    "subcategory": "h5-generator",
+    "tags": [
+        "H5",
+        "响应式设计",
+        "多源输入",
+        "动画效果",
+        "设计还原",
+        "移动端",
+        "PC端"
+    ],
+    "icon": "design-to-h5.svg",
+    "rating": 5,
+    "installs": 0,
+    "featured": true,
+    "description": "支持截图、文档、图片等多种素材生成带动画的响应式H5网页",
+    "highlights": [
+        "多源素材解析",
+        "响应式自适应",
+        "图片淡入淡出",
+        "文字呼吸效果"
+    ],
+    "requirements": {
+        "python": "3.8+",
+        "node": "16+"
+    },
+    "permissions": [],
+    "version": "1.0.0",
+    "changelog": [
+        {
+            "version": "1.0.0",
+            "date": "2026-04-08",
+            "changes": ["首发版本"]
+        }
+    ],
+    "author": {
+        "name": "WorkBuddy",
+        "verified": true
+    },
+    "license": "MIT",
+    "sourceUrl": "",
+    "documentationUrl": ""
+}

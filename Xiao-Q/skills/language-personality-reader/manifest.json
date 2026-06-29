@@ -1,0 +1,16 @@
+{
+  "id": "language-personality-reader",
+  "name": "language-personality-reader",
+  "displayName": "语言识人术",
+  "version": "1.0.0",
+  "description": "通过语言判断一个人性格的识人工具。从语速语气、用词习惯、说话逻辑、矛盾反应、表达边界5个维度分析性格特征，识别内向/外向、理性/感性、乐观/悲观等性格类型，并提供针对性的沟通建议。",
+  "type": "skill",
+  "author": "your-name",
+  "tags": ["personality", "communication", "psychology", "language", "assessment"],
+  "category": "productivity",
+  "entry": "SKILL.md",
+  "output": ["text"],
+  "config": {
+    "file": "config.json"
+  }
+}

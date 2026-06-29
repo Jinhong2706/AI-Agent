@@ -1,0 +1,23 @@
+{
+  "name": "skill-creator",
+  "version": "1.0.0",
+  "description": "AI-driven Skill package creator for generating, optimizing, validating and packaging standardized Skill bundles.",
+  "type": "skill",
+  "main": "SKILL.md",
+  "files": [
+    "SKILL.md",
+    "AGENTS.md",
+    "README.md",
+    "examples/",
+    "references/"
+  ],
+  "keywords": [
+    "skill",
+    "skill-creator",
+    "agent",
+    "workflow",
+    "automation"
+  ],
+  "author": "Shawn",
+  "license": "UNLICENSED"
+}

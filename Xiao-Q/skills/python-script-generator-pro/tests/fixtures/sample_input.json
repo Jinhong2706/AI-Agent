@@ -1,0 +1,40 @@
+{
+  "valid_configs": [
+    {
+      "name": "sample-project",
+      "type": "fastapi",
+      "description": "Sample FastAPI project",
+      "requirements": ["fastapi", "uvicorn"],
+      "author": "Test Author",
+      "license": "MIT",
+      "version": "1.0.0"
+    },
+    {
+      "name": "cli-tool",
+      "type": "cli",
+      "description": "Sample CLI tool"
+    }
+  ],
+  "invalid_configs": [
+    {
+      "name": "123-invalid",
+      "type": "cli",
+      "description": "Invalid name"
+    },
+    {
+      "name": "valid-name",
+      "type": "invalid-type",
+      "description": "Invalid type"
+    },
+    {
+      "name": "",
+      "type": "cli"
+    }
+  ],
+  "sample_requirements": [
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.20.0",
+    "sqlalchemy>=2.0.0",
+    "pydantic>=2.0.0"
+  ]
+}

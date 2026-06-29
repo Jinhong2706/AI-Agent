@@ -1,0 +1,174 @@
+{
+  "version": "1.0",
+  "source": "peaks.md",
+  "last_updated": "2026-04-20",
+  "description": "北京云海官方16峰静态配置。供 _fetch_*.py 和 analyzer.py 引用，不得在脚本中硬编码。",
+  "notes": {
+    "non_official_peaks": "三香山/佛爷顶/玉渡山/凤凰坟/煤山·镇边城等非官方山峰，不得出现在16峰报告中",
+    "station_elev": "使用 Open-Meteo 格点海拔（非山峰实际海拔）",
+    "summit_elev": "山峰实际海拔，用于计算险差",
+    "weather_code": "中国天气网区域编码"
+  },
+  "peaks": [
+    {
+      "rank": 1,
+      "name": "海坨山",
+      "latitude": 40.93,
+      "longitude": 115.78,
+      "summit_elev": 2198,
+      "area": "延庆",
+      "weather_code": "101010800",
+      "features": "云海最壮观，冬奥主赛场"
+    },
+    {
+      "rank": 2,
+      "name": "东灵山",
+      "latitude": 40.05,
+      "longitude": 115.43,
+      "summit_elev": 2303,
+      "area": "门头沟",
+      "weather_code": "101011400",
+      "features": "北京最高峰，云层最厚"
+    },
+    {
+      "rank": 3,
+      "name": "雾灵山",
+      "latitude": 40.62,
+      "longitude": 117.48,
+      "summit_elev": 2116,
+      "area": "密云",
+      "weather_code": "101011300",
+      "features": "日出评级最高，视野最佳"
+    },
+    {
+      "rank": 4,
+      "name": "百花山",
+      "latitude": 39.87,
+      "longitude": 115.57,
+      "summit_elev": 1991,
+      "area": "门头沟",
+      "weather_code": "101011400",
+      "features": "植被茂密，水汽充足"
+    },
+    {
+      "rank": 5,
+      "name": "云蒙山",
+      "latitude": 40.47,
+      "longitude": 116.63,
+      "summit_elev": 1414,
+      "area": "怀柔",
+      "weather_code": "101010500",
+      "features": "LCL最低，湿度最高"
+    },
+    {
+      "rank": 6,
+      "name": "妙峰山",
+      "latitude": 40.03,
+      "longitude": 116.00,
+      "summit_elev": 1291,
+      "area": "门头沟",
+      "weather_code": "101011400",
+      "features": "城市+云海双景，金顶停车直达"
+    },
+    {
+      "rank": 7,
+      "name": "黄草梁",
+      "latitude": 40.45,
+      "longitude": 115.72,
+      "summit_elev": 1700,
+      "area": "门头沟",
+      "weather_code": "101011400",
+      "features": "官方营地，星河+云海双绝"
+    },
+    {
+      "rank": 8,
+      "name": "长峪城",
+      "latitude": 40.32,
+      "longitude": 116.22,
+      "summit_elev": 1400,
+      "area": "昌平",
+      "weather_code": "101010700",
+      "features": "海坨山北侧，沟谷水汽"
+    },
+    {
+      "rank": 9,
+      "name": "东指壶",
+      "latitude": 40.52,
+      "longitude": 116.65,
+      "summit_elev": 1234,
+      "area": "平谷",
+      "weather_code": "101011500",
+      "features": "平谷秘境，靠近水库"
+    },
+    {
+      "rank": 10,
+      "name": "燕羽山",
+      "latitude": 40.52,
+      "longitude": 116.17,
+      "summit_elev": 1180,
+      "area": "延庆",
+      "weather_code": "101010800",
+      "features": "难度较低，适合休闲游"
+    },
+    {
+      "rank": 11,
+      "name": "北灵山",
+      "latitude": 40.08,
+      "longitude": 115.47,
+      "summit_elev": 1898,
+      "area": "门头沟",
+      "weather_code": "101011400",
+      "features": "灵山系北麓，沟谷拦截水汽"
+    },
+    {
+      "rank": 12,
+      "name": "西南灵山",
+      "latitude": 40.03,
+      "longitude": 115.43,
+      "summit_elev": 1800,
+      "area": "门头沟",
+      "weather_code": "101011400",
+      "features": "灵山西坡，观测方向独特"
+    },
+    {
+      "rank": 13,
+      "name": "箭扣长城",
+      "latitude": 40.47,
+      "longitude": 116.57,
+      "summit_elev": 900,
+      "area": "延庆",
+      "weather_code": "101010800",
+      "features": "雾锁峰顶，无云海可见"
+    },
+    {
+      "rank": 14,
+      "name": "金山岭长城",
+      "latitude": 40.65,
+      "longitude": 117.23,
+      "summit_elev": 1100,
+      "area": "密云",
+      "weather_code": "101011300",
+      "features": "雾锁峰顶，无云海可见"
+    },
+    {
+      "rank": 15,
+      "name": "白石山",
+      "latitude": 39.03,
+      "longitude": 114.58,
+      "summit_elev": 2099,
+      "area": "涞源",
+      "weather_code": "101090201",
+      "features": "保定涞源，云海+佛光双绝"
+    },
+    {
+      "rank": 16,
+      "name": "白草畔",
+      "latitude": 39.73,
+      "longitude": 115.38,
+      "summit_elev": 1983,
+      "area": "房山/涞源",
+      "weather_code": "101090201",
+      "features": "野三坡主峰，白草花海+云海双绝"
+    }
+  ]
+}

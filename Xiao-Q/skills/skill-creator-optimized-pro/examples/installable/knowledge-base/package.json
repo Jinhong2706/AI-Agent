@@ -1,0 +1,19 @@
+{
+  "name": "knowledge-base",
+  "version": "0.1.0",
+  "description": "知识库检索与沉淀助手：用于授权资料检索、结构化归纳、来源引用与知识写入。",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "keywords": [
+    "knowledge-base",
+    "retrieval",
+    "citation",
+    "knowledge-writing",
+    "skill"
+  ],
+  "files": [
+    "SKILL.md",
+    "README.md"
+  ]
+}

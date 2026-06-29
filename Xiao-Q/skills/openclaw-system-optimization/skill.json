@@ -1,0 +1,13 @@
+{
+  "name": "OpenClaw系统优化",
+  "slug": "openclaw-system-optimization",
+  "version": "1.1.0",
+  "author": "曾小闲",
+  "description": "每日定时自动执行系统健康检查（memory/skills/配置文件完整性检查+自动修复）+ 内存优化清理（缓存/日志/临时文件垃圾清理），完成后自动发送结构化排版的飞书通知，支持直接在对话框修改执行时间，无需后台操作",
+  "category": "系统工具",
+  "platform": ["OpenClaw"],
+  "requirements": ["飞书插件已授权"],
+  "keywords": ["系统优化", "自动运维", "内存清理", "健康检查", "定时任务", "飞书通知"],
+  "entry": "main.sh",
+  "license": "MIT"
+}

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技能评估审查 - __SKILL_NAME_PLACEHOLDER__</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .skill-info {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .skill-description {
+            background: #f0f7ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            border-left: 4px solid #0066cc;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .tab:hover {
+            background: #e0e0e0;
+        }
+        
+        .tab.active {
+            background: #0066cc;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .eval-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .eval-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .eval-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .eval-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-pass {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .eval-section {
+            margin-bottom: 20px;
+        }
+        
+        .eval-section h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .prompt-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            border-left: 4px solid #0066cc;
+        }
+        
+        .output-box {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .feedback-box {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+        }
+        
+        .feedback-box:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 3px rgba(0,102,204,0.1);
+        }
+        
+        .assertions-list {
+            list-style: none;
+        }
+        
+        .assertion-item {
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        
+        .assertion-pass {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        
+        .assertion-fail {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .nav-btn:hover {
+            background: #0052a3;
+        }
+        
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .submit-btn {
+            padding: 15px 30px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        .submit-btn:hover {
+            background: #218838;
+        }
+        
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .benchmark-table th,
+        .benchmark-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .benchmark-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .improvement-positive {
+            color: #28a745;
+            font-weight: 600;
+        }
+        
+        .improvement-negative {
+            color: #dc3545;
+            font-weight: 600;
+        }
+        
+        .collapsible {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .collapsible:hover {
+            color: #0066cc;
+        }
+        
+        .collapsible::before {
+            content: '▶ ';
+            display: inline-block;
+            margin-right: 5px;
+            transition: transform 0.2s;
+        }
+        
+        .collapsible.expanded::before {
+            content: '▼ ';
+        }
+        
+        .collapsible-content {
+            display: none;
+            margin-top: 10px;
+        }
+        
+        .collapsible-content.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 技能评估审查</h1>
+            <div class="skill-info">
+                <strong>技能：</strong> __SKILL_NAME_PLACEHOLDER__
+                <div class="skill-description">
+                    <strong>描述：</strong> __SKILL_DESCRIPTION_PLACEHOLDER__
+                </div>
+            </div>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('outputs')">📋 输出审查</button>
+            <button class="tab" onclick="switchTab('benchmark')">📊 基准测试</button>
+        </div>
+        
+        <!-- 输出审查标签页 -->
+        <div id="outputs" class="tab-content active">
+            <div id="eval-container">
+                <!-- 评估卡片将通过 JS 动态生成 -->
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">← 上一个</button>
+                <span id="eval-counter">1 / 5</span>
+                <button class="nav-btn" id="next-btn" onclick="navigate(1)">下一个 →</button>
+            </div>
+            
+            <button class="submit-btn" onclick="submitFeedback()">💾 提交所有评论</button>
+        </div>
+        
+        <!-- 基准测试标签页 -->
+        <div id="benchmark" class="tab-content">
+            <div class="eval-card">
+                <h2>📊 基准测试摘要</h2>
+                <div id="benchmark-summary">
+                    <!-- 基准摘要将通过 JS 动态生成 -->
+                </div>
+                
+                <table class="benchmark-table">
+                    <thead>
+                        <tr>
+                            <th>评估用例</th>
+                            <th>With Skill</th>
+                            <th>Baseline</th>
+                            <th>改进</th>
+                            <th>时间</th>
+                            <th>Token</th>
+                        </tr>
+                    </thead>
+                    <tbody id="benchmark-body">
+                        <!-- 基准数据将通过 JS 动态生成 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 评估数据（占位符，运行时替换）
+        const EVAL_DATA = __EVAL_DATA_PLACEHOLDER__;
+        
+        let currentIndex = 0;
+        const feedback = {};
+        
+        // 切换标签页
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+        
+        // 渲染评估卡片
+        function renderEval(index) {
+            const evalItem = EVAL_DATA[index];
+            const container = document.getElementById('eval-container');
+            
+            container.innerHTML = `
+                <div class="eval-card">
+                    <div class="eval-header">
+                        <div class="eval-name">${evalItem.eval_name || '评估 #' + (index + 1)}</div>
+                        <div class="eval-status ${evalItem.passed ? 'status-pass' : 'status-fail'}">
+                            ${evalItem.passed ? '✓ 通过' : '✗ 失败'}
+                        </div>
+                    </div>
+                    
+                    <div class="eval-section">
+                        <h3>📝 Prompt</h3>
+                        <div class="prompt-box">${evalItem.prompt}</div>
+                    </div>
+                    
+                    ${evalItem.output ? `
+                    <div class="eval-section">
+                        <h3>📤 输出</h3>
+                        <div class="output-box">${evalItem.output}</div>
+                    </div>
+                    ` : ''}
+                    
+                    ${evalItem.assertions ? `
+                    <div class="eval-section">
+                        <h3 class="collapsible" onclick="toggleCollapse(this)">✅ 断言评分</h3>
+                        <div class="collapsible-content">
+                            <ul class="assertions-list">
+                                ${evalItem.assertions.map(a => `
+                                    <li class="assertion-item ${a.passed ? 'assertion-pass' : 'assertion-fail'}">
+                                        <strong>${a.name}</strong>: ${a.passed ? '✓' : '✗'}
+                                        ${a.evidence ? `<br><small>${a.evidence}</small>` : ''}
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="eval-section">
+                        <h3>💬 反馈</h3>
+                        <textarea 
+                            class="feedback-box" 
+                            placeholder="写下你的反馈（自动保存）..."
+                            oninput="saveFeedback(${index}, this.value)"
+                        >${feedback[index] || ''}</textarea>
+                    </div>
+                </div>
+            `;
+            
+            // 更新计数器
+            document.getElementById('eval-counter').textContent = `${index + 1} / ${EVAL_DATA.length}`;
+            
+            // 更新按钮状态
+            document.getElementById('prev-btn').disabled = index === 0;
+            document.getElementById('next-btn').disabled = index === EVAL_DATA.length - 1;
+        }
+        
+        // 导航
+        function navigate(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) currentIndex = 0;
+            if (currentIndex >= EVAL_DATA.length) currentIndex = EVAL_DATA.length - 1;
+            renderEval(currentIndex);
+        }
+        
+        // 保存反馈
+        function saveFeedback(index, text) {
+            feedback[index] = text;
+            localStorage.setItem(`feedback-${index}`, text);
+        }
+        
+        // 加载保存的反馈
+        function loadFeedback() {
+            for (let i = 0; i < EVAL_DATA.length; i++) {
+                const saved = localStorage.getItem(`feedback-${i}`);
+                if (saved) feedback[i] = saved;
+            }
+        }
+        
+        // 提交反馈
+        function submitFeedback() {
+            const feedbackData = {
+                reviews: Object.entries(feedback).map(([index, text]) => ({
+                    run_id: `eval-${index}-with_skill`,
+                    feedback: text,
+                    timestamp: new Date().toISOString()
+                })),
+                status: 'complete',
+                submitted_at: new Date().toISOString()
+            };
+            
+            // 下载为 JSON 文件
+            const blob = new Blob([JSON.stringify(feedbackData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'feedback.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            alert('✅ 反馈已保存为 feedback.json 文件！');
+        }
+        
+        // 折叠/展开
+        function toggleCollapse(element) {
+            element.classList.toggle('expanded');
+            const content = element.nextElementSibling;
+            content.classList.toggle('show');
+        }
+        
+        // 渲染基准测试
+        function renderBenchmark() {
+            const summary = document.getElementById('benchmark-summary');
+            const tbody = document.getElementById('benchmark-body');
+            
+            // 摘要
+            summary.innerHTML = `
+                <p><strong>总评估数：</strong>${EVAL_DATA.length}</p>
+                <p><strong>通过率：</strong>${calculatePassRate()}%</p>
+            `;
+            
+            // 表格
+            tbody.innerHTML = EVAL_DATA.map(evalItem => `
+                <tr>
+                    <td>${evalItem.eval_name || '评估 #' + (EVAL_DATA.indexOf(evalItem) + 1)}</td>
+                    <td>${evalItem.passed ? '✓' : '✗'}</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+            `).join('');
+        }
+        
+        // 计算通过率
+        function calculatePassRate() {
+            const passed = EVAL_DATA.filter(e => e.passed).length;
+            return ((passed / EVAL_DATA.length) * 100).toFixed(1);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFeedback();
+            renderEval(0);
+            renderBenchmark();
+            
+            // 键盘导航
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') navigate(-1);
+                if (e.key === 'ArrowRight') navigate(1);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "lyrics-to-song",
+  "version": "1.2.13",
+  "skillSlug": "lyrics-to-song",
+  "displayName": "歌词成曲AI",
+  "marketplaceTitle": "歌词成曲AI",
+  "marketplaceOnly": true,
+  "releaseEnvironment": "production",
+  "baseUrl": "https://music.68zysm.cn/api/v3",
+  "webBaseUrl": "https://lexuan.club",
+  "node": ">=18",
+  "builtAt": "2026-04-28T05:52:50.981Z"
+}
