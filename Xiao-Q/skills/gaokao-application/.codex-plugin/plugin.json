@@ -1,0 +1,16 @@
+{
+  "name": "gaokao-application",
+  "version": "1.0.0",
+  "description": "高考志愿填报助手：基于位次、省份规则、选科和历年录取数据辅助生成谨慎的冲稳保垫志愿方案。",
+  "interface": {
+    "displayName": "高考志愿填报助手",
+    "description": "Rank-based mainland China Gaokao college application assistant.",
+    "icon": "GraduationCap",
+    "brandColor": "#2563eb"
+  },
+  "skills": [
+    {
+      "path": "."
+    }
+  ]
+}

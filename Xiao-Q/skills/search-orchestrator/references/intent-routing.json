@@ -1,0 +1,242 @@
+{
+  "version": "4.0.0",
+  "description": "查询意图 → 偏好排序 → 全量纳入。preferred_tools 仅影响调用优先级而非是否纳入。discover.js 发现的每一个 ready 搜索工具都会被自动调用，无需手动修改此文件适配新工具。",
+
+  "how_it_works": "1) discover.js 扫描全部可用工具 2) 意图分类确定偏好排序 3) preferred_tools 优先纳入 4) supplementary 匹配补充 5) 最终——所有 discover 发现的 ready 搜索工具全部并行调用，已知未知都不遗漏。装了新 skill 自动生效。",
+
+  "search_orchestrator_catch_all": {
+    "enabled": true,
+    "rule": "完成 preferred + supplementary 匹配后，遍历 discover.js 返回的全部 ready 工具，将尚未被纳入的任何搜索/信息获取类工具全部追加到最终调用列表。唯一排除条件：纯地理工具（geographic标签）仅在非地理意图时可跳过。",
+    "rationale": "不依赖人工维护的工具白名单。用户安装的任何搜索 Skill 都会被 discover.js 发现，然后被此规则自动纳入，无需修改 intent-routing.json。"
+  },
+
+  "intents": [
+    {
+      "intent": "geographic",
+      "triggers": ["路线", "导航", "周边", "附近", "POI", "地图", "旅游规划", "热力图", "在哪", "怎么走", "距离", "地址", "方向", "查找地点"],
+      "required_capabilities": {
+        "strengths": ["geographic"],
+        "min_sources": 1
+      },
+      "preferred_tools": ["amap-lbs-skill", "amap-lbs"],
+      "supplementary_capabilities": {
+        "strengths": ["chinese", "general", "news", "deep_research", "ai_optimized"],
+        "coverage": ["china", "global"]
+      },
+      "depth_strategy": "chain",
+      "max_rounds": 3,
+      "note": "地图工具为主 + 所有其他搜索工具补充"
+    },
+
+    {
+      "intent": "chinese_news",
+      "triggers": ["最新", "新闻", "热点", "事件", "发生", "宣布", "发布", "刚发生"],
+      "language_hint": "chinese",
+      "required_capabilities": {
+        "strengths": ["chinese", "news"],
+        "freshness": "realtime",
+        "min_sources": 3
+      },
+      "preferred_tools": ["baidu-search", "minimax-web-search"],
+      "supplementary_capabilities": {
+        "strengths": ["news", "deep_research", "ai_optimized", "general", "english", "dynamic_pages"],
+        "coverage": ["global"],
+        "depth": ["deep", "moderate"]
+      },
+      "depth_strategy": "timeline",
+      "max_rounds": 5,
+      "note": "中文搜索优先排序 + 全球工具全量补充 + 自动纳入用户安装的所有其他搜索 Skill"
+    },
+
+    {
+      "intent": "chinese_general",
+      "triggers": [],
+      "language_hint": "chinese",
+      "required_capabilities": {
+        "strengths": ["chinese"],
+        "coverage": ["china", "global"],
+        "min_sources": 2
+      },
+      "preferred_tools": ["baidu-search", "minimax-web-search"],
+      "supplementary_capabilities": {
+        "strengths": ["general", "news", "deep_research", "ai_optimized", "english", "deep_extract", "dynamic_pages"],
+        "coverage": ["global"],
+        "depth": ["deep", "moderate"]
+      },
+      "depth_strategy": "entity_drill",
+      "max_rounds": 4,
+      "note": "中文优先 + 全量补充 + 自动发现新 Skill"
+    },
+
+    {
+      "intent": "english_news",
+      "triggers": ["breaking", "latest", "news", "announced", "just in", "reported"],
+      "language_hint": "english",
+      "required_capabilities": {
+        "strengths": ["news"],
+        "freshness": "realtime",
+        "depth": ["deep", "moderate"],
+        "min_sources": 3
+      },
+      "preferred_tools": ["tavily-search", "web_search"],
+      "supplementary_capabilities": {
+        "strengths": ["chinese", "general", "deep_extract", "dynamic_pages", "china_coverage"],
+        "coverage": ["china", "global"]
+      },
+      "depth_strategy": "timeline",
+      "max_rounds": 5,
+      "note": "英文搜索优先 + 中文源补充 + 自动纳入所有可用搜索 Skill"
+    },
+
+    {
+      "intent": "technical",
+      "triggers": ["代码", "API", "文档", "error", "bug", "issue", "github", "npm", "pip", "framework", "library", "SDK", "怎么实现", "技术方案", "stack trace", "documentation", "reference", "spec", "protocol", "配置", "config"],
+      "required_capabilities": {
+        "strengths": ["technical", "general"],
+        "depth": ["deep", "moderate"],
+        "min_sources": 2
+      },
+      "preferred_tools": ["web_search", "web_fetch"],
+      "supplementary_capabilities": {
+        "strengths": ["chinese", "ai_optimized", "deep_research", "dynamic_pages"],
+        "coverage": ["china", "global"]
+      },
+      "depth_strategy": "doc_trace",
+      "max_rounds": 4,
+      "note": "技术类全网覆盖，所有搜索工具全量并行"
+    },
+
+    {
+      "intent": "fact_check",
+      "triggers": ["真的吗", "核实", "辟谣", "真伪", "验证", "是否属实", "事实核查", "真相", "是不是假的", "fact check", "verify", "debunk"],
+      "required_capabilities": {
+        "strengths": ["general", "news"],
+        "min_sources": 3
+      },
+      "preferred_tools": ["web_search", "web_fetch"],
+      "supplementary_capabilities": {
+        "strengths": ["chinese", "english", "deep_research", "ai_optimized", "dynamic_pages", "china_coverage"],
+        "coverage": ["china", "global"],
+        "depth": ["deep"]
+      },
+      "depth_strategy": "cross_verify",
+      "max_rounds": 5,
+      "note": "事实核查需最大范围交叉验证，所有工具全量调用"
+    },
+
+    {
+      "intent": "comparative",
+      "triggers": ["对比", "比较", "区别", "哪个好", "vs", "选择", "推荐", "compare", "versus", "difference between", "which is better"],
+      "required_capabilities": {
+        "strengths": ["general"],
+        "depth": ["deep", "moderate"],
+        "min_sources": 2
+      },
+      "preferred_tools": ["web_search"],
+      "supplementary_capabilities": {
+        "strengths": ["chinese", "deep_extract", "deep_research", "ai_optimized", "dynamic_pages"],
+        "coverage": ["china", "global"]
+      },
+      "depth_strategy": "dimension_table",
+      "max_rounds": 3,
+      "note": "对比分析多维度多源，全量工具并行"
+    },
+
+    {
+      "intent": "deep_research",
+      "triggers": ["深入研究", "全面了解", "完整报告", "背景分析", "来龙去脉", "综述", "概况", "deep dive", "comprehensive", "overview", "history of", "how does X work"],
+      "required_capabilities": {
+        "depth": ["deep"],
+        "min_sources": 2
+      },
+      "preferred_tools": ["web_search", "web_fetch"],
+      "supplementary_capabilities": {
+        "strengths": ["chinese", "english", "deep_research", "ai_optimized", "dynamic_pages", "china_coverage"],
+        "coverage": ["china", "global"],
+        "depth": ["deep"]
+      },
+      "depth_strategy": "entity_drill",
+      "max_rounds": 4,
+      "note": "深度研究必须最广覆盖面，所有工具全量多轮迭代"
+    },
+
+    {
+      "intent": "english_general",
+      "triggers": [],
+      "language_hint": "english",
+      "required_capabilities": {
+        "strengths": ["general", "english"],
+        "min_sources": 2
+      },
+      "preferred_tools": ["web_search"],
+      "supplementary_capabilities": {
+        "strengths": ["chinese", "deep_extract", "deep_research", "ai_optimized", "dynamic_pages", "china_coverage"],
+        "coverage": ["china", "global"]
+      },
+      "depth_strategy": "entity_drill",
+      "max_rounds": 4,
+      "note": "英文优先 + 全量补充 + 自动纳入新 Skill"
+    },
+
+    {
+      "intent": "default",
+      "triggers": [],
+      "required_capabilities": {
+        "min_sources": 2
+      },
+      "preferred_tools": ["web_search"],
+      "supplementary_capabilities": {
+        "strengths": ["chinese", "english", "general", "news", "deep_research", "ai_optimized", "dynamic_pages", "china_coverage", "deep_extract"],
+        "coverage": ["china", "global"],
+        "depth": ["deep", "moderate"]
+      },
+      "depth_strategy": "entity_drill",
+      "max_rounds": 3,
+      "note": "兜底方案全量工具覆盖"
+    }
+  ],
+
+  "depth_strategies": {
+    "chain": {
+      "description": "链条式深挖 — 从一个结果引出下一个相关搜索",
+      "convergence_check": "连续2轮无新关联"
+    },
+    "timeline": {
+      "description": "时间线追踪 — 按时间顺序追溯事件发展",
+      "convergence_check": "时间线无断点"
+    },
+    "entity_drill": {
+      "description": "实体深挖 — 对结果中出现的重要实体进行定向搜索",
+      "convergence_check": "本轮产出新实体数为0"
+    },
+    "doc_trace": {
+      "description": "文档链追踪 — 从文档/issue追踪到源码/修复",
+      "convergence_check": "链断裂或无新文档"
+    },
+    "cross_verify": {
+      "description": "交叉验证 — 对每个关键声明寻找独立来源",
+      "convergence_check": "所有声明均已≥2源验证"
+    },
+    "dimension_table": {
+      "description": "维度对比 — 按维度逐项对比并验证",
+      "convergence_check": "所有对比维度已填充"
+    }
+  },
+
+  "tool_matching_rules": {
+    "version": "4.0 — 全量纳入体系",
+    "how": "先排序，后全收。preferred_tools 仅决定调用顺序（靠前的先发），但不决定是否调用——任何 ready 的搜索工具最终都会被纳入。",
+    "philosophy": "discover.js 是唯一的真相来源。它能发现什么，就调用什么。preferred_tools 是经验建议（排在前面的通常更有效），但不是准入过滤器。用户安装的任何新搜索 Skill 在被 discover.js 发现后立即生效，零配置介入。",
+    "priority": [
+      "1. preferred_tools 中所有 status=ready 的工具 → 纳入主工具集（优先排序，先调用）",
+      "2. 剩余 ready 工具中，strengths/depth/coverage 与 required + supplementary capabilities 有任何交集的 → 纳入补充工具集",
+      "3. 【关键】遍历 discover.js 返回的全部 ready 工具 → 尚未纳入的所有搜索/信息获取类工具 → 全部追加（零遗漏）",
+      "4. 唯一排除：纯地理工具（仅有 geographic 标签）在非地理意图时可跳过",
+      "5. 最终工具列表 = 主集 ∪ 补充集 ∪ 自动发现集，全部并行执行",
+      "6. 0 个 ready → 告知用户 → 降级为 web_fetch 定向抓取"
+    ],
+    "auto_discovery": "用户安装新搜索 Skill 后：1) discover.js 下次运行时自动发现 2) search_orchestrator_catch_all 规则自动纳入 3) 无需编辑此文件。真正的零配置搜索聚合。",
+    "strength_match": "工具的 strengths 与能力需求的交集用于排序（前=优先级高），不影响是否纳入",
+    "cross_language": "语言标签（chinese/english）为偏好提示，非硬性过滤。Tavily 搜中文内容、Baidu 搜英文解读都是合法用法。"
+  }
+}

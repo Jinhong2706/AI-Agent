@@ -1,0 +1,105 @@
+; RSDKv5 Mod Configuration File
+; Save as mod.ini in your mod's root directory
+
+[Mod]
+Name=[MOD_NAME]
+Version=[VERSION]
+Author=[YOUR_NAME]
+Description=[BRIEF_DESCRIPTION_OF_YOUR_MOD]
+
+; Game this mod targets
+; Sonic Mania = 1
+; Sonic CD Remastered = 2 (RSDKv4)
+; Sonic 1 Remastered = 3 (RSDKv3)
+Game=1
+
+; Mod type
+; 0 = Script mod (overrides objects, adds new ones)
+; 1 = Art mod (replaces sprites/textures)
+; 2 = Full mod (scripts + art)
+Type=2
+
+; Load priority (higher = loads later, can override other mods)
+Priority=0
+
+; Dependencies (other mods required)
+; Dependencies=[mod_folder_name1],[mod_folder_name2]
+
+; Compatibility
+MinAPIVersion=5.0
+MaxAPIVersion=5.0
+
+; ============================================
+; FILE OVERRIDES
+; ============================================
+
+; Scripts to override/add
+; Format: Script[Index]=OriginalScript.txt->YourScript.txt
+
+; Example:
+; Script0=Obj_Player.txt->MyMod/Scripts/Obj_Player.txt
+; Script1=Obj_Ring.txt->MyMod/Scripts/Obj_Ring.txt
+
+; New object scripts (additional objects)
+; Format: NewScript[Index]=YourScript.txt
+
+; Example:
+; NewScript0=MyMod/Scripts/Obj_NewEnemy.txt
+; NewScript1=MyMod/Scripts/Obj_NewPlatform.txt
+
+; ============================================
+; ART OVERRIDES
+; ============================================
+
+; Sprites to override
+; Format: Sprite[Index]=SpriteSheet.png->YourSprite.png
+
+; Example:
+; Sprite0=Global/Sprites/Players/PlayerSheet.png->MyMod/Sprites/PlayerSheet.png
+
+; ============================================
+; STAGE OVERRIDES
+; ============================================
+
+; Stage data to override
+; Format: Stage[Index]=StageName.bin->YourStage.bin
+
+; Example:
+; Stage0=Stage/Zone01/Act1.bin->MyMod/Stages/Zone01_Act1.bin
+
+; ============================================
+; AUDIO OVERRIDES
+; ============================================
+
+; Sound effects to override
+; Format: SFX[Index]=sfx_name->YourSFX.wav
+
+; Music to override
+; Format: Music[Index]=music_name->YourMusic.ogg
+
+; ============================================
+; CREDITS
+; ============================================
+
+; Add yourself to mod credits
+; This will show up in the mod loader
+ShowInCredits=true
+CreditText=[YOUR_NAME] - [WHAT_YOU_DID]
+
+; ============================================
+; NOTES
+; ============================================
+
+; 1. Place this file in your mod's root directory
+; 2. Folder structure example:
+;    MyMod/
+;    ├── mod.ini          (this file)
+;    ├── Scripts/
+;    │   └── Obj_NewObject.txt
+;    ├── Sprites/
+;    │   └── NewSprites.png
+;    └── Stages/
+;        └── NewStage.bin
+;
+; 3. Install mod by copying MyMod/ to the game's mods/ directory
+; 4. Enable in RSDK Mod Loader

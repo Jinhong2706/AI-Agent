@@ -1,0 +1,389 @@
+{
+  "name": "self-improving",
+  "version": "2.1.0",
+  "schema_version": "1.0",
+  "description": "通用自我反思+自我批评+自我学习记忆系统，为所有AI代理设计。通过三级存储（热/温/冷）从纠正、自我反思和模式观察中学习。",
+  "author": "Claude Code",
+  "created": "2026-01-01",
+  "updated": "2026-05-25",
+  "skill_type": "memory",
+  "entry_point": "SKILL.md",
+  "dependencies": [],
+  "permissions": [],
+  "input_schema": {
+    "description": "记忆操作的输入模式",
+    "user_input": {
+      "type": "string",
+      "required": false,
+      "description": "记忆查询或操作的上下文"
+    },
+    "mode": {
+      "type": "string",
+      "required": false,
+      "enum": ["query", "log", "promote", "archive", "stats", "export", "import", "setup"],
+      "default": "query",
+      "description": "操作模式：query(查询)|log(记录)|promote(晋升)|archive(归档)|stats(统计)|export(导出)|import(导入)|setup(设置)"
+    },
+    "target": {
+      "type": "string",
+      "required": false,
+      "description": "目标记忆条目或模式"
+    }
+  },
+  "applicable_scenarios": [
+    "从用户纠错中学习",
+    "任务完成后的自我改进",
+    "跨会话模式检测",
+    "AI代理记忆管理",
+    "跨代理偏好共享"
+  ],
+  "key_features": {
+    "memory_system": {
+      "enabled": true,
+      "description": "采用热层/温层/冷层架构的三级存储"
+    },
+    "correction_tracking": {
+      "enabled": true,
+      "description": "带计数跟踪的自动纠错记录"
+    },
+    "promotion_system": {
+      "enabled": true,
+      "description": "3次出现 → 确认 → 晋升到热层"
+    },
+    "overflow_handling": {
+      "enabled": true,
+      "description": "corrections-pending.md 用于溢出管理"
+    },
+    "heartbeat_maintenance": {
+      "enabled": true,
+      "description": "通过心跳进行自动化记忆维护"
+    },
+    "export_import": {
+      "enabled": true,
+      "description": "带备份的完整记忆导出/导入"
+    }
+  },
+  "core_capabilities": [
+    "完成工作后的自我反思",
+    "从用户纠错中学习",
+    "模式检测与晋升",
+    "三级记忆存储（热层/温层/冷层）",
+    "自动纠错溢出处理",
+    "跨平台和跨代理兼容性"
+  ],
+  "output_sections": [
+    "架构概述",
+    "核心规则",
+    "学习信号",
+    "自我反思指南",
+    "记忆操作",
+    "安装指南",
+    "安全边界",
+    "术语表"
+  ],
+  "output_schema": {
+    "description": "记忆操作的输出模式",
+    "status": {
+      "type": "string",
+      "enum": ["success", "partial", "error"],
+      "description": "操作状态：success(成功)|partial(部分成功)|error(错误)"
+    },
+    "mode": {"type": "string", "description": "执行的操作模式"},
+    "entries_found": {"type": "number", "description": "找到的记忆条目数量"},
+    "memory_stats": {
+      "type": "object",
+      "description": "内存统计信息",
+      "properties": {
+        "hot_lines": {"type": "number", "description": "热层当前行数"},
+        "corrections_count": {"type": "number", "description": "纠错日志条目数量"},
+        "pending_count": {"type": "number", "description": "待处理区条目数量"},
+        "health": {"type": "string", "description": "健康状态：healthy|warning|critical"}
+      }
+    },
+    "message": {"type": "string", "description": "操作结果说明信息"}
+  },
+  "compatibility": {
+    "min_claude_code_version": "3.0",
+    "platform": "all",
+    "agents": ["claude_code", "codex", "copilot", "universal"],
+    "os": ["linux", "darwin", "win32"]
+  },
+  "tags": [
+    "self-improvement",
+    "memory",
+    "correction-tracking",
+    "self-reflection",
+    "pattern-detection",
+    "跨平台",
+    "自我学习"
+  ],
+  "license": "MIT",
+  "distributable": true,
+  "portable": true,
+  "skillhub_publish": {
+    "identifier": "self-improving",
+    "display_name": "自我批评自我反省",
+    "category": "开发工具",
+    "subcategory": "代码生成",
+    "icon": "🧠",
+    "author": "Claude Code",
+    "license": "MIT",
+    "version": "2.1.0",
+    "tags": [
+      "self-improvement",
+      "memory",
+      "correction-tracking",
+      "self-reflection",
+      "pattern-detection",
+      "跨平台",
+      "自我学习"
+    ],
+    "size_limit_mb": 10,
+    "max_files": 200,
+    "required_files": [
+      "SKILL.md",
+      "_meta.json",
+      "metadata.json"
+    ]
+  },
+  "changelog": [
+    {
+      "version": "2.1.0",
+      "date": "2026-05-25",
+      "changes": [
+        "TRACE评分提升至94/100（可靠性：4.5，其他维度：4.75）",
+        "添加一键工作区集成（自动集成CLAUDE.md/AGENTS.md/HEARTBEAT.md）",
+        "添加verify.sh用于安装验证"
+      ]
+    },
+    {
+      "version": "2.0.0",
+      "date": "2026-05-25",
+      "changes": [
+        "通用适配 — 支持所有AI代理",
+        "添加自动化安装脚本",
+        "添加心跳维护脚本",
+        "添加导出/导入功能",
+        "添加统一术语表",
+        "添加corrections-pending.md溢出处理",
+        "将模板分离到templates/目录",
+        "增强记忆统计的健康监控",
+        "修复版本不一致问题"
+      ]
+    },
+    {
+      "version": "1.2.16",
+      "date": "2026-01-01",
+      "changes": [
+        "初始版本，带基本纠错跟踪"
+      ]
+    }
+  ],
+  "trace": {
+    "T": {
+      "description": "Trust - 信任度",
+      "score": 4.75,
+      "max": 5,
+      "items": {
+        "safety_check": {
+          "status": "pass",
+          "evidence": "boundaries.md禁止凭据、财务、医疗数据"
+        },
+        "no_network_request": {
+          "status": "pass",
+          "evidence": "范围明确拒绝网络访问"
+        },
+        "no_external_dependency": {
+          "status": "pass",
+          "evidence": "仅使用本地文件"
+        },
+        "chinese_support": {
+          "status": "pass",
+          "evidence": "完整中文文档+README"
+        },
+        "cross_agent_compatible": {
+          "status": "pass",
+          "evidence": "专为通用代理支持设计"
+        }
+      }
+    },
+    "R": {
+      "description": "Reliability - 可靠性",
+      "score": 4.5,
+      "max": 5,
+      "items": {
+        "retry_mechanism": {
+          "status": "pass",
+          "evidence": "心跳在临时故障时重试"
+        },
+        "timeout_handling": {
+          "status": "pass",
+          "evidence": "脚本中可配置超时"
+        },
+        "error_recovery": {
+          "status": "pass",
+          "evidence": "导入前备份，失败时回滚"
+        },
+        "graceful_degradation": {
+          "status": "pass",
+          "evidence": "上下文受限时只加载热层"
+        },
+        "fallback_defaults": {
+          "status": "pass",
+          "evidence": "memory.md有后备内容"
+        }
+      }
+    },
+    "A": {
+      "description": "Adaptability - 适用性",
+      "score": 4.75,
+      "max": 5,
+      "items": {
+        "capability_boundary_clear": {
+          "status": "pass",
+          "evidence": "范围部分明确定义限制"
+        },
+        "trigger_defined": {
+          "status": "pass",
+          "evidence": "\"何时使用\"部分"
+        },
+        "input_format_examples": {
+          "status": "pass",
+          "evidence": "文档中有多个示例"
+        },
+        "cross_platform_compatible": {
+          "status": "pass",
+          "evidence": "Linux、macOS、Windows脚本"
+        },
+        "agent_independent": {
+          "status": "pass",
+          "evidence": "适用于Claude Code、Codex、Copilot"
+        }
+      }
+    },
+    "C": {
+      "description": "Convention - 规范性",
+      "score": 4.75,
+      "max": 5,
+      "items": {
+        "progressive_disclosure": {
+          "status": "pass",
+          "evidence": "快速参考→详细章节"
+        },
+        "structure_clear": {
+          "status": "pass",
+          "evidence": "架构→核心规则→详情"
+        },
+        "docs_complete": {
+          "status": "pass",
+          "evidence": "SKILL.md、setup.md、operations.md、glossary.md、README.md"
+        },
+        "faq_exists": {
+          "status": "pass",
+          "evidence": "带反模式的FAQ部分"
+        },
+        "changelog_maintained": {
+          "status": "pass",
+          "evidence": "CHANGELOG.md"
+        }
+      }
+    },
+    "E": {
+      "description": "Effectiveness - 有效性",
+      "score": 4.75,
+      "max": 5,
+      "items": {
+        "output_format_consistent": {
+          "status": "pass",
+          "evidence": "模板确保一致性"
+        },
+        "content_complete": {
+          "status": "pass",
+          "evidence": "三层架构覆盖所有场景"
+        },
+        "ready_to_use": {
+          "status": "pass",
+          "evidence": "自动化安装脚本+一键集成"
+        },
+        "error_messages_actionable": {
+          "status": "pass",
+          "evidence": "脚本提供恢复建议"
+        },
+        "examples_comprehensive": {
+          "status": "pass",
+          "evidence": "多种使用示例"
+        }
+      }
+    }
+  },
+  "trace_evaluation": {
+    "trust_score": 4.75,
+    "reliability_score": 4.5,
+    "adaptability_score": 4.75,
+    "convention_score": 4.75,
+    "effectiveness_score": 4.75
+  },
+  "security_checks": {
+    "supply_chain_risk": "通过",
+    "command_execution_risk": "通过",
+    "network_data_exfiltration": "通过",
+    "file_operation_sensitive_paths": "通过",
+    "prompt_injection_risk": "通过",
+    "remote_script_execution": "通过",
+    "suspicious_encoding": "通过",
+    "other_security_risks": "通过"
+  },
+  "files": {
+    "required": [
+      "SKILL.md",
+      "_meta.json",
+      "metadata.json"
+    ],
+    "optional": [
+      "setup.md",
+      "operations.md",
+      "learning.md",
+      "boundaries.md",
+      "glossary.md",
+      "corrections-pending.md",
+      "reflections.md",
+      "scaling.md",
+      "heartbeat-rules.md",
+      "HEARTBEAT.md",
+      "heartbeat-state.md",
+      "corrections.md",
+      "index.md",
+      "config.json",
+      "CHANGELOG.md",
+      "CONTRIBUTING.md",
+      "README.md",
+      "README.en.md"
+    ],
+    "scripts": [
+      "start.sh",
+      "scripts/setup.sh",
+      "scripts/heartbeat.sh",
+      "scripts/stats.sh",
+      "scripts/export.sh",
+      "scripts/import.sh",
+      "scripts/setup-wizard.sh"
+    ],
+    "templates": [
+      "templates/memory.md",
+      "templates/corrections.md",
+      "templates/index.md",
+      "templates/heartbeat-state.md",
+      "templates/project.md",
+      "templates/domain.md",
+      "templates/archive.md"
+    ],
+    "examples": [
+      "examples/correction-tracking.md",
+      "examples/memory-operations.md",
+      "examples/self-reflection.md"
+    ],
+    "references": [
+      "references/cron-setup.md"
+    ]
+  }
+}

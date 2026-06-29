@@ -1,0 +1,17 @@
+{
+  "name": "data-analysis",
+  "version": "0.1.0",
+  "description": "数据分析类最小可安装 Skill 示例包",
+  "type": "module",
+  "files": [
+    "SKILL.md",
+    "README.md"
+  ],
+  "keywords": [
+    "data-analysis",
+    "data-cleaning",
+    "visualization",
+    "skill"
+  ],
+  "license": "UNLICENSED"
+}

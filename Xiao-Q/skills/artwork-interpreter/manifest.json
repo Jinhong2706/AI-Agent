@@ -1,0 +1,27 @@
+{
+  "id": "artwork-interpreter",
+  "name": "artwork-interpreter",
+  "displayName": "Artwork Interpreter",
+  "version": "1.0.0",
+  "description": "Help users interpret and appreciate artworks. Uses a six-dimensional analysis framework (Form, Content, Technique, Emotion, Theme, Context) or a minimalist four-dimensional framework to comprehensively analyze artworks. Applicable to painting, sculpture, music, dance, literature, theater, film, and other art forms. Output is a Word document format art appreciation report.",
+  "type": "skill",
+  "author": "your-name",
+  "tags": ["art", "interpretation", "appreciation", "analysis", "critique", "artwork", "culture", "docx"],
+  "category": "culture",
+  "entry": "SKILL.md",
+  "output": ["docx"],
+  "scripts": {
+    "generate": "scripts/generate_report.py",
+    "install": "scripts/install_dependencies.py"
+  },
+  "examples": [
+    "examples/mona_lisa_example.json"
+  ],
+  "config": {
+    "file": "config.json",
+    "schema": {
+      "defaultMode": "string",
+      "outputFormat": "string"
+    }
+  }
+}

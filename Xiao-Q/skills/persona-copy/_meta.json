@@ -1,0 +1,9 @@
+{
+  "name": "人设文案-学员版",
+  "version": "1.0.0",
+  "description": "老板第一人称视角人设文案生成，13个行业模板，可直接读稿拍视频",
+  "author": "aiqinghuage01-dev",
+  "platforms": ["workbuddy", "qclaw", "openclaw", "codex", "claude-code"],
+  "requirements": {},
+  "entry": "SKILL.md"
+}

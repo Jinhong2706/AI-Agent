@@ -1,0 +1,16 @@
+{
+  "id": "travel-photo-assistant",
+  "name": "travel-photo-assistant",
+  "displayName": "旅游拍照万能助手",
+  "version": "1.0.0",
+  "description": "旅游拍照万能创意公式，从构图、层次、光影、角度、动作、减法六大维度，提供极简、好记、可复制的拍照技巧。支持景区/景点拍照建议、最佳时间点、动作指导、道具推荐，单人照/多人照模式全覆盖。",
+  "type": "skill",
+  "author": "your-name",
+  "tags": ["travel", "photography", "photo", "creative", "tourism"],
+  "category": "lifestyle",
+  "entry": "SKILL.md",
+  "output": ["text", "docx"],
+  "config": {
+    "file": "config.json"
+  }
+}

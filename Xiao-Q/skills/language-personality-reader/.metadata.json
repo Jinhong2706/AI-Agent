@@ -1,0 +1,11 @@
+{
+  "assetType": "skill",
+  "name": "language-personality-reader",
+  "displayName": "语言识人术",
+  "semver": "1.0.0",
+  "description": "5维度语言分析，快速识人，提供沟通建议。",
+  "author": "your-name",
+  "tags": ["personality", "communication", "psychology"],
+  "category": "productivity",
+  "entry": "SKILL.md"
+}

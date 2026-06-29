@@ -1,0 +1,27 @@
+{
+  "name": "reverse-engineering-fusion",
+  "version": "2.0.0",
+  "description": "逆向工程融合技能 - ORRI方法论实现",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "ts-node scripts/test-nes.ts",
+    "dev": "ts-node --watch scripts/test-nes.ts",
+    "wizard": "ts-node scripts/wizard.ts"
+  },
+  "keywords": [
+    "reverse-engineering",
+    "fusion",
+    "ORRI",
+    "protocol",
+    "openclaw-skill"
+  ],
+  "author": "AI Fusion Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.19.39",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  }
+}

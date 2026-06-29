@@ -1,0 +1,2 @@
+[console_scripts]
+llm-key-pool = llm_key_pool.llm_client:main

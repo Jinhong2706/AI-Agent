@@ -1,0 +1,75 @@
+{
+  "version": "1.0.0",
+  "defaultMode": "six",
+  "outputFormat": "docx",
+  "outputTemplate": "artistic",
+  "includeExamples": true,
+  "dimensions": {
+    "six": {
+      "name": "六维完整版",
+      "dimensions": [
+        {"key": "form", "name": "形式维度", "color": "#FF6B6B"},
+        {"key": "content", "name": "内容维度", "color": "#4ECDC4"},
+        {"key": "technique", "name": "技法维度", "color": "#45B7D1"},
+        {"key": "emotion", "name": "情感维度", "color": "#96CEB4"},
+        {"key": "theme", "name": "思想/主题维度", "color": "#DDA0DD"},
+        {"key": "context", "name": "背景维度", "color": "#F7DC6F"}
+      ]
+    },
+    "four": {
+      "name": "极简四维版",
+      "dimensions": [
+        {"key": "form", "name": "形式维度", "color": "#FF6B6B"},
+        {"key": "content", "name": "内容维度", "color": "#4ECDC4"},
+        {"key": "emotion", "name": "情感维度", "color": "#96CEB4"},
+        {"key": "theme", "name": "思想维度（含背景）", "color": "#DDA0DD"}
+      ]
+    }
+  },
+  "artForms": {
+    "painting": {
+      "name": "绘画",
+      "formElements": ["色彩", "线条", "构图", "光影", "笔触", "空间"]
+    },
+    "sculpture": {
+      "name": "雕塑",
+      "formElements": ["形态", "材质", "空间", "质感", "体量"]
+    },
+    "music": {
+      "name": "音乐",
+      "formElements": ["旋律", "节奏", "和声", "音色", "结构", "动态"]
+    },
+    "dance": {
+      "name": "舞蹈",
+      "formElements": ["动作", "姿态", "节奏", "调度", "空间"]
+    },
+    "literature": {
+      "name": "文学",
+      "formElements": ["语言", "结构", "叙事", "修辞", "风格"]
+    },
+    "film": {
+      "name": "影视",
+      "formElements": ["画面", "剪辑", "声音", "叙事", "表演"]
+    },
+    "theater": {
+      "name": "戏剧",
+      "formElements": ["表演", "舞台", "对白", "调度", "灯光"]
+    }
+  },
+  "emotionTypes": {
+    "sublime": {"name": "崇高感", "keywords": ["庄严", "宏伟", "震撼", "敬畏"]},
+    "beautiful": {"name": "优美感", "keywords": ["和谐", "宁静", "舒适", "愉悦"]},
+    "tragic": {"name": "悲剧感", "keywords": ["悲伤", "怜悯", "恐惧", "净化"]},
+    "comic": {"name": "喜剧感", "keywords": ["幽默", "讽刺", "轻松", "欢快"]},
+    "absurd": {"name": "荒诞感", "keywords": ["困惑", "不安", "虚无", "批判"]}
+  },
+  "themeCategories": {
+    "life_death": {"name": "生命与死亡", "question": "生存的意义是什么？"},
+    "love_solitude": {"name": "爱与孤独", "question": "爱的本质是什么？"},
+    "freedom_constraint": {"name": "自由与束缚", "question": "个体自由与社会规范"},
+    "nature_civilization": {"name": "自然与文明", "question": "人与自然的关系"},
+    "tradition_modern": {"name": "传统与现代", "question": "文化传承与变革"},
+    "individual_collective": {"name": "个体与集体", "question": "个人价值与集体利益"},
+    "reality_illusion": {"name": "真实与虚幻", "question": "现实与梦境的界限"}
+  }
+}

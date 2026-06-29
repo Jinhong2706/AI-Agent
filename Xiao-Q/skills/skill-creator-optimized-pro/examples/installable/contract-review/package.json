@@ -1,0 +1,17 @@
+{
+  "name": "contract-review",
+  "version": "0.1.0",
+  "description": "最小可安装的中文合同审查 Skill 包示例。",
+  "main": "SKILL.md",
+  "files": [
+    "SKILL.md",
+    "README.md"
+  ],
+  "keywords": [
+    "skill",
+    "contract-review",
+    "legal",
+    "zh-CN"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,11 @@
+{
+  "environment": "production",
+  "baseUrl": "https://music.68zysm.cn/api/v3",
+  "webBaseUrl": "https://lexuan.club",
+  "skillSlug": "ai-song",
+  "displayName": "AI歌曲",
+  "marketplaceTitle": "AI歌曲",
+  "marketplaceOnly": true,
+  "autoUpdate": true,
+  "latestUrl": "https://cdn.68zysm.cn/music-mv/skill/prod/packages/ai-song/latest.json"
+}

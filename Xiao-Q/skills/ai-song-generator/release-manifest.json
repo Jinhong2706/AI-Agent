@@ -1,0 +1,13 @@
+{
+  "name": "ai-song-generator",
+  "version": "1.3.2",
+  "skillSlug": "ai-song-generator",
+  "displayName": "AI歌曲生成",
+  "marketplaceTitle": "AI歌曲生成",
+  "marketplaceOnly": true,
+  "releaseEnvironment": "production",
+  "baseUrl": "https://music.68zysm.cn/api/v3",
+  "webBaseUrl": "https://lexuan.club",
+  "node": ">=18",
+  "builtAt": "2026-06-11T04:50:29.322Z"
+}

@@ -1,0 +1,35 @@
+{
+  "name": "wechat-miniapp-zh",
+  "displayName": "微信小程序开发助手",
+  "version": "1.0.0",
+  "description": "微信小程序开发的全流程助手——从 appid 申请、原生/Taro/uni-app 选型、云开发/自建后端选型,到登录鉴权、支付、订阅消息、审核避坑。区别于通用 Web 开发。",
+  "author": "ikun",
+  "license": "MIT",
+  "category": "development",
+  "tags": [
+    "微信小程序",
+    "Taro",
+    "uni-app",
+    "云开发",
+    "前端"
+  ],
+  "keywords": [
+    "微信小程序",
+    "小程序开发",
+    "Taro",
+    "uni-app",
+    "云开发",
+    "wx.login",
+    "微信支付",
+    "订阅消息",
+    "小程序审核"
+  ],
+  "platforms": [
+    "openclaw",
+    "skillhub",
+    "claude-code",
+    "cursor"
+  ],
+  "language": "zh-CN",
+  "minAgentVersion": "0.1.0"
+}

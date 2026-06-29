@@ -1,0 +1,10 @@
+{
+  "name": "deep-research",
+  "version": "1.0.0",
+  "description": "深度研究技能：自动搜索知识库和互联网，整合分析后推送完整回答",
+  "author": "AI Skills Team",
+  "tags": ["research", "knowledge-base", "internet-search", "integration", "analysis"],
+  "license": "MIT-0",
+  "created": "2026-04-23T08:21:00.000Z",
+  "updated": "2026-04-23T08:21:00.000Z"
+}

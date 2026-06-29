@@ -1,0 +1,503 @@
+/* ============================================
+  碳擎 SaaS 系统 - 页面布局模板
+  基于设计规范 tokens
+  ============================================ */
+
+/* === 页面根布局 === */
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* === Header 顶栏 === */
+.header {
+  flex-shrink: 0;
+  width: 100%;
+  height: 70px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #D9D9D9;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.headerLogo {
+  width: 147px;
+  height: 33px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.headerRight {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+.workbenchBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 96px;
+  height: 32px;
+  border-radius: 9999px;
+  border: none;
+  background: #EEF3FF;
+  color: #294CFF;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0 12px;
+  line-height: 1;
+}
+
+.workbenchBtn:hover {
+  background: #E0E9FF;
+}
+
+.headerSelectGroup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333333;
+  background: transparent;
+  white-space: nowrap;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+.headerSelectGroup.selectWide {
+  width: 96px;
+}
+
+.headerSelectGroup.selectNarrow {
+  width: 82px;
+}
+
+.headerSelectGroup.selectMedium {
+  width: 104px;
+}
+
+.headerSelectGroup:hover {
+  background: #f5f5f5;
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #666666;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.iconBtn:hover {
+  background: #f5f5f5;
+  color: #333333;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.companyName {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #3D3D3D;
+  white-space: nowrap;
+}
+
+/* === 内容区 === */
+.body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* === Sidebar 侧栏 === */
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: #FFFFFF;
+  border-right: 1px solid #D9D9D9;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebarHeader {
+  height: 68px;
+  padding: 16px 36px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #D9D9D9;
+  box-sizing: border-box;
+}
+
+.sidebarHeaderInner {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+}
+
+.logoIcon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.productTitle {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #333333;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* === 导航菜单列表 === */
+.navList {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 0;
+  overflow-y: auto;
+}
+
+.navItem {
+  position: relative;
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding-left: 24px;
+  padding-right: 8px;
+  cursor: pointer;
+  transition: background 150ms ease;
+  box-sizing: border-box;
+}
+
+.navItem:hover {
+  background: rgba(34, 73, 248, 0.06);
+}
+
+.navItemIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333333;
+}
+
+.navItemIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.navItemLabel {
+  font-size: 14px;
+  line-height: 22px;
+  color: #333333;
+  margin-left: 12px;
+  flex: 1;
+  white-space: nowrap;
+}
+
+.navItemArrow {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333333;
+  opacity: 0.5;
+  transition: transform 150ms ease;
+}
+
+.navItemArrow.expanded {
+  transform: rotate(90deg);
+}
+
+.navItemArrow svg {
+  width: 10px;
+  height: 10px;
+}
+
+/* 子菜单样式 */
+.subMenu {
+  display: none;
+  padding-left: 36px;
+}
+
+.subMenu.open {
+  display: block;
+}
+
+.subMenuItem {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 150ms ease;
+  border-radius: 4px;
+  margin: 2px 0;
+  padding: 0 12px;
+}
+
+.subMenuItem:hover {
+  background: rgba(34, 73, 248, 0.06);
+}
+
+.subMenuItem.subActive {
+  background: rgba(34, 73, 248, 0.12);
+}
+
+.subMenuItemLabel {
+  font-size: 14px;
+  line-height: 22px;
+  color: #666666;
+}
+
+.subMenuItem.subActive .subMenuItemLabel {
+  color: #2249F8;
+  font-weight: 600;
+}
+
+/* === 底部收起导航 === */
+.sidebarFooter {
+  flex-shrink: 0;
+  border-top: 1px solid #D9D9D9;
+}
+
+.collapseBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 16px 0 36px;
+  font-size: 14px;
+  line-height: 22px;
+  color: #666666;
+  cursor: pointer;
+  transition: all 150ms ease;
+  box-sizing: border-box;
+}
+
+.collapseBtn:hover {
+  background: rgba(34, 73, 248, 0.06);
+  color: #333333;
+}
+
+.collapseBtn svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* === 主内容列 === */
+.mainColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 16px 24px;
+  background: #F2F2F6;
+  overflow: auto;
+}
+
+.breadcrumb {
+  height: 22px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 22px;
+  color: #666666;
+  flex-shrink: 0;
+}
+
+.breadcrumbSep {
+  color: #999999;
+}
+
+.breadcrumbCurrent {
+  color: #333333;
+  font-weight: 500;
+}
+
+/* === 主内容画布 === */
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  padding: 24px;
+  margin-top: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 700;
+  color: #333333;
+}
+
+.pageActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* === 按钮 === */
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  background: #2249F8;
+  color: #FFFFFF;
+  border: none;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.btnPrimary:hover {
+  background: #647FFA;
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  background: #F5F7FF;
+  color: #2249F8;
+  border: 1px solid #2249F8;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.btnSecondary:hover {
+  background: #E8EDFF;
+}
+
+/* === 内容区 === */
+.contentCanvas {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* === 空状态 === */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.emptyCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.emptyIcon {
+  width: 48px;
+  height: 48px;
+  color: #CCCCCC;
+  margin-bottom: 4px;
+}
+
+.emptyTitle {
+  font-size: 14px;
+  color: #9e9e9e;
+  margin: 0;
+}
+
+.emptyDesc {
+  font-size: 12px;
+  color: #9e9e9e;
+  margin: 0;
+}
+
+/* === 文字内容 === */
+.textContent h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333333;
+  margin: 24px 0 12px;
+  line-height: 26px;
+}
+
+.textContent h3:first-child {
+  margin-top: 0;
+}
+
+.textContent p {
+  font-size: 14px;
+  line-height: 24px;
+  color: #666666;
+  margin: 0 0 12px;
+}
+
+.textContent strong {
+  color: #333333;
+  font-weight: 600;
+}

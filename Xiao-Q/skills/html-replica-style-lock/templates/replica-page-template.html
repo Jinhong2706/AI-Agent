@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Replica Page</title>
+  <style>
+    :root {
+      --page-bg: #0f1115;
+      --surface-1: #161a21;
+      --surface-2: #1c212a;
+      --text-primary: #f4f7fb;
+      --text-secondary: #a9b2bf;
+      --accent: #6ea8ff;
+      --border: rgba(255,255,255,.1);
+      --shadow-lg: 0 18px 48px rgba(0,0,0,.28);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --content-max: 1200px;
+      --space-1: 8px;
+      --space-2: 12px;
+      --space-3: 16px;
+      --space-4: 24px;
+      --space-5: 32px;
+      --space-6: 48px;
+    }
+
+    /* 真实输出时必须将这些变量替换为从原图/网页逆向得到的值 */
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--page-bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    .page {
+      width: min(100% - 32px, var(--content-max));
+      margin: 0 auto;
+      padding: 48px 0 80px;
+    }
+    .hero,
+    .section-card {
+      border: 1px solid var(--border);
+      background: var(--surface-1);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">Replace with reverse-engineered content</h1>
+      <p>Replace with reverse-engineered structure, content, and styles.</p>
+    </section>
+  </main>
+</body>
+</html>

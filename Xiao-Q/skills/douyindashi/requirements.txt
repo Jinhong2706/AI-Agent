@@ -1,0 +1,15 @@
+# 抖音运营大师 - Python依赖
+# 所有依赖均已固定版本号，请勿使用 pip install --upgrade 修改版本
+
+# 数据处理
+pandas==2.1.4
+openpyxl==3.1.2
+
+# 可视化
+matplotlib==3.8.2
+
+# 网络请求
+requests==2.31.0
+
+# 日期处理
+python-dateutil==2.8.2

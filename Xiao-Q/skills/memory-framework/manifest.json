@@ -1,0 +1,31 @@
+{
+  "name": "memory-framework",
+  "version": "1.0.0",
+  "displayName": "记忆系统框架",
+  "displayNameEn": "Memory Framework",
+  "description": "基于OpenClaw改良的通用记忆系统框架，支持L1/L2/L3分层、WAL Protocol、learnings等",
+  "descriptionEn": "Universal memory framework for OpenClaw with L1/L2/L3 hierarchy, WAL Protocol, and learnings system",
+  "author": "元神",
+  "authorUrl": "",
+  "homepage": "",
+  "tags": ["记忆系统", "记忆框架", "OpenClaw记忆", "AI助手记忆", "知识管理", "WAL Protocol", "每日复盘", "错误记录", "任务管理", "目标管理", "学习系统", "个人效率", "信息整理", "memory", "OpenClaw", "skill"],
+  "categories": ["productivity", "utility"],
+  "platform": "all",
+  "minOpenClawVersion": "2026.4.0",
+  "skills": [
+    {
+      "name": "memory-framework",
+      "path": "memory-framework",
+      "entry": "SKILL.md"
+    }
+  ],
+  "dependencies": [],
+  "readme": "README.md",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-04-08",
+      "changes": ["初始版本"]
+    }
+  ]
+}

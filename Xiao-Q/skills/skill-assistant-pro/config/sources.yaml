@@ -1,0 +1,473 @@
+# ============================================================
+# Skill 搜索源配置
+# ============================================================
+#
+# ┌─ 核心概念 ────────────────────────────────────────────────┐
+# │                                                           │
+# │  源分为两大类：                                            │
+# │                                                           │
+# │  1. 平台型技能市场 (platforms)                              │
+# │     收录第三方来源的 Skill（来自 GitHub / 用户上传）         │
+# │     提供独有的搜索、质量信号（安装量/评分/认证）和安装机制   │
+# │     例: skills.sh, SkillsMP, ClawHub, SkillHub           │
+# │                                                           │
+# │  2. GitHub 优质技能仓库 (repos)                            │
+# │     高质量的 GitHub 仓库，含 SKILL.md 源码或策展索引        │
+# │     靠 Stars / 作者声誉 / 社区策展担保质量                  │
+# │     例: anthropics/skills, awesome-openclaw 等             │
+# │                                                           │
+# │  + 通用搜索 (general) 作为兜底                             │
+# │     GitHub code search 等                                │
+# │                                                           │
+# │  三层架构：                                                │
+# │    搜索渠道（在哪里发现）→ 存放源（文件在哪里）             │
+# │    → 获取方式（怎么拿到）                                  │
+# │                                                           │
+# │  版本管理：                                                │
+# │    每个已安装 Skill 目录下生成 _skill_meta.json，统一追踪   │
+# │    来源、版本、安装时间、安全扫描结果等信息                  │
+# │    使用 _skill_meta.json（而非 _meta.json）避免与           │
+# │    SkillHub/ClawHub 自带的 _meta.json 冲突                 │
+# │                                                           │
+# └───────────────────────────────────────────────────────────┘
+#
+# priority 越小优先级越高（0 = 最高）。
+# trust_level: high / medium / low — 决定安装时的审查深度。
+# category: platform / repo / general — 源的大类。
+#
+# 命令中 {query} 为搜索关键词占位符，运行时自动替换。
+# ============================================================
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 一、平台型技能市场 (Skill Market Platforms)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+platforms:
+
+  # ── skills.sh ─────────────────────────────────────────────
+  - name: skills.sh
+    category: platform
+    storage: github
+    access_methods: [cli, api]
+    result_limit: 6          # 每次搜索返回的最大结果数（用户可在引导中调整）
+    search:
+      cli: "npx skills find \"{query}\""
+      api: 'curl -s "https://skills.sh/api/search?q={query}&limit=10" | python3 -c "import sys,json;data=json.load(sys.stdin);skills=sorted(data.get(''skills'',[]),key=lambda x:x.get(''installs'',0),reverse=True);[print(f\"{s[''source'']}@{s[''skillId'']}  {s[''installs'']:,}\") for s in skills[:6]]"'
+    install:
+      script: "bash scripts/install_skill.sh https://github.com/{owner}/{repo} {skill-name} {SKILLS_ROOT} --channel skills.sh"
+      fallback: "git clone --depth 1 https://github.com/{owner}/{repo} && 手动复制目标子目录"
+      # ⚠️ 禁止使用 npx skills add（侵入性强，写 skills-lock.json + ~/.agents/）
+    priority: 1
+    trust_level: medium
+    enabled: true
+    notes: >
+      Vercel 官方出品，91K+ Skills。经团队审核，沙盒执行，适合集成 CI/CD。
+      CLI = limit=10 + installs 降序 + Top 6；API 裸调 = 语义相关度 + 100 条。
+      降级链路：CLI → curl API（仅两级）。
+      ⚠️ 不强制 Node 版本：有 Node 用 CLI，无 Node 自动降级 curl API（功能等价）。
+    quality_metrics:
+      - type: weekly_installs
+        scale: "头部 10K-22K/周，中位 50-200/周，长尾 <10/周"
+      - type: verified_badge
+        scale: "Vercel 审核标记"
+
+  # ── skillsmp ─────────────────────────────────────────────
+  - name: skillsmp
+    category: platform
+    storage: github
+    access_methods: [api]
+    result_limit: 5
+    search:
+      api: 'curl -s "https://skillsmp.com/api/v1/skills/search?q={query}&sortBy=stars&limit=5" -H "Authorization: Bearer ${SKILLSMP_API_KEY}"'
+    install:
+      manual: "从返回的 githubUrl 获取 GitHub 仓库地址，用 install_skill.sh 或 git clone 安装"
+    url: "https://skillsmp.com"
+    priority: 2
+    trust_level: medium
+    enabled: true
+    auth:
+      api_key: ""
+      env_var: "SKILLSMP_API_KEY"
+      token_url: "https://skillsmp.com/docs/api"
+      token_instructions: "登录后 Generate API Key，格式 sk_live_skillsmp_xxx，每日 500 次"
+      required: true
+    notes: "全能型聚合市场，700K+ Skills（从 GitHub 聚合）。返回 JSON 含 stars / author / githubUrl / updatedAt。⚠️ 站点为 SPA，site:skillsmp.com 搜索无效，必须用 API。"
+    quality_metrics:
+      - type: stars
+        scale: "头部 100K+，优质 10K+，良好 1K+，中等 100+，新兴 <100（源仓库 Stars）"
+      - type: freshness
+        scale: "updatedAt 时间戳"
+
+  # ── clawhub ──────────────────────────────────────────────
+  - name: clawhub
+    category: platform
+    storage: clawhub
+    access_methods: [cli]
+    result_limit: 5
+    search:
+      cli: "clawhub search \"{query}\""
+    install:
+      cli_project: "clawhub install {id}"
+    package:
+      explore: "clawhub package explore --family skill"
+      inspect: "clawhub package inspect {slug}"
+    update:
+      single: "clawhub update {slug}"
+      all: "clawhub update --all"
+      all_force: "clawhub update --all --no-input --force"
+    auth:
+      login: "clawhub login"
+      login_token: "clawhub login --token clh_..."
+      config_path: "~/Library/Application Support/clawhub/config.json"
+      config_env: "CLAWHUB_CONFIG_PATH"
+    priority: 3
+    trust_level: medium
+    enabled: false  # 与 SkillHub 二选一，Node < 22 故禁用，已替换为 SkillHub
+    requirements:
+      node_min_version: "22"
+    notes: >
+      OpenClaw 官方 registry，13K+ Skills。⚠️ 需 Node >= 22。
+      ⚠️ 与 SkillHub 二选一（数据同源），Node ≥ 22 的用户推荐选 ClawHub。
+      更新能力：update（单个/全量，支持 --force 强制覆盖）。
+      优先选择 Verified 标识或下载量前 100 的技能。
+    safety_filter: "优先 Verified 标识 + 下载量 TOP 100"
+    quality_metrics:
+      - type: total_downloads
+        scale: "头部 50K+，中位 500-5K，长尾 <100"
+      - type: verified_badge
+        scale: "Verified 标识 = 通过安全审核"
+      - type: stars
+        scale: "社区评分 0-5"
+
+  # ── skillhub（与 ClawHub 同源，国内加速）───────────────────
+  - name: skillhub
+    category: platform
+    storage: github
+    access_methods: [cli]
+    result_limit: 5
+    search:
+      cli: "skillhub search \"{query}\""
+      cli_json: "skillhub search \"{query}\" --json"    # 机器可读输出
+    response_fields:
+      slug: "slug"
+      name: "displayName || name"                        # 优先 displayName，fallback name
+      summary: "summary || description"                  # 优先 summary，fallback description
+      version: "version"
+    install:
+      cli: "skillhub install {slug}"
+      # 真实逻辑：CLI 内部通过 primary_download_url_template 拼 URL 下载 zip
+      # → safe_extract_zip（拒绝路径穿越）→ 写 .skills_store_lock.json → 同步 ClawHub lock v1
+      internal_process: >
+        1. 远程搜索或本地 index 匹配 slug
+        2. 用 primary_download_url_template 填充 {slug} 得到 zip URL
+        3. 下载 zip + 可选 SHA256 校验
+        4. safe_extract_zip（拒绝绝对路径和 .. 遍历）
+        5. 解压到 {install_root}/{slug}/
+        6. 写入 .skills_store_lock.json（name, zip_url, source, version）
+        7. 同步 ClawHub lock v1: ~/.openclaw/workspace/.clawhub/lock.json（若文件存在且 version==1）
+    lock_files:
+      skillhub: ".skills_store_lock.json"                # SkillHub 自带 lock
+      clawhub_sync: "~/.openclaw/workspace/.clawhub/lock.json"  # 安装后自动同步
+    upgrade:
+      command: "skillhub upgrade {slug}"
+      # 真实逻辑：读 {skill_dir}/config.json 中的 update manifest URL
+      # → 拉 manifest → 比较 version → 新则下载 zip 覆盖 → 保留原 config.json → 更新 lock
+    priority: 3
+    trust_level: medium
+    enabled: true
+    requirements:
+      cli_install: "curl -fsSL https://skillhub.cn/install/install.sh | bash"
+      path_fix: 'echo ''export PATH="$HOME/.local/bin:$PATH"'' >> ~/.zshrc && source ~/.zshrc'
+    env_overrides:
+      search_url: "SKILLHUB_SEARCH_URL"
+      download_url: "SKILLHUB_PRIMARY_DOWNLOAD_URL_TEMPLATE"
+      clawhub_lock: "SKILLHUB_CLAWHUB_LOCK_PATH"
+      skip_workspace: "SKILLHUB_SKIP_WORKSPACE_SKILLS"
+    notes: >
+      与 ClawHub 数据同源（OpenClaw 13K+ Skills），中英双语，国内 CDN 加速。
+      ⚠️ 与 ClawHub 二选一（数据同源），Node < 22 或国内用户推荐选 SkillHub。
+      安装命令：curl -fsSL https://skillhub.cn/install/install.sh | bash
+      安装逻辑：zip 下载 + safe_extract_zip（路径穿越防护）+ SHA256 校验 + 双 lock 同步。
+      CLI 支持 --json 输出，便于脚本集成。
+      升级逻辑：每个 Skill 的 config.json 含 update manifest URL，CLI 自动比较版本并覆盖安装。
+      CLI 带自升级能力（startup_self_upgrade_check），启动时自动检查新版本。
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 二、GitHub 优质技能仓库 (Quality GitHub Repositories)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+repos:
+
+  # ── 官方源 ─────────────────────────────────────────────────
+  - name: anthropic-official
+    category: repo
+    repo: "anthropics/skills"
+    branch: "main"
+    storage: github
+    access_methods: [gh_cli, curl_raw]
+    commands:
+      list_skills: "gh api 'repos/anthropics/skills/git/trees/main?recursive=1' --jq '.tree[] | select(.path | endswith(\"SKILL.md\")) | .path'"
+      fetch_skill: "gh api 'repos/anthropics/skills/contents/{path}' --jq '.content' | base64 -d"
+      search_in_repo: "gh search code \"{query}\" --repo anthropics/skills --filename SKILL.md --json path,textMatches"
+    fallback:
+      type: curl_raw
+      url: "https://raw.githubusercontent.com/anthropics/skills/main/README.md"
+      trigger: "gh CLI 不可用时降级为 raw README 文本匹配"
+    priority: 0  # 最高优先级
+    trust_level: high
+    enabled: true
+    notes: "Anthropic 官方 Skills 仓库，108K+ Stars，SKILL.md 规范参考实现（18 个 SKILL.md）。可直接信任。"
+    quality_metrics:
+      - type: stars
+        scale: "108K+"
+      - type: verified_badge
+        scale: "官方出品 = 最高信任"
+
+  # ── 策展合集 ───────────────────────────────────────────────
+  - name: awesome-openclaw
+    category: repo
+    repo: "VoltAgent/awesome-openclaw-skills"
+    branch: "main"
+    storage: github
+    access_methods: [curl_raw]
+    search:
+      curl_raw: "https://raw.githubusercontent.com/VoltAgent/awesome-openclaw-skills/main/README.md"
+    priority: 3
+    trust_level: medium
+    enabled: true
+    notes: "5,400+ 社区精选 OpenClaw Skills 合集，43.5K Stars"
+
+  - name: awesome-claude-skills
+    category: repo
+    repo: "ComposioHQ/awesome-claude-skills"
+    branch: "master"  # 注意: master 非 main
+    storage: github
+    access_methods: [curl_raw]
+    search:
+      curl_raw: "https://raw.githubusercontent.com/ComposioHQ/awesome-claude-skills/master/README.md"
+    priority: 3
+    trust_level: medium
+    enabled: true
+    notes: "4.7K+ Stars，500+ 应用连接，Composio 工具层支持 1000+ 预建工具"
+
+  # ── 高质量个人/团队仓库 ─────────────────────────────────────
+  - name: superpowers
+    category: repo
+    repo: "obra/superpowers"
+    branch: "main"
+    storage: github
+    access_methods: [gh_cli, curl_raw]
+    search:
+      gh_cli: 'gh api repos/obra/superpowers/git/trees/main?recursive=1 --jq ".tree[].path" | grep -i SKILL.md'
+      curl_raw: "https://raw.githubusercontent.com/obra/superpowers/main/README.md"
+    priority: 3
+    trust_level: medium
+    enabled: true
+    notes: "编码代理完整工作流框架：TDD、系统调试、代码审查、并行 Agent 调度等 14 个核心 Skills"
+
+  - name: mattpocock-skills
+    category: repo
+    repo: "mattpocock/skills"
+    branch: "main"
+    storage: github
+    priority: 5
+    trust_level: medium
+    enabled: false
+    notes: "TypeScript 教育家 Matt Pocock，安全评分 92/100"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 三、通用搜索 (General Search)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+general:
+
+  - name: github
+    category: general
+    storage: github
+    access_methods: [gh_cli, git_clone]
+    commands:
+      search_code: 'gh search code "{query}" --filename SKILL.md --limit 10 --json repository,path,textMatches'
+      search_repos: 'gh search repos "{query} skill SKILL.md" --sort stars --limit 5 --json fullName,stargazersCount,description,updatedAt'
+      tree_traverse: "gh api 'repos/{owner}/{repo}/git/trees/{branch}?recursive=1' --jq '.tree[] | select(.path | endswith(\"SKILL.md\")) | .path'"
+      fetch_file: "gh api 'repos/{owner}/{repo}/contents/{path}' --jq '.content' | base64 -d"
+    fallback:
+      type: WebSearch
+      note: "gh CLI 不可用时降级为 WebSearch 兜底（精度显著降低；balanced 策略下触发条件 D），并强烈引导用户安装 gh"
+      templates:
+        - "{query} SKILL.md site:github.com"
+        - "github {query} agent skill"
+        - "github {query} awesome list"
+    requirements:
+      cli: "gh"
+      auth: true
+    priority: 3
+    trust_level: varies
+    enabled: true
+    notes: "GitHub 搜索首选 gh CLI，认证后 5000 次/小时 API 配额。"
+    quality_metrics:
+      - type: stars
+        scale: "头部 10K+，优质 1K+，中等 100+，新兴 <100"
+      - type: freshness
+        scale: "最后更新时间"
+      - type: contributors
+        scale: "贡献者数量，多人 > 单人"
+
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 四、已移除的源（保留说明）
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# killer-skills: 底层搜索 GitHub，与 skills.sh 高度重叠；搜索粒度粗（仓库级而非 Skill 级）。
+# skillsauth: 维护者不详，安装量数据疑似注水，来源单一，不纳入搜索源。
+# qoder-community: 内容量少且更新不活跃，不纳入搜索范围。
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 五、用户偏好 (User Preferences)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+preferences:
+  # ── 首次使用引导 ──
+  # false = 未完成初始配置，首次触发搜索/推荐/安装时强制进入引导流程
+  # 引导完成后自动设为 true
+  setup_completed: true
+
+  # ── 配置自愈 / 迁移检测 ──
+  # 固定每日一次：Agent 在前置检查「步骤 0」按 last_check_date 节流，
+  # 扫描并清理废弃配置（完整逻辑见 SKILL.md 步骤 0）。本块唯一字段为 last_check_date。
+  maintenance:
+    last_check_date: ""        # 上次检测日期（ISO YYYY-MM-DD），空 = 从未检测；由 Agent 自动更新
+
+  # 安装位置策略：默认与 skill-assistant 同级目录（自动感知）
+  # 例如 skill-assistant 在 .cursor/skills/ 下，新 Skill 也装到 .cursor/skills/
+  # 全局安装时需用户明确 IDE 类型（Cursor/CodeBuddy 等），路径为 ~/.{ide}/skills/
+  install_dir_strategy: "sibling_of_skill_assistant"
+
+  # skills.sh 下载通知：安装 Skill 时是否通知 skills.sh 记录下载量
+  # true = 通知（帮助社区优化推荐排序），false = 静默安装
+  notify_skills_sh_download: true  # 用户选择：允许
+
+  # 搜索策略（用户在首次引导 Step 3 中选择）:
+  #   speed    — 仅 skills.sh + SkillHub，跳过全 GitHub，每渠道 Top 2（需求明确时用）
+  #   balanced — 所有已启用平台 + gh 仓库 + 全 GitHub，每渠道 Top 3（默认推荐）
+  #   thorough — 全部渠道 + WebSearch 兜底默认常驻 + 非 Skill 源，每渠道 Top 5（全面了解市面）
+  # 完整定义见 references/channel-search-commands.md#搜索策略完整定义
+  search_strategy: thorough
+
+  # ── 评测工作区 (v1.7.0 新增) ──
+  # 用于 diagnose / inspect / 加速器的产物落盘位置
+  # 完整规范见 references/workspace-layout.md
+  workspace:
+    # layout 三选一（详见 workspace-layout.md "三种工作区布局策略"）：
+    #   sibling_of_skills_dir — 默认；放在被评测 skill 父目录的同级 skill-assistant-workspace/
+    #                            例：评 .cursor/skills/foo → .cursor/skills/skill-assistant-workspace/foo/
+    #   external               — ~/.skill-assistant/workspaces/<skill>-workspace/
+    #   project_local          — <当前项目根>/.skill-doctor/<skill>/
+    layout: sibling_of_skills_dir
+
+    # 仅 layout=external 时生效
+    workspace_root: ~/.skill-assistant/workspaces
+
+    # 保留多少代历史
+    #   all     — 全保留（推荐；磁盘便宜，归因可追溯）
+    #   last_N  — 仅保留最近 N 代（如 last_5），更早代移到 archive/ 子目录
+    keep_iterations: all
+
+    # 旧代是否压缩（最近 3 代不压缩，更早代压缩为 .tar.gz）
+    compress_old_iterations: true
+
+    # 首次创建 workspace 时自动生成 .gitignore（防止误把评测产物 commit）
+    auto_gitignore: true
+
+    # 同 skill 跨棘轮迭代是否复用 test-prompts.json / trigger-queries.json
+    shared_test_sets: true
+
+    # 多窗口 / 多 IDE 并发 diagnose 防撞车
+    session_lock_enabled: true
+    session_lock_timeout_hours: 4
+
+  # 去重策略: 同一 GitHub 仓库的 Skill 出现在多个平台时
+  dedup_strategy:
+    enabled: true
+    # 优先展示哪个平台的结果（靠前优先）
+    prefer_channels: [anthropic-official, skills.sh, skillhub]
+
+  # 结果比较: 搜索结果中发现相似/同源 Skill 时自动比较
+  comparison:
+    enabled: true
+    # 相似度判定: 同一 repo+path 为同源，repo 不同但 name 相同为同名
+    match_by: [source_repo, skill_name]
+    # 比较维度
+    compare_dimensions: [freshness, installs, stars, security, trust_level]
+
+  # 安全偏好
+  security:
+    # 安装前是否必须通过安全扫描
+    require_scan: true
+    # 扫描失败时是否允许用户覆盖
+    allow_override: true
+    # 高信任源是否跳过扫描
+    skip_scan_for_high_trust: false
+
+  # 自定义源（用户可在此添加私有源）。category 选 platform（带 endpoint/headers）或 repo（带 repo 字段）。
+  custom_sources: []
+  # 示例:
+  # - name: my-company-registry
+  #   category: platform
+  #   endpoint: "https://internal.example.com/api/skills?q={query}"
+  #   headers:
+  #     Authorization: "Bearer ${SKILL_REGISTRY_TOKEN}"
+  #   priority: 0
+  #   trust_level: high
+  #   enabled: true
+  #   notes: "公司内部 Skill 注册表"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 六、_skill_meta.json 模板
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 为什么用 _skill_meta.json 而不是 _meta.json？
+# SkillHub/ClawHub install 时会自带 _meta.json（ownerId/slug/version/publishedAt），
+# 格式与我们的版本管理 schema 不同。使用 _skill_meta.json 避免文件冲突，
+# 让平台自带元数据和我们的版本管理信息共存。
+meta_schema:
+  filename: "_skill_meta.json"
+  # install_skill.sh v2 安装成功后自动生成到 {skill_dir}/_skill_meta.json
+  # 用于版本追踪、更新检测、来源溯源、完整性校验
+  template:
+    name: "{skill_name}"                      # Skill 名称（经 sanitizeName 清理后）
+    version: "1.0.0"                          # 语义版本（来自 SKILL.md frontmatter，无则 1.0.0）
+    source:
+      type: "github"                          # github / skillhub / clawhub / local
+      repo: "{owner}/{repo}"                  # GitHub 仓库（GitHub 源必填）
+      path: "{skill_path_in_repo}"            # Skill 在仓库中的路径
+      branch: "main"                          # 分支
+      commitHash: "{git_rev_parse_HEAD}"      # 安装时的 commit hash（GitHub 源必填）
+      folderHash: "{gh_trees_api_sha}"        # Skill 目录精确 SHA（GitHub Trees API，需 gh CLI）
+      slug: ""                                # SkillHub/ClawHub slug（平台源填写）
+    channel: "{discovery_channel}"            # 发现该 Skill 的渠道 (skills.sh / github / skillhub 等)
+    installedAt: "{ISO_8601_timestamp}"       # 安装时间
+    installedVia: "install_skill.sh"          # 安装方式（install_skill.sh / skillhub_cli / clawhub_cli / manual）
+    security:
+      scanned: true                           # 是否经过安全扫描
+      scannedAt: "{ISO_8601_timestamp}"
+      findings: { critical: 0, high: 0, medium: 0 }
+    integrity:
+      localHash: "{sha256_of_installed_files}" # 安装文件 SHA-256 指纹，排除 _skill_meta.json 和 _meta.json
+      computedAt: "{ISO_8601_timestamp}"       # hash 计算时间
+    skillMeta:
+      description: ""
+      tags: []
+  # ── 新增字段说明（v2）──
+  # source.folderHash: 通过 GitHub Trees API 获取 Skill 目录级 SHA，
+  #   比 commitHash 更精确——仓库其他目录的提交不会触发误报更新。
+  #   需 gh CLI。根目录 Skill（path="."）无法获取。
+  # integrity.localHash: 安装完成后对所有文件内容计算 SHA-256，
+  #   用于检测安装后文件是否被篡改。校验时重新计算并与记录对比。
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 七、全局设置
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+settings:
+  # 凭证文件路径（相对于 skill-assistant 根目录）
+  # API Key 持久化存储在此文件中，而非 sources.yaml 本体
+  # 解析优先级：credentials_file > sources.yaml auth.api_key > 环境变量 > 用户临时提供
+  credentials_file: "config/.credentials.yaml"
+  max_cli_channels: 3
+  cli_timeout_seconds: 30
+  curl_timeout_seconds: 15
+  auto_fallback: true
+  language: zh-CN

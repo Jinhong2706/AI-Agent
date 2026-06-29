@@ -1,0 +1,7 @@
+{
+  "id": "skill-creator-king",
+  "name": "skill-creator-king",
+  "version": "3.23.1",
+  "description": "从零创建、审查评分、迭代完善 AI Agent Skill 的元工具。 支持四平台、Phase 0-5六阶段流程、14维质量审计、反模式扫描、Token预算估算、好模式识别、LLM 驱动修复+安全回滚、全生命周期覆盖。 Use when 创建新的 AI Agent Skill, 审查已有 Skill 的质量, or 升级迭代 Skill 功能。",
+  "author": "公众号 & Skillhub -- 普通AI星球"
+}

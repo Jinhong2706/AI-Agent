@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@600;700;900&display=swap');
+
+:root {
+  --bg-deep: #060b18;
+  --bg-surface: #0a1022;
+  --bg-elevated: #0f1630;
+  --card-bg: rgba(10, 18, 38, 0.85);
+  --border-subtle: rgba(56, 130, 200, 0.08);
+  --border-default: rgba(56, 130, 200, 0.14);
+  --border-glow: rgba(0, 210, 255, 0.25);
+  --border-gold: rgba(255, 184, 0, 0.30);
+  --border-green: rgba(0, 232, 122, 0.30);
+  --text-primary: #dce8f4;
+  --text-secondary: #7a9bc0;
+  --text-muted: #3d5a80;
+  --text-dim: #1e334f;
+  --cyan: #00d4ff;
+  --cyan-dim: rgba(0, 212, 255, 0.15);
+  --green: #00e87a;
+  --green-dim: rgba(0, 232, 122, 0.12);
+  --gold: #ffb800;
+  --gold-dim: rgba(255, 184, 0, 0.12);
+  --danger: #ff3355;
+  --danger-dim: rgba(255, 51, 85, 0.12);
+  --warn: #ff7700;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.40), 0 2px 8px rgba(0, 0, 0, 0.20);
+  --shadow-card-hi: 0 16px 48px rgba(0, 0, 0, 0.50), 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-glow-cyan: 0 0 40px rgba(0, 212, 255, 0.08);
+  --shadow-glow-green: 0 0 40px rgba(0, 232, 122, 0.10);
+  --shadow-glow-gold: 0 0 40px rgba(255, 184, 0, 0.08);
+  --space-xs: 3px;
+  --space-sm: 6px;
+  --space-md: 12px;
+  --space-lg: 18px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans SC', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(0, 100, 180, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 100%, rgba(80, 40, 160, 0.05) 0%, transparent 55%),
+    linear-gradient(180deg, var(--bg-deep) 0%, #080d1e 50%, var(--bg-deep) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-md) var(--space-sm) var(--space-md);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stagger-1 { animation: fadeUp 0.65s ease-out 0.05s both; }
+.stagger-2 { animation: fadeUp 0.65s ease-out 0.12s both; }
+.stagger-3 { animation: fadeUp 0.65s ease-out 0.19s both; }
+.stagger-4 { animation: fadeUp 0.65s ease-out 0.26s both; }
+.stagger-5 { animation: fadeUp 0.65s ease-out 0.33s both; }
+.stagger-6 { animation: fadeUp 0.65s ease-out 0.40s both; }
+
+.report-header {
+  text-align: center;
+  padding: var(--space-lg) var(--space-sm) var(--space-md);
+  animation: fadeDown 0.7s ease-out;
+}
+
+.header-icon {
+  font-size: 32px;
+  display: block;
+  margin-bottom: var(--space-xs);
+  filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.3));
+}
+
+.header-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(22px, 4.5vw, 36px);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: var(--space-sm);
+  background: linear-gradient(135deg, #ffffff 0%, #7ec8e8 35%, #00d4ff 65%, #00e87a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-meta {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.header-update {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--space-xs);
+  color: var(--text-dim);
+  font-size: 11.5px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cyan);
+  margin-bottom: var(--space-sm);
+}
+
+.section-label::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 18px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--cyan), var(--green));
+}
+
+.card {
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  margin-bottom: var(--space-sm);
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: blur(20px);
+  background: var(--card-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.top3-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.top3-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-sm);
+  border: 2px solid;
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+
+.top3-card:hover { transform: translateY(-4px); }
+
+.top3-card.rank-1 {
+  border-color: var(--border-green);
+  box-shadow: var(--shadow-glow-green), var(--shadow-card);
+}
+
+.top3-card.rank-1 .prob-num { color: var(--green); text-shadow: 0 0 28px rgba(0, 232, 122, 0.45); }
+.top3-card.rank-1 .rank-badge { filter: drop-shadow(0 0 8px rgba(0, 232, 122, 0.4)); }
+
+.top3-card.rank-2 {
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-glow-cyan), var(--shadow-card);
+}
+
+.top3-card.rank-2 .prob-num { color: var(--cyan); text-shadow: 0 0 28px rgba(0, 212, 255, 0.45); }
+.top3-card.rank-2 .rank-badge { filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4)); }
+
+.top3-card.rank-3 {
+  border-color: var(--border-gold);
+  box-shadow: var(--shadow-glow-gold), var(--shadow-card);
+}
+
+.top3-card.rank-3 .prob-num { color: var(--gold); text-shadow: 0 0 28px rgba(255, 184, 0, 0.45); }
+.top3-card.rank-3 .rank-badge { filter: drop-shadow(0 0 8px rgba(255, 184, 0, 0.4)); }
+
+.top3-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 50%;
+  pointer-events: none;
+  opacity: 0.06;
+}
+
+.rank-1::before { background: radial-gradient(ellipse at 50% 0%, var(--green) 0%, transparent 70%); }
+.rank-2::before { background: radial-gradient(ellipse at 50% 0%, var(--cyan) 0%, transparent 70%); }
+.rank-3::before { background: radial-gradient(ellipse at 50% 0%, var(--gold) 0%, transparent 70%); }
+
+.rank-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 24px;
+  z-index: 2;
+}
+
+.prob-block {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.prob-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(38px, 5.5vw, 54px);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.prob-pct {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding-bottom: 4px;
+}
+
+.peak-name {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.top3-metrics-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: var(--space-sm);
+}
+
+.top3-metric-row {
+  display: flex;
+  gap: 6px;
+  min-height: 28px;
+}
+
+.top3-metric {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-xs);
+  padding: 0 8px;
+  min-width: 0;
+}
+
+.top3-metric-label {
+  font-size: 9.5px;
+  color: #e8f0ff;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+
+.top3-metric-val {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-align: right;
+  word-break: break-word;
+  white-space: normal;
+  line-height: 1.3;
+}
+
+.table-wrap { overflow-x: auto; border-radius: var(--radius-md); }
+
+.peak-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12.5px;
+  min-width: 750px;
+}
+
+.peak-table thead th {
+  padding: 7px 8px;
+  text-align: center;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #7eb8e8;
+  border-bottom: 1px solid var(--border-default);
+  background: rgba(0, 180, 220, 0.04);
+}
+
+.peak-table tbody td {
+  padding: 6px 6px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.025);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.peak-table tbody tr:hover td { background: rgba(0, 212, 255, 0.04); }
+.peak-table tbody tr:last-child td { border-bottom: none; }
+
+.row-top1 td { background: rgba(0, 232, 122, 0.05); }
+.row-top2 td { background: rgba(0, 212, 255, 0.04); }
+.row-top3 td { background: rgba(255, 184, 0, 0.04); }
+
+.td-name {
+  text-align: left !important;
+  padding-left: 14px !important;
+  font-weight: 600;
+  color: var(--text-primary) !important;
+}
+
+.rank-emoji { font-size: 15px; }
+
+/* 概率颜色 */
+.prob-high { color: var(--green) !important; font-weight: 700; }
+.prob-medium { color: var(--cyan) !important; font-weight: 600; }
+.prob-low { color: var(--gold) !important; }
+.prob-very-low { color: var(--danger) !important; }
+
+/* 山顶差颜色 */
+.diff-positive { color: var(--green) !important; font-weight: 700; }
+.diff-edge { color: var(--gold) !important; font-weight: 600; }
+.diff-negative { color: var(--danger) !important; }
+
+.td-high { color: var(--green) !important; font-weight: 700; }
+.td-mid { color: var(--cyan) !important; font-weight: 600; }
+.td-warn { color: var(--gold) !important; }
+.td-low { color: var(--danger) !important; }
+.star-cell { color: #ffd700 !important; letter-spacing: 2px; font-size: 14px; font-weight: bold; text-shadow: 0 0 8px rgba(255, 215, 0, 0.8), 0 0 16px rgba(255, 180, 0, 0.5), 0 0 24px rgba(255, 150, 0, 0.3); }
+.top3-stars { color: #ffd700; letter-spacing: 2px; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5), 0 0 16px rgba(255, 180, 0, 0.3); }
+
+/* 雾型徽章 */
+.fog-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  line-height: 1.6;
+  letter-spacing: 0.1px;
+}
+
+
+.mechanism-row {
+  display: flex;
+  gap: 10px;
+}
+
+.mech-card {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: 10px;
+}
+
+.mech-card:hover {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+.mech-active {
+  border-color: var(--border-glow) !important;
+  background: var(--cyan-dim) !important;
+}
+
+.mech-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  width: 32px;
+  text-align: center;
+}
+
+.mech-body { flex: 1; }
+
+.mech-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.mech-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.fog-summary-bar {
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.10);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
+}
+
+.suggest-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.sugg-card {
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  border: 2px solid;
+  background: var(--bg-elevated);
+}
+
+.sugg-recommend {
+  border-color: var(--border-green);
+  background: linear-gradient(135deg, rgba(0, 232, 122, 0.04) 0%, var(--bg-elevated) 100%);
+}
+
+.sugg-alternative {
+  border-color: var(--border-glow);
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.04) 0%, var(--bg-elevated) 100%);
+}
+
+.sugg-optional {
+  border-color: var(--border-gold);
+  background: linear-gradient(135deg, rgba(255, 184, 0, 0.04) 0%, var(--bg-elevated) 100%);
+}
+
+.sugg-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.sugg-icon { font-size: 18px; }
+
+.sugg-label {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.sugg-recommend .sugg-label { background: var(--green-dim); color: var(--green); }
+.sugg-alternative .sugg-label { background: var(--cyan-dim); color: var(--cyan); }
+.sugg-optional .sugg-label { background: var(--gold-dim); color: var(--gold); }
+
+.sugg-peak {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.sugg-prob {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.sugg-recommend .sugg-prob { color: var(--green); }
+.sugg-alternative .sugg-prob { color: var(--cyan); }
+.sugg-optional .sugg-prob { color: var(--gold); }
+
+.sugg-points {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sugg-points li {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  padding: 2px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  line-height: 1.4;
+}
+
+.sugg-points li::before {
+  content: '•';
+  font-size: 10px;
+  flex-shrink: 0;
+  color: var(--green);
+}
+
+.sugg-alternative .sugg-points li::before { color: var(--cyan); }
+.sugg-optional .sugg-points li::before { color: var(--gold); }
+
+.warn-box {
+  background: var(--danger-dim);
+  border: 1px solid rgba(255, 51, 85, 0.25);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.warn-icon { font-size: 20px; flex-shrink: 0; }
+
+.warn-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--danger);
+  margin-bottom: 6px;
+}
+
+.warn-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.warn-items li {
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding: 3px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.warn-items li::before {
+  content: '!';
+  font-size: 10px;
+  flex-shrink: 0;
+  color: var(--warn);
+}
+
+.hourly-block { margin-bottom: 28px; }
+.hourly-block:last-child { margin-bottom: 0; }
+
+.hourly-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.hourly-title::before {
+  content: '';
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--cyan);
+}
+
+.hourly-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.hourly-tbl thead {
+  background: rgba(0, 180, 220, 0.04);
+}
+
+.hourly-tbl th {
+  padding: 7px 8px;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #7eb8e8;
+  border-bottom: 1px solid var(--border-default);
+  text-align: center;
+  background: rgba(0, 180, 220, 0.04);
+}
+
+.hourly-tbl td {
+  padding: 8px 4px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: rgba(10, 20, 35, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.hourly-tbl tbody tr:last-child td { border-bottom: none; }
+.hourly-tbl tbody tr:hover td { background: rgba(0, 180, 220, 0.06); }
+
+/* 时间列 - 青色 */
+.time-col { 
+  color: var(--cyan); 
+  font-weight: 700; 
+  font-size: 13px;
+}
+
+/* 温度列 */
+.temp-col { color: var(--text-primary); }
+
+/* 湿度列 */
+.rh-col { color: #a0d0ef; }
+
+/* 风速列 */
+.wind-col { color: #b0c4d4; }
+
+/* LCL列 - 青色 */
+.lcl-col { color: var(--cyan); }
+
+/* 云量列 */
+.cc-col { }
+
+/* 雾顶列 */
+.fogtop-col { color: #9ab; }
+
+/* 山顶差列 - 正绿负红 */
+.diff-col { 
+  font-weight: 700; 
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* 通透度列 */
+.trans-col { color: var(--gold); font-weight: 600; }
+
+/* 云海判断列 */
+.judge-col { font-size: 11px; font-weight: 600; }
+.judge-best { color: #ffd700; }      /* 金色-最佳 */
+.judge-good { color: #ffb347; }      /* 橙色-接近 */
+.judge-edge { color: #87ceeb; }      /* 浅蓝-边缘 */
+.judge-bad { color: #ff6b6b; }        /* 红色-雾中 */
+
+.cloud-yes { color: var(--green); font-weight: 600; }
+.cloud-maybe { color: var(--gold); }
+.cloud-no { color: var(--danger); }
+
+.equip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.equip-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+}
+
+.equip-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  width: 24px;
+  text-align: center;
+}
+
+.equip-text { display: flex; flex-direction: column; min-width: 0; }
+
+.equip-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.equip-note {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.legend-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-md);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.report-footer {
+  text-align: center;
+  padding: var(--space-sm) var(--space-sm) var(--space-xs);
+  color: var(--text-dim);
+  font-size: 11.5px;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: var(--space-sm);
+}
+
+.footer-note { color: var(--text-muted); margin-top: 4px; }
+
+@media (max-width: 768px) {
+  .page { padding: var(--space-md) 14px 60px; }
+  .header-title { font-size: 26px; }
+  .top3-section { grid-template-columns: 1fr; gap: 12px; }
+  .card { padding: 20px 16px; }
+  .peak-table { min-width: 600px; font-size: 11.5px; }
+  .mechanism-row { flex-wrap: wrap; }
+  .mech-card { flex: 1 1 calc(50% - 5px); min-width: 140px; }
+  .suggest-row { grid-template-columns: 1fr; }
+  .equip-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .equip-grid { grid-template-columns: 1fr; }
+}
+
+/* Visual effect badge */
+.visual-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<header class="report-header">
+  <span class="header-icon">🔺</span>
+  <h1 class="header-title">{{TITLE}}</h1>
+  <div class="header-meta">{{SUBTITLE}}</div>
+  <div class="header-update">🕐 {{UPDATE_TIME}}</div>
+</header>
+
+{{TOP3_CARDS}}
+
+<div class="card stagger-1">
+  <div class="section-label">16峰综合排名</div>
+  <div class="table-wrap">
+    <table class="peak-table">
+      <thead>
+                <tr>
+          <th style="width:40px;">排名</th>
+          <th style="text-align:left;padding-left:16px;">峰名</th>
+          <th>海拔(m)</th>
+          <th>概率(%)</th>
+          <th>LCL(m)</th>
+          <th>雾顶(m)</th>
+          <th>险差</th>
+          <th>风速(km/h)</th>
+          <th>通透度</th>
+          <th>日出评级</th>
+          <th>雾型</th>
+          <th>视觉效果</th>
+          <th>最佳时间</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{RANKING_ROWS}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card stagger-2">
+  <div class="section-label">视觉效果说明</div>
+  <div class="fog-summary-bar">{{FOG_SUMMARY}}</div>
+  <div class="mechanism-row">
+    {{MECHANISM_CARDS}}
+  </div>
+</div>
+
+<div class="card stagger-3">
+  <div class="section-label">出行建议</div>
+  {{TRAVEL_SUGGESTIONS}}
+</div>
+
+<div class="card stagger-4">
+  <div class="section-label">逐小时数据</div>
+  {{HOURLY_TABLES}}
+</div>
+
+<div class="card stagger-5">
+  <div class="section-label">装备清单</div>
+  <div class="equip-grid">
+    {{EQUIP_GRID}}
+  </div>
+</div>
+
+<div class="card stagger-6">
+  <div class="section-label">图例说明</div>
+  <div class="legend-grid">
+    <div class="legend-item"><span class="legend-dot" style="background:var(--green);"></span> ≥65% 强烈推荐</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--cyan);"></span> 45~64% 推荐</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--gold);"></span> 25~44% 可考虑</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--danger);"></span> &lt;25% 不推荐</div>
+    <div class="legend-item"><span style="color:var(--green);font-weight:600;">↑+200m+</span> 雾上可见</div>
+    <div class="legend-item"><span style="color:var(--gold);font-weight:600;">+50~200m</span> 雾缘</div>
+    <div class="legend-item"><span style="color:var(--danger);font-weight:600;">↓−50m以下</span> 雾中</div>
+  </div>
+</div>
+
+<footer class="report-footer">
+  <div>{{UPDATE_TIME}}</div>
+  <div>数据来源：Open-Meteo API</div>
+  <div class="footer-note">{{FOOTER_NOTE}}</div>
+</footer>
+
+</div>
+
+</body>
+</html>

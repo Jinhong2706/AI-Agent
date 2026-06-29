@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(llm-key-pool --config ./llm_config.yaml --test)",
+      "Read(//c/Users/Administrator/.claude/skills/llm-key-pool/**)",
+      "Bash(python -m llm_key_pool.llm_client --prompt \"分析一下当前llm-key-pool项目的目录结构和模块职责，说明每个文件的作用\")"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "ppt-page-recognition",
+  "displayName": "PPT 页面识别",
+  "description": "读取本地 PowerPoint `.pptx`，恢复页面结构与语义，并输出可用于后续生成的标准 JSON。识别时会自动检查同名 PDF 并导出整页截图；对图片占比高、原生文字少或结构化内容不足的页面，会生成整页视觉补全任务，帮助恢复图片中的正文、指标、分组、流程和连接关系。如果缺少同名 PDF 或当前模型不支持视觉，会明确提醒用户后再继续。",
+  "version": "1.0.10",
+  "author": "SkillHub",
+  "language": "zh-CN",
+  "tags": ["ppt", "powerpoint", "识别", "页面结构", "视觉补全"],
+  "capabilities": [
+    "读取 PPTX 文件结构",
+    "识别页面类型（封面、目录、时间线、Logo墙等）",
+    "提取结构化内容",
+    "支持视觉补全"
+  ]
+}

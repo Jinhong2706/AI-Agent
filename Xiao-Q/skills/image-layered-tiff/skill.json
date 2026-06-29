@@ -1,0 +1,11 @@
+{
+  "name": "img2layered-tiff",
+  "version": "1.3.0",
+  "description": "将JPG/PNG图片转换为分层TIFF/PSD文件，支持Photoshop图层显示，边缘图形提取等多种分层模式",
+  "description_zh": "将JPG/PNG图片转换为分层TIFF/PSD文件，支持RGB通道分离、CMYK通道分离、Alpha通道提取、彩色+灰度、边缘清晰图形提取等多种分层模式。PSD输出可在Photoshop图层面板中直接查看各图层。",
+  "author": "drago",
+  "license": "MIT",
+  "tags": ["image", "tiff", "psd", "layer", "converter", "design", "photoshop", "edge-detection"],
+  "runtime": "python",
+  "pythonVersion": ">=3.10"
+}

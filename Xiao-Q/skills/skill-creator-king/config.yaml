@@ -1,0 +1,63 @@
+# 配置文件（当前版本见 SKILL.md frontmatter）
+# 标记 # documentary 的配置项：硬编码在脚本中的文档值，非运行时读取。
+
+# ============================================================
+# 强制阻塞点（不可跳过）   # documentary — AI 对话流消费
+# ============================================================
+blocking_decisions:
+  - skill_name
+  - channel_selection
+  - core_beliefs
+  - trigger_examples
+  - data_sources
+  - p0_fixes
+
+# ============================================================
+# 审查打磨配置   # documentary — AI 审查流程消费
+# ============================================================
+review:
+  report_filename_template: "REVIEW-REPORT-{date}.md"
+  auto_validate_after_fix: true
+  default_storage: "target_skill_dir"  # or "current_dir"
+  bump_include_files:
+    # 以下为完整通道全部文件，轻量 skill 中不存在的文件会自动跳过
+    - SKILL.md
+    - SPEC.md
+    - DESIGN.md
+    - config.yaml
+    - PRINCIPLES.md
+    - data/sources.yaml
+  sample_l2_count: 3  # 抽检 L2 文件数
+
+# ============================================================
+# 质量评分审计配置 (v2.0)   # documentary — quality-audit.py 硬编码同值常量
+# ============================================================
+audit:
+  dimensions_file: "data/checklists/audit.yaml"
+  auto_weight: 60  # 自动维度总权重
+  manual_weight: 30  # 手工维度总权重 (10+10+10)
+  lightweight_skip_dims:
+    - script_llm_boundary
+  badge_enabled: true  # 95+ 分可选添加徽章
+  badge_threshold: 95
+
+# ============================================================
+# 缓存配置 (v3.0)   # documentary — quality-audit.py 硬编码同值常量
+# ============================================================
+cache:
+  dir: data/cache/
+  max_files: 50
+  ttl_days: 30
+  auto_create: true
+
+# ============================================================
+# 咨询性决策提示 (v3.5)   # advisory — AI 对话流消费
+# ============================================================
+viability_gate:
+  enabled: true
+  phase: 1  # 在 Phase 1 收尾时触发
+  blocking: false  # 不阻塞进入 Phase 2，只做提示
+  questions:
+    - "这个功能/项目你会每周用几次？——答出具体频率，不说「需要的人会用到」"
+    - "列出 3 个它不可替代的使用场景"
+    - "v1 的最简版本是什么？——砍掉所有「也许也要」的功能"

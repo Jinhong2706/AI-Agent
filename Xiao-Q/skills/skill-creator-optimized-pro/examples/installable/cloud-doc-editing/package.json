@@ -1,0 +1,23 @@
+{
+  "name": "cloud-doc-editing",
+  "version": "0.1.0",
+  "description": "云文档读取、编辑、权限、版本与回写确认边界的最小可安装技能示例。",
+  "type": "module",
+  "private": true,
+  "keywords": [
+    "skill",
+    "cloud-doc",
+    "wps",
+    "lark",
+    "editing"
+  ],
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "check": "node -e \"const fs=require('fs'); const s=fs.readFileSync('SKILL.md','utf8'); if(!s.startsWith('---\\n')) throw new Error('SKILL.md 缺少 YAML front matter'); const end=s.indexOf('\\n---',4); if(end<0) throw new Error('SKILL.md YAML front matter 未闭合'); console.log('cloud-doc-editing skill package ok');\""
+  },
+  "license": "UNLICENSED"
+}

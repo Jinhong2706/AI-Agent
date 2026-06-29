@@ -1,0 +1,29 @@
+{
+  "name": "aitaxs-assistant",
+  "version": "1.2.0",
+  "description": "综合财税 AI 助手，面向个体工商户和小微企业主，提供税额计算、税务政策解读、发票处理、申报提醒和节税建议，内置 H5 可视化交互界面。",
+  "author": {
+    "name": "jacky_zhouxj",
+    "qq": "1817694478"
+  },
+  "license": "MIT",
+  "keywords": [
+    "税务",
+    "财税",
+    "个税",
+    "增值税",
+    "企业所得税",
+    "发票",
+    "报税",
+    "节税",
+    "个体工商户",
+    "小微企业",
+    "tax",
+    "finance"
+  ],
+  "category": "finance",
+  "skills": [
+    "./SKILL.md"
+  ],
+  "strict": true
+}

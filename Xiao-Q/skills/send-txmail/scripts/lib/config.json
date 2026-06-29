@@ -1,0 +1,16 @@
+{
+    "BaseConfig":{
+        "QemailSMTPDress":"smtp.qq.com",
+        "QEmailSMTPtimeout":"60",
+        "QemailSMTPort":"465"
+    },
+    "SenderConfig":{
+        "QemailPass":"你的QQ授权码",
+        "QemailSender":"你的邮箱账户（其实就是QQ号@qq.com）",
+        "AliasSenderName":"28.7Blog(显示的别名)"
+    },
+    "DefaultConfig":{
+        "DefaultSubjectPrefix":"由OpenClaw发出的邮件-来自28.7Blog",
+        "DefaultReplayEmailDress":"你的邮箱账户（其实就是QQ号@qq.com）"
+    }
+}

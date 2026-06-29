@@ -1,0 +1,1 @@
+{"name":"ppt-generator-skill","version":"0.1.0","description":"最小可安装的 PPT 生成类 Skill 示例包，覆盖触发条件、内容规划、版式视觉 QA、异常处理与交付契约。","private":true,"type":"module","keywords":["skill","ppt","presentation","generator"],"files":["SKILL.md","README.md","package.json"],"skill":{"entry":"SKILL.md","category":"document-generation","language":"zh-CN"}}

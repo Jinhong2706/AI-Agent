@@ -1,0 +1,11 @@
+[
+  {
+    "id": "rec-001",
+    "timestamp": "YYYY-MM-DDTHH:MM:SS",
+    "issue": "问题描述",
+    "root_cause": "根本原因",
+    "solution": "解决方案",
+    "outcome": "结果",
+    "status": "resolved"
+  }
+]

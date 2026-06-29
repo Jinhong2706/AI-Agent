@@ -1,0 +1,273 @@
+{
+  "version": "1.0.0",
+  "description": "所有已知搜索工具的能力矩阵。discover.js 读取此文件并检测可用性。新增搜索工具时添加条目即可。",
+  "tools": {
+    "web_search": {
+      "id": "web_search",
+      "name": "Brave Search (Built-in)",
+      "type": "system",
+      "strengths": [
+        "general",
+        "english",
+        "news",
+        "technical"
+      ],
+      "coverage": "global",
+      "freshness": "realtime",
+      "depth": "surface",
+      "cost": "free",
+      "estimated_latency_ms": 1500,
+      "detection": {
+        "type": "builtin",
+        "note": "OpenClaw 内置系统工具，始终可用"
+      },
+      "call": {
+        "kind": "system_tool",
+        "tool_name": "web_search",
+        "params": {
+          "query": "string (required)",
+          "count": "1-10 (default 5)",
+          "freshness": "day|week|month|year (optional)",
+          "country": "2-letter code (optional)"
+        }
+      }
+    },
+    "web_fetch": {
+      "id": "web_fetch",
+      "name": "URL Content Extractor (Built-in)",
+      "type": "system",
+      "strengths": [
+        "deep_extract",
+        "verification",
+        "full_text"
+      ],
+      "coverage": "global",
+      "freshness": "realtime",
+      "depth": "deep",
+      "cost": "free",
+      "estimated_latency_ms": 2000,
+      "detection": {
+        "type": "builtin",
+        "note": "OpenClaw 内置系统工具，始终可用"
+      },
+      "call": {
+        "kind": "system_tool",
+        "tool_name": "web_fetch",
+        "params": {
+          "url": "string (required)",
+          "extractMode": "markdown|text (default markdown)",
+          "maxChars": "number (optional)"
+        }
+      }
+    },
+    "browser": {
+      "id": "browser",
+      "name": "Browser Automation (Built-in)",
+      "type": "system",
+      "strengths": [
+        "dynamic_pages",
+        "interaction",
+        "screenshot",
+        "javascript"
+      ],
+      "coverage": "global",
+      "freshness": "realtime",
+      "depth": "deep",
+      "cost": "free",
+      "estimated_latency_ms": 5000,
+      "detection": {
+        "type": "builtin",
+        "note": "OpenClaw 内置浏览器工具，始终可用"
+      },
+      "call": {
+        "kind": "system_tool",
+        "tool_name": "browser",
+        "params": "见 browser skill 文档"
+      }
+    },
+    "baidu-search": {
+      "id": "baidu-search",
+      "name": "Baidu AI Search",
+      "type": "skill",
+      "strengths": [
+        "chinese",
+        "news",
+        "general",
+        "china_coverage"
+      ],
+      "coverage": "china",
+      "freshness": "realtime",
+      "depth": "moderate",
+      "cost": "paid",
+      "estimated_latency_ms": 2000,
+      "detection": {
+        "type": "skill_scan",
+        "directory": "baidu-search",
+        "check_env": [
+          "BAIDU_API_KEY"
+        ],
+        "check_bins": [
+          "python3"
+        ],
+        "check_files": [
+          "scripts/search.py"
+        ]
+      },
+      "call": {
+        "kind": "shell",
+        "template": "cd {skill_dir} && BAIDU_API_KEY=$BAIDU_API_KEY python3 scripts/search.py '<JSON>'",
+        "params": {
+          "query": "string (required)",
+          "count": "1-50 (default 10)",
+          "freshness": "YYYY-MM-DDtoYYYY-MM-DD | pd|pw|pm|py (optional)"
+        }
+      }
+    },
+    "tavily-search": {
+      "id": "tavily-search",
+      "name": "Tavily AI Search",
+      "type": "skill",
+      "strengths": [
+        "english",
+        "deep_research",
+        "news",
+        "ai_optimized"
+      ],
+      "coverage": "global",
+      "freshness": "realtime",
+      "depth": "deep",
+      "cost": "paid",
+      "estimated_latency_ms": 2000,
+      "detection": {
+        "type": "skill_scan",
+        "directory": "openclaw-tavily-search",
+        "check_env": [
+          "TAVILY_API_KEY"
+        ],
+        "check_bins": [
+          "python3"
+        ],
+        "check_files": [
+          "scripts/tavily_search.py"
+        ]
+      },
+      "call": {
+        "kind": "shell",
+        "template": "cd {skill_dir} && TAVILY_API_KEY=$TAVILY_API_KEY python3 scripts/tavily_search.py --query \"{query}\" --max-results 10 --format brave",
+        "params": {
+          "query": "string (required)",
+          "options": "--max-results <n> | --days <n> | --format brave|json (optional)"
+        }
+      }
+    },
+    "minimax-web-search": {
+      "id": "minimax-web-search",
+      "name": "MiniMax Token Plan Web Search",
+      "type": "skill",
+      "strengths": [
+        "chinese",
+        "general",
+        "image_understanding"
+      ],
+      "coverage": "china+global",
+      "freshness": "realtime",
+      "depth": "moderate",
+      "cost": "token",
+      "estimated_latency_ms": 2000,
+      "detection": {
+        "type": "skill_scan",
+        "directory": "minimax-token-plan-tool",
+        "check_env": [
+          "MINIMAX_API_KEY"
+        ],
+        "check_bins": [
+          "node"
+        ],
+        "check_files": [
+          "minimax_token_plan_tool.js"
+        ]
+      },
+      "call": {
+        "kind": "shell",
+        "template": "cd {skill_dir} && MINIMAX_API_KEY=$MINIMAX_API_KEY MINIMAX_API_HOST=${MINIMAX_API_HOST:-https://api.minimaxi.com} node minimax_token_plan_tool.js web_search \"{query}\"",
+        "params": {
+          "query": "string (required)"
+        }
+      }
+    },
+    "amap-lbs-skill": {
+      "id": "amap-lbs-skill",
+      "name": "Gaode Map LBS",
+      "type": "skill",
+      "strengths": [
+        "geographic",
+        "poi",
+        "routing",
+        "travel",
+        "heatmap"
+      ],
+      "coverage": "china",
+      "freshness": "cached",
+      "depth": "moderate",
+      "cost": "free_tier",
+      "estimated_latency_ms": 1500,
+      "detection": {
+        "type": "skill_scan",
+        "directory": "amap-lbs-skill",
+        "check_env": [
+          "AMAP_WEBSERVICE_KEY"
+        ],
+        "check_bins": [
+          "node"
+        ],
+        "check_files": [
+          "index.js",
+          "scripts/poi-search.js"
+        ]
+      },
+      "call": {
+        "kind": "shell",
+        "template": "cd {skill_dir} && AMAP_WEBSERVICE_KEY=$AMAP_WEBSERVICE_KEY node -e \"const {searchPOI} = require('./index.js'); searchPOI({keywords:'{keywords}', city:'{city}', offset:10}).then(r => console.log(JSON.stringify(r.pois)));\"",
+        "params": {
+          "keywords": "string (required)",
+          "city": "string (optional)",
+          "location": "lng,lat (optional)",
+          "radius": "meters (optional)"
+        }
+      }
+    },
+    "agent-browser": {
+      "id": "agent-browser",
+      "name": "Agent Browser",
+      "type": "skill",
+      "strengths": [
+        "dynamic_pages",
+        "interaction",
+        "screenshot",
+        "form_filling",
+        "data_extraction",
+        "javascript"
+      ],
+      "coverage": "global",
+      "freshness": "realtime",
+      "depth": "deep",
+      "cost": "free",
+      "estimated_latency_ms": 8000,
+      "detection": {
+        "type": "binary_check",
+        "check_bins": [
+          "agent-browser"
+        ],
+        "check_alt_paths": [
+          "./node_modules/.bin/agent-browser",
+          "npx agent-browser"
+        ]
+      },
+      "call": {
+        "kind": "shell",
+        "template": "agent-browser {action} {params}",
+        "params": "见 agent-browser skill 文档"
+      }
+    }
+  }
+}

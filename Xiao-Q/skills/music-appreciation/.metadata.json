@@ -1,0 +1,11 @@
+{
+  "assetType": "skill",
+  "name": "music-appreciation",
+  "displayName": "音乐鉴赏指南",
+  "semver": "1.0.0",
+  "description": "从听感到审美的音乐鉴赏指南。涵盖旋律、节奏、演奏技术、编曲创作、歌词表达、风格审美等维度，适合从入门到进阶的音乐爱好者。",
+  "author": "your-name",
+  "tags": ["music", "appreciation", "listening", "education"],
+  "category": "education",
+  "entry": "SKILL.md"
+}

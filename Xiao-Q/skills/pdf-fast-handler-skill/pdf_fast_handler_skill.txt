@@ -1,0 +1,123 @@
+# PDF Fast Handler Skill
+
+## 简介
+PDF 一站式全能处理工具，覆盖日常办公、扫描件识别、格式转换、页面编辑、内容提取、安全加密、批量自动化等全场景功能。
+
+## 功能特性
+
+### 📄 基础操作
+- **文本提取** - 提取 PDF 中的文字内容
+- **文档合并** - 将多个 PDF 合并为一个
+- **文档拆分** - 按指定页码拆分 PDF
+- **水印添加** - 为 PDF 添加文字水印
+- **信息查询** - 查看 PDF 页数、大小、加密状态等元信息
+
+### 🔄 格式转换
+- **PDF → Word** - 转换为可编辑的 DOCX 格式
+- **PDF → 图片** - 将每页转换为 JPG/PNG 图片
+- **PDF → HTML** - 转换为网页格式
+- **PDF → TXT** - 提取纯文本
+- **PDF → Markdown** - 转换为 Markdown 格式
+- **图片 → PDF** - 将多张图片合并为 PDF
+- **Word → PDF** - 将 DOCX 转换为 PDF
+
+### 🔍 OCR 识别
+- **扫描件识别** - 识别扫描版 PDF 中的中英文文字
+- **多语言支持** - 支持中文简体 (chi_sim) 和英文 (eng)
+
+### ✏️ 页面编辑
+- **页面旋转** - 支持 90°/180°/270° 旋转
+- **删除页面** - 删除指定页码
+- **提取页面** - 提取指定页码为新 PDF
+- **插入页面** - 在指定位置插入其他 PDF
+- **替换页面** - 替换指定页码内容
+- **反转顺序** - 反转所有页面顺序
+
+### 🔐 安全操作
+- **PDF 加密** - 设置打开密码
+- **PDF 解密** - 移除密码保护
+- **PDF 压缩** - 减小文件体积
+- **PDF 修复** - 尝试修复损坏的 PDF
+
+### 📝 页眉页脚
+- **添加页眉** - 在每页顶部添加文字
+- **添加页脚** - 在每页底部添加文字
+- **添加页码** - 自动添加页码
+
+### 📦 内容提取
+- **提取图片** - 提取 PDF 中嵌入的图片
+- **提取表格** - 识别并提取表格内容
+- **提取书签** - 提取文档目录/书签
+- **提取批注** - 提取注释和批注
+
+### 📁 批量处理
+- **批量转 Word** - 文件夹内所有 PDF 转 Word
+- **批量转图片** - 文件夹内所有 PDF 转图片
+- **批量提取文本** - 批量提取文字内容
+- **批量 Word 转 PDF** - 文件夹内所有 Word 转 PDF
+
+## 使用方式
+
+### 命令行
+```bash
+# 查看帮助
+python pdf_fast_handler_skill.py --help
+
+# 基础操作
+python pdf_fast_handler_skill.py info input.pdf
+python pdf_fast_handler_skill.py extract input.pdf
+python pdf_fast_handler_skill.py merge file1.pdf file2.pdf -o merged.pdf
+
+# 格式转换
+python pdf_fast_handler_skill.py to-word input.pdf -o output.docx
+python pdf_fast_handler_skill.py to-image input.pdf -o ./images
+
+# 页面编辑
+python pdf_fast_handler_skill.py rotate input.pdf 90 -o rotated.pdf
+python pdf_fast_handler_skill.py delete-pages input.pdf 1,3,5 -o output.pdf
+
+# 安全操作
+python pdf_fast_handler_skill.py encrypt input.pdf -p 123456 -o encrypted.pdf
+python pdf_fast_handler_skill.py decrypt input.pdf -p 123456 -o decrypted.pdf
+
+# 图片/Word 互转
+python pdf_fast_handler_skill.py images2pdf img1.jpg img2.jpg -o output.pdf
+python pdf_fast_handler_skill.py word2pdf input.docx -o output.pdf
+
+# 批量处理
+python pdf_fast_handler_skill.py batch ./pdf_folder to-word
+```
+
+## 依赖安装
+
+### Python 依赖
+```bash
+pip install PyPDF2 pdf2docx pdf2image pytesseract pillow docx2pdf
+```
+
+或运行安装脚本：
+```bash
+bash install_pdf_fast_handler_skill.sh
+```
+
+### 系统依赖
+
+**macOS:**
+```bash
+brew install poppler tesseract tesseract-lang
+```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt install poppler-utils tesseract-ocr tesseract-ocr-chi-sim
+```
+
+**Windows:**
+1. 下载 Poppler: https://github.com/oschwartz10612/poppler-windows/releases
+2. 下载 Tesseract: https://github.com/UB-Mannheim/tesseract/wiki
+3. 将安装目录添加到系统 PATH
+
+## 版本信息
+- 版本: 9.9.9
+- 作者: QClaw
+- 许可证: MIT

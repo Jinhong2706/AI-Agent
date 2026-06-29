@@ -1,0 +1,35 @@
+{
+  "name": "excel-finance-cn",
+  "displayName": "中国财税 Excel 实战",
+  "version": "1.0.0",
+  "description": "针对中国会计准则、增值税、个税、社保、年终汇算的 Excel 工作流。覆盖小规模/一般纳税人计税、薪资表、社保公积金、季度报表等。",
+  "author": "ikun",
+  "license": "MIT",
+  "category": "tools",
+  "tags": [
+    "excel",
+    "财务",
+    "税务",
+    "会计",
+    "中国"
+  ],
+  "keywords": [
+    "增值税",
+    "个税",
+    "社保",
+    "年终汇算",
+    "薪资表",
+    "财务报表",
+    "Excel"
+  ],
+  "platforms": [
+    "openclaw",
+    "skillhub",
+    "claude-code",
+    "cursor"
+  ],
+  "language": "zh-CN",
+  "minAgentVersion": "0.1.0",
+  "homepage": "",
+  "repository": ""
+}

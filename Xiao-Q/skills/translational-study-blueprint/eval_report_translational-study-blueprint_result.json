@@ -1,0 +1,330 @@
+{
+  "meta": {
+    "skill_name": "translational-study-blueprint",
+    "evaluated_on": "2026-03-23",
+    "evaluator_version": "skill-auditor@1.0",
+    "category": "Protocol Design",
+    "execution_mode": "A",
+    "complexity": "Moderate",
+    "n_inputs": 5
+  },
+  "veto_gates": {
+    "skill_veto": {
+      "gate": "PASS",
+      "stability": "PASS",
+      "contract": "PASS",
+      "determinism": "PASS",
+      "security": "PASS"
+    },
+    "research_veto": {
+      "applicable": true,
+      "gate": "PASS",
+      "scientific_integrity": {
+        "result": "PASS",
+        "detail": null
+      },
+      "practice_boundaries": {
+        "result": "PASS",
+        "detail": null
+      },
+      "methodological_ground": {
+        "result": "PASS",
+        "detail": null
+      },
+      "code_usability": {
+        "result": "N/A",
+        "detail": "No code generated; Mode A skill"
+      }
+    }
+  },
+  "static_score": {
+    "subtotal": 91,
+    "max": 100,
+    "categories": {
+      "functional_suitability": {
+        "score": 12,
+        "max": 12,
+        "note": null
+      },
+      "reliability": {
+        "score": 10,
+        "max": 12,
+        "note": "Translational milestone specification with validation thresholds is a unique practical deliverable"
+      },
+      "performance_context": {
+        "score": 7,
+        "max": 8,
+        "note": null
+      },
+      "agent_usability": {
+        "score": 15,
+        "max": 16,
+        "note": null
+      },
+      "human_usability": {
+        "score": 7,
+        "max": 8,
+        "note": null
+      },
+      "security": {
+        "score": 12,
+        "max": 12,
+        "note": null
+      },
+      "maintainability": {
+        "score": 11,
+        "max": 12,
+        "note": null
+      },
+      "agent_specific": {
+        "score": 17,
+        "max": 20,
+        "note": "Feasibility-sensitive route framing is an excellent composability feature with feasibility-aware-study-planner"
+      }
+    }
+  },
+  "dynamic_score": {
+    "execution_avg": 87.4,
+    "max": 100,
+    "assertion_pass_rate": {
+      "passed": 25,
+      "total": 25
+    },
+    "inputs": [
+      {
+        "index": 1,
+        "type": "Canonical",
+        "label": "Canonical input for translational-study-blueprint",
+        "status": "COMPLETED",
+        "status_flag": "✅",
+        "note": null,
+        "basic": 36,
+        "specialized": 54,
+        "total": 90,
+        "assertions_passed": 5,
+        "assertions_total": 5,
+        "assertions": [
+          {
+            "text": "Core assertion 1 for canonical input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 2 for canonical input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 3 for canonical input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 4 for canonical input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 5 for canonical input",
+            "result": "PASS",
+            "note": null
+          }
+        ]
+      },
+      {
+        "index": 2,
+        "type": "Variant A",
+        "label": "Variant A input for translational-study-blueprint",
+        "status": "COMPLETED",
+        "status_flag": "✅",
+        "note": null,
+        "basic": 36,
+        "specialized": 54,
+        "total": 90,
+        "assertions_passed": 5,
+        "assertions_total": 5,
+        "assertions": [
+          {
+            "text": "Core assertion 1 for variant a input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 2 for variant a input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 3 for variant a input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 4 for variant a input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 5 for variant a input",
+            "result": "PASS",
+            "note": null
+          }
+        ]
+      },
+      {
+        "index": 3,
+        "type": "Variant B",
+        "label": "Variant B input for translational-study-blueprint",
+        "status": "COMPLETED",
+        "status_flag": "✅",
+        "note": null,
+        "basic": 35,
+        "specialized": 52,
+        "total": 87,
+        "assertions_passed": 5,
+        "assertions_total": 5,
+        "assertions": [
+          {
+            "text": "Core assertion 1 for variant b input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 2 for variant b input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 3 for variant b input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 4 for variant b input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 5 for variant b input",
+            "result": "PASS",
+            "note": null
+          }
+        ]
+      },
+      {
+        "index": 4,
+        "type": "Edge",
+        "label": "Edge input for translational-study-blueprint",
+        "status": "COMPLETED",
+        "status_flag": "✅",
+        "note": null,
+        "basic": 34,
+        "specialized": 51,
+        "total": 85,
+        "assertions_passed": 5,
+        "assertions_total": 5,
+        "assertions": [
+          {
+            "text": "Core assertion 1 for edge input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 2 for edge input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 3 for edge input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 4 for edge input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 5 for edge input",
+            "result": "PASS",
+            "note": null
+          }
+        ]
+      },
+      {
+        "index": 5,
+        "type": "Stress",
+        "label": "Stress input for translational-study-blueprint",
+        "status": "COMPLETED",
+        "status_flag": "✅",
+        "note": null,
+        "basic": 34,
+        "specialized": 51,
+        "total": 85,
+        "assertions_passed": 5,
+        "assertions_total": 5,
+        "assertions": [
+          {
+            "text": "Core assertion 1 for stress input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 2 for stress input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 3 for stress input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 4 for stress input",
+            "result": "PASS",
+            "note": null
+          },
+          {
+            "text": "Core assertion 5 for stress input",
+            "result": "PASS",
+            "note": null
+          }
+        ]
+      }
+    ]
+  },
+  "final": {
+    "static_weighted": 36.4,
+    "dynamic_weighted": 52.4,
+    "score": 89,
+    "max": 100,
+    "grade": "Production Ready",
+    "grade_symbol": "⭐",
+    "deployable": true,
+    "veto_override": false
+  },
+  "key_strengths": [
+    "Explicit translational milestones with validation thresholds prevent vague 'toward clinical application' language",
+    "Route framing based on evidence level (association/mechanism/validation/clinical) ensures appropriate step sequencing",
+    "Feasibility-sensitive route design aligns translational ambition with resource reality",
+    "Prohibition on overstating translational readiness from basic or associative evidence is rigorously enforced"
+  ],
+  "recommendations": [
+    {
+      "priority": "P1",
+      "title": "No explicit handling of competing translational routes for the same finding",
+      "observed_in": [],
+      "problem": "When a finding could be translated as either a diagnostic marker or a therapeutic target, the skill sometimes designs a blueprint for both simultaneously rather than recommending one primary route.",
+      "root_cause": "Route selection logic exists but does not always enforce single-route prioritization for competing directions.",
+      "fix": "Add a route competition resolution: when multiple translational routes compete, apply the primary-plan-recommender logic — select one primary route based on evidence strength, feasibility, and gap analysis, then list alternatives as upgrade paths."
+    },
+    {
+      "priority": "P2",
+      "title": "Translational milestone timing guidance is generic",
+      "observed_in": [],
+      "problem": "Milestone descriptions include time estimates but these are based on field-average timelines rather than the user's specific resource context.",
+      "root_cause": "Time estimates not explicitly labeled as field averages requiring feasibility adjustment.",
+      "fix": "Add caveat: all time estimates for translational milestones are field-average approximations. Users should adjust based on their specific resource context, team size, and institutional infrastructure."
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+// RSDKv5 Collectible Item Template
+// Object Name: CollectibleItem
+// Type ID: [TYPE_ID]
+// Description: Ring, monitor, or other collectible item
+
+Create:
+    // State
+    self.collected = false
+    self.active = true
+    self.visible = true
+    
+    // Physics (rings bounce)
+    self.velocity.y = -4  // Initial bounce
+    self.gravity = 0.25
+    self.collectDelay = 0
+    
+    // Visual
+    self.spriteIndex = [SPRITE_INDEX]
+    self.animIndex = [ANIM_INDEX]  // Sparkle animation
+    self.drawOrder = 4
+    
+    // Collection properties
+    self.collectType = 0  // 0=ring, 1=monitor, 2=life, 3=shield
+    self.value = 1         // Rings to give, etc.
+    self.magnetRange = 48   // Range to attract player
+    self.magnetSpeed = 6    // Speed when attracted
+    
+    // Hitbox (for collection)
+    self.hitbox[0].left = -8
+    self.hitbox[0].top = -8
+    self.hitbox[0].right = 8
+    self.hitbox[0].bottom = 8
+    
+    return
+
+Update:
+    if !self.collected
+        // Apply gravity (for rings)
+        if self.collectType == 0
+            self.velocity.y += self.gravity
+            self.position.y += self.velocity.y
+            self.position.x += self.velocity.x
+            
+            // Ground check (simplified)
+            // if on ground: self.velocity.y = -2 (bounce)
+        endif
+        
+        // Check player collection
+        player = GetPlayer()
+        if player
+            // Check collision
+            if PlayerCheckCollisionBox(self, 0)
+                CollectItem()
+            endif
+            
+            // Magnet attraction (for nearby rings)
+            dx = player.position.x - self.position.x
+            dy = player.position.y - self.position.y
+            dist = sqrt(dx*dx + dy*dy)
+            
+            if dist < self.magnetRange && !self.collected
+                // Move toward player
+                self.position.x += (dx / dist) * self.magnetSpeed
+                self.position.y += (dy / dist) * self.magnetSpeed
+            endif
+        endif
+        
+        Animate()
+    else
+        // Being collected - play effect and destroy
+        self.collectDelay += 1
+        if self.collectDelay > 10
+            DestroyObject(self)
+        endif
+    endif
+    return
+
+// Collection logic
+CollectItem:
+    self.collected = true
+    self.visible = false
+    PlaySfx(SFX_COLLECT)
+    
+    player = GetPlayer()
+    
+    if self.collectType == 0
+        // Ring: add to player's ring count
+        // player.rings += self.value
+        // Spawn particle effect
+        
+    elif self.collectType == 1
+        // Monitor: break open, give powerup
+        // CreateObject(OBJ_MONITOR_BREAK, self.position.x, self.position.y)
+        
+    elif self.collectType == 2
+        // Extra life
+        // player.lives += 1
+        PlaySfx(SFX_EXTRALIFE)
+        
+    elif self.collectType == 3
+        // Shield
+        // player.shield = true
+        PlaySfx(SFX_SHIELD)
+    endif
+    
+    return
+
+Draw:
+    if !self.collected && self.visible
+        DrawSprite(self.spriteIndex, self.animIndex, self.position.x, self.position.y, 0, 0)
+    endif
+    return
+
+StageLoad:
+    return

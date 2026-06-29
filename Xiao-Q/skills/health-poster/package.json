@@ -1,0 +1,74 @@
+{
+  "name": "health-poster-generator-pro",
+  "version": "1.0.0",
+  "description": "专业版健康科普海报生成器，可配置组织名称，不包含定时任务和固定通道配置",
+  "main": "scripts/generate_health_poster_pro.py",
+  "scripts": {
+    "test": "python3 test_skill_pro.py",
+    "generate": "python3 scripts/generate_health_poster_pro.py",
+    "configure": "python3 scripts/generate_health_poster_pro.py --configure",
+    "list-themes": "python3 scripts/generate_health_poster_pro.py --list-themes"
+  },
+  "keywords": [
+    "health",
+    "poster",
+    "generator",
+    "seedream",
+    "volcengine",
+    "education",
+    "prevention",
+    "openclaw",
+    "skill"
+  ],
+  "author": {
+    "name": "OpenClaw Community",
+    "email": "community@openclaw.ai",
+    "url": "https://openclaw.ai"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "seedream-image-generation": ">=1.0.0"
+  },
+  "engines": {
+    "openclaw": ">=2026.3.0",
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openclaw-community/health-poster-generator-pro.git"
+  },
+  "bugs": {
+    "url": "https://github.com/openclaw-community/health-poster-generator-pro/issues"
+  },
+  "homepage": "https://skillhub.cn/skills/health-poster-generator-pro",
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "manifest.json",
+    "package.json",
+    "scripts/",
+    "references/"
+  ],
+  "config": {
+    "organization_name": {
+      "description": "组织/商会名称，显示在图片左上角",
+      "type": "string",
+      "default": ""
+    },
+    "output_base": {
+      "description": "输出目录基础路径",
+      "type": "string",
+      "default": "~/health_posters"
+    }
+  },
+  "skillhub": {
+    "category": "image-generation",
+    "tags": ["health", "education", "poster", "generator"],
+    "compatibility": ["openclaw"],
+    "requirements": ["火山引擎API key"],
+    "screenshots": [],
+    "demo_video": null,
+    "rating": 0,
+    "downloads": 0
+  }
+}

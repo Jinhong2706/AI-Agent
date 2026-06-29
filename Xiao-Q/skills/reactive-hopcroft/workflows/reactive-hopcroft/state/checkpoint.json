@@ -1,0 +1,21 @@
+{
+  "workflow_id": "reactive-hopcroft",
+  "version": "1.1",
+  "completed_nodes": [
+    "extract",
+    "title_select",
+    "generate"
+  ],
+  "current_node": "humanize",
+  "started_at": "2026-05-02T14:00:00Z",
+  "updated_at": "2026-05-02T05:53:27.090563+00:00",
+  "user_inputs": {
+    "selected_title": "5分钟部署，24小时工作，成本为0：这个数字员工的ROI我算了三遍",
+    "theme": "OpenClaw业务自动化"
+  },
+  "intermediate_files": {
+    "extract": "data/01-extract.json",
+    "title_select": "data/02-titles.json",
+    "generate": "data/03-draft.md"
+  }
+}

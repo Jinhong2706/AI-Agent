@@ -1,0 +1,11 @@
+{
+  "environment": "production",
+  "baseUrl": "https://music.68zysm.cn/api/v3",
+  "webBaseUrl": "https://lexuan.club",
+  "skillSlug": "lyrics-to-song",
+  "displayName": "歌词成曲AI",
+  "marketplaceTitle": "歌词成曲AI",
+  "marketplaceOnly": true,
+  "autoUpdate": true,
+  "latestUrl": "https://cdn.68zysm.cn/music-mv/skill/prod/packages/lyrics-to-song/latest.json"
+}

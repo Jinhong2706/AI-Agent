@@ -1,0 +1,11 @@
+{
+  "environment": "production",
+  "baseUrl": "https://music.68zysm.cn/api/v3",
+  "webBaseUrl": "https://lexuan.club",
+  "skillSlug": "ai-music-generator",
+  "displayName": "AI音乐生成器",
+  "marketplaceTitle": "AI音乐生成器",
+  "marketplaceOnly": true,
+  "autoUpdate": true,
+  "latestUrl": "https://cdn.68zysm.cn/music-mv/skill/prod/packages/ai-music-generator/latest.json"
+}

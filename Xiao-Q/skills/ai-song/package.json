@@ -1,0 +1,21 @@
+{
+  "name": "ai-song",
+  "version": "1.3.2",
+  "description": "AI歌曲创作工具，支持一句话写歌、歌词成曲、中文流行歌、品牌歌和歌曲小样生成。",
+  "type": "module",
+  "main": "./dist/aimv.cjs",
+  "bin": {
+    "aimv": "./bin/aimv.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "README.md",
+    "runtime-defaults.json",
+    "release-manifest.json",
+    "SKILL.md"
+  ]
+}

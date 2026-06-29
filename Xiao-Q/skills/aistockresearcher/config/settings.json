@@ -1,0 +1,70 @@
+{
+  "version": "2.1",
+  "last_updated": "2026-06-23",
+
+  "data_sources": {
+    "stock_price": {
+      "primary": "sina",
+      "fallback": "tencent",
+      "timeout": 8,
+      "retries": 2
+    },
+    "fund_data": "akshare",
+    "news": "eastmoney"
+  },
+
+  "cache": {
+    "enabled": true,
+    "ttl": 300,
+    "max_size": 1000,
+    "directory": ".cache"
+  },
+
+  "analysis": {
+    "analysts": {
+      "fundamental": {"weight": 0.25, "enabled": true},
+      "technical": {"weight": 0.15, "enabled": true},
+      "risk": {"weight": 0.15, "enabled": true},
+      "sentiment": {"weight": 0.15, "enabled": true},
+      "growth": {"weight": 0.20, "enabled": true},
+      "macro": {"weight": 0.10, "enabled": true}
+    },
+    "default_top": 20,
+    "min_score": 50
+  },
+
+  "screening": {
+    "default_conditions": {
+      "pe": [0, 50],
+      "pb": [0, 10],
+      "roe": [10, 100]
+    },
+    "top_stocks": 20
+  },
+
+  "watchlist": [
+    "600519",
+    "000858",
+    "300750",
+    "002304"
+  ],
+
+  "report": {
+    "output_dir": "reports",
+    "formats": ["json", "markdown"],
+    "auto_generate": {
+      "daily": true,
+      "weekly": false,
+      "monthly": false
+    }
+  },
+
+  "llm": {
+    "provider": "deepseek",
+    "api_key": "",
+    "base_url": "https://api.deepseek.com",
+    "model": "deepseek-chat",
+    "temperature": 0.7,
+    "max_tokens": 2000
+  }
+}

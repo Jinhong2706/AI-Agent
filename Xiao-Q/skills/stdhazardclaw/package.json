@@ -1,0 +1,43 @@
+{
+  "name": "stdhazardclaw",
+  "version": "1.0.0",
+  "description": "生产安全隐患排查专家 - 识别照片和文字中的安全隐患，输出结构化报告（本skill为演示使用，用户可以自主配置腾讯ima知识库，生产环境依托基于国投检测数智公司安全知识云支撑。）",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "echo 'No build required - pure JavaScript'",
+    "test": "node test/index.js"
+  },
+  "keywords": [
+    "openclaw",
+    "skill",
+    "safety",
+    "hazard",
+    "production"
+  ],
+  "author": "hazardclaw",
+  "license": "MIT",
+  "dependencies": {},
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "src/",
+    "package.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "skills": {
+    "triggers": [
+      "安全隐患",
+      "隐患排查",
+      "生产安全",
+      "安全检查",
+      "安全",
+      "隐患"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "retention_days": 7,
+  "auto_remind_days": 5,
+  "auto_archive": true,
+  "last_remind_date": "2026-05-01",
+  "last_clean_date": "2026-05-01",
+  "_automation_rules": {
+    "push_content": {
+      "retention_days": 0,
+      "auto_clean": true,
+      "keywords": [
+        "推送",
+        "AI动态",
+        "历史推送摘要",
+        "每日AI",
+        "动态推送",
+        "新闻推送"
+      ],
+      "description": "推送类信息（如AI动态推送、历史摘要等），第二天自动清理"
+    },
+    "personal_work_content": {
+      "retention_days": 0,
+      "auto_clean": false,
+      "remind_days": 5,
+      "keywords": [
+        "个人",
+        "工作",
+        "项目",
+        "客户"
+      ],
+      "description": "个人和工作相关内容，不自动清理，每5天提示用户是否清理"
+    }
+  },
+  "_schedule_config": {
+    "enabled": true,
+    "tasks": {
+      "auto_clean": {
+        "enabled": true,
+        "schedule": "daily",
+        "time": "18:00"
+      }
+    }
+  }
+}

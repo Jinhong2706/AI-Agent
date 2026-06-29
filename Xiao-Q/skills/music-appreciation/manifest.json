@@ -1,0 +1,16 @@
+{
+  "id": "music-appreciation",
+  "name": "music-appreciation",
+  "displayName": "音乐鉴赏指南",
+  "version": "1.0.0",
+  "description": "从听感到审美的音乐鉴赏指南。涵盖旋律、节奏、音色、演奏技术、编曲创作、歌词表达、风格审美等维度，不用太学术，日常听歌也能练出判断力。适合从入门到进阶的音乐爱好者。",
+  "type": "skill",
+  "author": "your-name",
+  "tags": ["music", "appreciation", "listening", "band", "song-analysis", "criticism", "education"],
+  "category": "education",
+  "entry": "SKILL.md",
+  "output": ["text"],
+  "config": {
+    "file": "config.json"
+  }
+}

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{SKILL_NAME}} — Skill 评测报告</title>
+<style>
+:root {
+  --brand:      #4F46E5;
+  --brand-l:    #818CF8;
+  --brand-bg:   #EEF0FF;
+  --green:      #10B981;
+  --green-bg:   #ECFDF5;
+  --amber:      #F59E0B;
+  --amber-bg:   #FFFBEB;
+  --red:        #EF4444;
+  --red-bg:     #FEF2F2;
+  --ink:        #0E1330;
+  --ink-s:      #3D4472;
+  --ink-m:      #8E94BD;
+  --bg:         #F5F6FF;
+  --bg-card:    #FFFFFF;
+  --line:       #E0E4F7;
+  --r:          12px;
+  --shadow:     0 2px 12px rgba(79,70,229,0.08);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+  background: var(--bg); color: var(--ink);
+  line-height: 1.6;
+}
+
+/* ── 顶部导航栏 ── */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--ink);
+  padding: 0 40px;
+  display: flex; align-items: center; gap: 0;
+  height: 52px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.topbar-brand {
+  font-size: 16px; font-weight: 800; color: #fff;
+  font-family: 'Inter', monospace; letter-spacing: 0.01em;
+  margin-right: 32px; white-space: nowrap;
+}
+.topbar-brand .dot { color: var(--brand-l); }
+.topbar-nav { display: flex; gap: 0; flex: 1; overflow-x: auto; }
+.topbar-nav a {
+  font-size: 13px; font-weight: 600; color: #9BA4C7;
+  padding: 0 14px; height: 52px;
+  display: flex; align-items: center;
+  text-decoration: none; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.topbar-nav a:hover { color: #fff; border-bottom-color: var(--brand-l); }
+.topbar-meta {
+  font-size: 12px; color: #5A6080; font-family: monospace;
+  white-space: nowrap; margin-left: auto; padding-left: 24px;
+}
+
+/* ── 主内容 ── */
+.main { max-width: 1100px; margin: 0 auto; padding: 32px 40px 80px; }
+
+/* ── Hero 概要条 ── */
+.hero-bar {
+  background: var(--bg-card); border-radius: var(--r);
+  padding: 28px 32px; margin-bottom: 28px;
+  box-shadow: var(--shadow);
+  display: flex; align-items: center; gap: 32px; flex-wrap: wrap;
+  border-left: 4px solid var(--brand);
+}
+.hero-bar h1 { font-size: 22px; font-weight: 900; }
+.hero-bar .skill-id { font-size: 13px; color: var(--ink-m); font-family: monospace; margin-top: 2px; }
+.meta-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-left: auto; }
+.chip {
+  font-size: 12px; font-weight: 700; padding: 4px 12px;
+  border-radius: 20px; white-space: nowrap;
+}
+.chip.mode   { background: var(--brand-bg); color: var(--brand); }
+.chip.ver    { background: #E8F5E9; color: #2E7D32; }
+.chip.date   { background: #FFF3E0; color: #E65100; }
+
+/* ── ① 核心结论框 ── */
+.summary-box {
+  background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+  color: #fff; border-radius: var(--r);
+  padding: 26px 30px; margin-bottom: 22px;
+  box-shadow: 0 4px 20px rgba(79,70,229,0.25);
+}
+.summary-box .grade-line {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; opacity: 0.85; margin-bottom: 6px;
+}
+.summary-box .verdict {
+  font-size: 22px; font-weight: 800; line-height: 1.4;
+  margin-bottom: 10px;
+}
+.summary-box .reasoning {
+  font-size: 14px; line-height: 1.7; opacity: 0.93;
+}
+
+/* ── ② 必读建议 ── */
+.must-read {
+  background: var(--bg-card); border-radius: var(--r);
+  padding: 22px 28px; margin-bottom: 22px;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--amber);
+}
+.must-read-title {
+  font-size: 15px; font-weight: 800; color: var(--ink);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.must-read-list { display: flex; flex-direction: column; gap: 10px; }
+.must-read-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 14px; border-radius: 8px;
+  background: var(--amber-bg);
+  font-size: 14px; line-height: 1.55;
+}
+.must-read-item.high     { background: var(--red-bg); }
+.must-read-item.medium   { background: var(--amber-bg); }
+.must-read-item.low      { background: var(--green-bg); }
+.must-read-item .pri {
+  flex-shrink: 0; font-size: 11px; font-weight: 800;
+  padding: 3px 9px; border-radius: 4px; letter-spacing: 0.06em;
+  font-family: 'Inter', monospace;
+}
+.must-read-item.high .pri    { background: var(--red); color: #fff; }
+.must-read-item.medium .pri  { background: var(--amber); color: #fff; }
+.must-read-item.low .pri     { background: var(--green); color: #fff; }
+.must-read-item .text { color: var(--ink-s); flex: 1; }
+.must-read-item .text .ref {
+  font-size: 12px; color: var(--ink-m); margin-top: 4px;
+  font-family: monospace;
+}
+
+/* ── 分数卡 ── */
+.score-row {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px; margin-bottom: 28px;
+}
+.score-card {
+  background: var(--bg-card); border-radius: var(--r);
+  padding: 20px; text-align: center; box-shadow: var(--shadow);
+  border-top: 3px solid var(--line);
+}
+.score-card.primary { border-top-color: var(--brand); }
+.score-card.up      { border-top-color: var(--green); }
+.score-card.warn    { border-top-color: var(--amber); }
+.score-card .label  { font-size: 11px; font-weight: 700; color: var(--ink-m); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+.score-card .value  { font-size: 36px; font-weight: 900; font-family: 'Inter', monospace; color: var(--ink); line-height: 1; }
+.score-card .sub    { font-size: 12px; color: var(--ink-m); margin-top: 4px; }
+.score-card .delta  { font-size: 13px; font-weight: 700; color: var(--green); margin-top: 4px; }
+.score-card .delta.down { color: var(--red); }
+
+/* ── 章节卡片 ── */
+.section {
+  background: var(--bg-card); border-radius: var(--r);
+  padding: 28px 32px; margin-bottom: 24px;
+  box-shadow: var(--shadow);
+}
+.section-title {
+  font-size: 16px; font-weight: 800; color: var(--ink);
+  margin-bottom: 18px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 10px;
+}
+.section-title .icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--brand-bg); display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.section-title .num {
+  font-family: 'Inter', monospace; font-size: 12px; font-weight: 800;
+  color: #fff; background: var(--brand); padding: 3px 9px; border-radius: 5px;
+}
+.section-hint {
+  font-size: 13px; color: var(--ink-m); margin-bottom: 14px; line-height: 1.6;
+}
+
+/* ── ④ 测试覆盖矩阵 ── */
+.coverage-grid {
+  display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 16px;
+}
+.coverage-stats {
+  background: var(--bg); border-radius: 8px; padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.coverage-stats .stat {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 13px;
+}
+.coverage-stats .stat .k { color: var(--ink-m); font-weight: 600; }
+.coverage-stats .stat .v {
+  font-family: 'Inter', monospace; font-size: 16px; font-weight: 800;
+  color: var(--ink);
+}
+.coverage-stats .stat .v.warn { color: var(--amber); }
+.coverage-stats .stat .v.ok   { color: var(--green); }
+.coverage-stats .stat .v.bad  { color: var(--red); }
+.matrix-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.matrix-table th {
+  background: var(--bg); padding: 8px 10px;
+  text-align: center; font-size: 11px; font-weight: 700;
+  text-transform: uppercase; color: var(--ink-m); letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--line);
+}
+.matrix-table th:first-child { text-align: left; }
+.matrix-table td {
+  padding: 8px 10px; border-bottom: 1px solid var(--line);
+  text-align: center; font-family: 'Inter', monospace;
+}
+.matrix-table td:first-child { text-align: left; font-weight: 600; font-family: inherit; }
+.matrix-table td.cell-p0 { background: var(--green-bg); color: #166534; font-weight: 700; }
+.matrix-table td.cell-p1 { background: var(--brand-bg); color: var(--brand); font-weight: 700; }
+.matrix-table td.cell-p2 { background: var(--amber-bg); color: #92400E; }
+.matrix-table td.cell-na { background: var(--bg); color: var(--ink-m); }
+.matrix-table td.cell-miss { background: var(--red-bg); color: var(--red); font-weight: 700; }
+
+/* ── ⑤ 维度评分详情 ── */
+.dim-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.dim-table th {
+  background: var(--bg); padding: 8px 12px;
+  text-align: left; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-m);
+  border-bottom: 1px solid var(--line);
+}
+.dim-table td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.dim-table tr:last-child td { border-bottom: none; }
+.score-pill {
+  display: inline-block; padding: 2px 10px;
+  border-radius: 12px; font-size: 13px; font-weight: 700;
+  font-family: 'Inter', monospace; min-width: 38px; text-align: center;
+}
+.score-pill.a { background: var(--green-bg); color: #166534; }
+.score-pill.b { background: var(--brand-bg); color: var(--brand); }
+.score-pill.c { background: var(--amber-bg); color: #92400E; }
+.score-pill.d, .score-pill.f { background: var(--red-bg); color: var(--red); }
+.score-pill.na { background: var(--bg); color: var(--ink-m); }
+
+/* ── ⑥ 测试数据与结果 ── */
+.eval-grid { display: flex; flex-direction: column; gap: 16px; }
+.eval-card {
+  border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+}
+.eval-card-header {
+  background: var(--bg); padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+}
+.eval-card-header .eval-id { font-size: 13px; font-weight: 700; color: var(--ink); }
+.eval-card-header .eval-id .pri-tag {
+  display: inline-block; font-size: 10px; font-weight: 800;
+  padding: 2px 7px; border-radius: 3px; margin-left: 8px;
+  font-family: 'Inter', monospace; letter-spacing: 0.06em;
+}
+.eval-card-header .eval-id .pri-tag.p0 { background: var(--green); color: #fff; }
+.eval-card-header .eval-id .pri-tag.p1 { background: var(--brand); color: #fff; }
+.eval-card-header .eval-id .pri-tag.p2 { background: var(--ink-m); color: #fff; }
+.eval-card-header .eval-score { font-size: 14px; font-weight: 800; font-family: monospace; }
+.eval-card-header .eval-score.pass { color: var(--green); }
+.eval-card-header .eval-score.fail { color: var(--red); }
+.eval-card-body { padding: 14px 16px; }
+.expectation-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 6px 0; font-size: 13px;
+  border-bottom: 1px solid var(--line);
+}
+.expectation-row:last-child { border-bottom: none; }
+.exp-icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+.exp-cat {
+  flex-shrink: 0; font-size: 10px; font-weight: 700;
+  padding: 2px 6px; border-radius: 3px; margin-top: 2px;
+  background: var(--brand-bg); color: var(--brand); font-family: monospace;
+}
+.exp-text { color: var(--ink-s); line-height: 1.5; }
+.exp-text .evidence {
+  display: block; margin-top: 4px; font-size: 12px;
+  color: var(--ink-m); font-style: italic;
+}
+
+/* ── 输出对比块（baseline vs with_skill） ── */
+.compare-block {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  margin-top: 12px;
+}
+.compare-pane {
+  border: 1px solid var(--line); border-radius: 6px;
+  font-family: monospace; font-size: 12px; line-height: 1.6;
+  max-height: 280px; overflow-y: auto;
+}
+.compare-pane .head {
+  position: sticky; top: 0; background: var(--bg); padding: 6px 12px;
+  font-weight: 700; font-size: 11px; color: var(--ink-m);
+  border-bottom: 1px solid var(--line);
+}
+.compare-pane .body { padding: 10px 12px; white-space: pre-wrap; word-break: break-word; }
+
+/* ── Diff 展示 ── */
+.diff-block {
+  background: #0F1117; border-radius: 8px; overflow: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 13px; line-height: 1.7; padding: 20px;
+  max-height: 480px; overflow-y: auto;
+}
+.diff-add { color: #6EE7B7; }
+.diff-del { color: #FCA5A5; }
+.diff-meta{ color: #8E94BD; }
+.diff-ctx { color: #6B7280; }
+
+/* ── Transcript 折叠 ── */
+details { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+details + details { margin-top: 10px; }
+summary {
+  padding: 12px 16px; font-size: 13px; font-weight: 700;
+  cursor: pointer; user-select: none;
+  background: var(--bg); list-style: none;
+  display: flex; align-items: center; gap: 8px;
+}
+summary::after { content: '▼'; font-size: 10px; margin-left: auto; color: var(--ink-m); }
+details[open] summary::after { content: '▲'; }
+.transcript-body {
+  padding: 16px; background: #0F1117;
+  font-family: monospace; font-size: 12px; color: #D1D5DB;
+  line-height: 1.7; max-height: 400px; overflow-y: auto;
+  white-space: pre-wrap; word-break: break-word;
+}
+
+/* ── NEVER 检查列表 ── */
+.never-list { display: flex; flex-direction: column; gap: 8px; }
+.never-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 14px; border-radius: 8px; font-size: 13px;
+}
+.never-item.ok  { background: var(--green-bg); color: #166534; }
+.never-item.na  { background: var(--bg); color: var(--ink-m); }
+.never-item.violation { background: var(--red-bg); color: #991B1B; }
+.never-icon { font-size: 15px; flex-shrink: 0; }
+
+/* ── 分数走势迷你表 ── */
+.trend-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.trend-table th, .trend-table td {
+  padding: 8px 14px; text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.trend-table th { background: var(--bg); font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--ink-m); }
+.trend-table .keep  { color: var(--green); font-weight: 700; }
+.trend-table .revert{ color: var(--red); font-weight: 700; }
+
+/* ── 下一步建议 ── */
+.next-steps { display: flex; flex-direction: column; gap: 10px; }
+.next-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 16px; border-radius: 10px;
+  background: var(--brand-bg);
+  border-left: 3px solid var(--brand);
+  font-size: 14px; color: var(--ink-s); line-height: 1.55;
+}
+.next-num {
+  flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--brand); color: #fff;
+  font-size: 11px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+
+/* ── ⑧ 评分标准附录 ── */
+.criteria-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.criteria-table th, .criteria-table td {
+  padding: 8px 12px; border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.criteria-table th {
+  background: var(--bg); font-size: 11px; font-weight: 700;
+  text-transform: uppercase; color: var(--ink-m); letter-spacing: 0.06em;
+  text-align: left;
+}
+.criteria-table tr:last-child td { border-bottom: none; }
+.criteria-grade {
+  display: inline-block; padding: 2px 10px; border-radius: 12px;
+  font-size: 12px; font-weight: 800; font-family: 'Inter', monospace;
+}
+.criteria-grade.a { background: var(--green-bg); color: #166534; }
+.criteria-grade.b { background: var(--brand-bg); color: var(--brand); }
+.criteria-grade.c { background: var(--amber-bg); color: #92400E; }
+.criteria-grade.d, .criteria-grade.f { background: var(--red-bg); color: var(--red); }
+
+/* ── 工具提示 ── */
+.badge {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 2px 8px; border-radius: 4px; vertical-align: middle;
+}
+.badge.dry    { background: var(--amber-bg); color: #92400E; }
+.badge.hybrid { background: var(--brand-bg); color: var(--brand); }
+.badge.dynamic{ background: var(--green-bg); color: #166534; }
+.badge.static { background: var(--bg); color: var(--ink-m); }
+
+@media (max-width: 700px) {
+  .main { padding: 16px; }
+  .topbar { padding: 0 16px; }
+  .coverage-grid { grid-template-columns: 1fr; }
+  .compare-block { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<div class="topbar">
+  <div class="topbar-brand">Skill<span class="dot">·</span>Assistant</div>
+  <nav class="topbar-nav">
+    <a href="#summary">核心结论</a>
+    <a href="#must-read">必读建议</a>
+    <a href="#scoreboard">评分总览</a>
+    <a href="#coverage">测试覆盖</a>
+    <a href="#dimensions">评分详情</a>
+    <a href="#evals">测试数据</a>
+    <a href="#changes">改动详情</a>
+    <a href="#criteria">评分标准</a>
+  </nav>
+  <div class="topbar-meta">{{SKILL_NAME}} · {{REPORT_DATE}}</div>
+</div>
+
+<div class="main">
+
+  <!-- Hero -->
+  <div class="hero-bar">
+    <div>
+      <h1>{{SKILL_NAME}}</h1>
+      <div class="skill-id">{{SKILL_ID}}</div>
+    </div>
+    <div class="meta-chips">
+      <span class="chip mode">{{EVAL_MODE}}</span>
+      <span class="chip ver">{{VERSION_BEFORE}} → {{VERSION_AFTER}}</span>
+      <span class="chip date">{{REPORT_DATE}}</span>
+    </div>
+  </div>
+
+  <!-- ① 核心结论 -->
+  <div id="summary" class="summary-box">
+    <div class="grade-line">核心结论 · {{GRADE}}</div>
+    <div class="verdict">{{CORE_VERDICT}}</div>
+    <div class="reasoning">{{CORE_REASONING}}</div>
+  </div>
+
+  <!-- ② 必读建议 -->
+  <div id="must-read" class="must-read">
+    <div class="must-read-title">📌 必读建议（按优先级排序）</div>
+    <div class="must-read-list">
+      {{MUST_READ_ITEMS}}
+    </div>
+  </div>
+
+  <!-- ③ 评分总览 -->
+  <div id="scoreboard">
+    <div class="section-title" style="background:transparent; border-bottom:none; padding-bottom:8px; margin-bottom:14px;">
+      <span class="num">③</span>
+      评分总览
+    </div>
+    <div class="score-row">
+      <div class="score-card primary">
+        <div class="label">综合效能分</div>
+        <div class="value">{{SCORE_AFTER}}</div>
+        <div class="sub">满分 100 · {{GRADE}}</div>
+        <div class="delta">{{SCORE_DELTA}}</div>
+        {{PREV_SCORE_HINT}}
+      </div>
+      <div class="score-card up">
+        <div class="label">指令维度</div>
+        <div class="value">{{DIM_DIRECTIVE_AFTER}}</div>
+        <div class="sub">权重 40%</div>
+        <div class="delta">{{DIM_DIRECTIVE_DELTA}}</div>
+      </div>
+      <div class="score-card up">
+        <div class="label">约束维度</div>
+        <div class="value">{{DIM_CONSTRAINT_AFTER}}</div>
+        <div class="sub">权重 30%</div>
+        <div class="delta">{{DIM_CONSTRAINT_DELTA}}</div>
+      </div>
+      <div class="score-card warn">
+        <div class="label">冗余率</div>
+        <div class="value">{{REDUNDANCY_AFTER}}%</div>
+        <div class="sub">优化前 {{REDUNDANCY_BEFORE}}%</div>
+        <div class="delta">{{REDUNDANCY_DELTA}}</div>
+      </div>
+      <div class="score-card">
+        <div class="label">body 行数</div>
+        <div class="value">{{LINES_AFTER}}</div>
+        <div class="sub">优化前 {{LINES_BEFORE}}</div>
+        <div class="delta">{{LINES_DELTA}}</div>
+      </div>
+      <div class="score-card">
+        <div class="label">body tokens</div>
+        <div class="value">{{TOKENS_AFTER}}</div>
+        <div class="sub">优化前 {{TOKENS_BEFORE}}</div>
+        <div class="delta">{{TOKENS_DELTA}}</div>
+      </div>
+    </div>
+
+    <div class="section" style="margin-top:0;">
+      <div class="section-title" style="font-size:14px;">📈 分数走势</div>
+      <table class="trend-table">
+        <thead>
+          <tr>
+            <th>时间</th><th>Commit</th><th>旧分</th><th>新分</th>
+            <th>决策</th><th>维度</th><th>eval_mode</th><th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{TREND_ROWS}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ④ 测试覆盖矩阵 -->
+  <div id="coverage" class="section">
+    <div class="section-title">
+      <span class="num">④</span>
+      测试用例覆盖
+      <span class="badge {{EVAL_MODE_BADGE_CLASS}}" style="margin-left:auto">{{EVAL_MODE}}</span>
+    </div>
+    <div class="section-hint">
+      下面这张矩阵告诉你：测试集覆盖了 SKILL.md 中**哪些功能模块**、**哪些场景类型**，是否有盲区。
+      行 = 功能模块（从 SKILL.md 抽取）；列 = 5 类场景（happy 顺路 / complex 多步 / edge 边界 / negative 反例 / error 异常）。
+      格内：<span class="score-pill a" style="font-size:11px">P0</span> 核心必测 ·
+      <span class="score-pill b" style="font-size:11px">P1</span> 建议覆盖 ·
+      <span class="score-pill c" style="font-size:11px">P2</span> 锦上添花 ·
+      <span style="color:var(--ink-m)">—</span> 不适用。
+    </div>
+
+    <div class="coverage-grid">
+      <div>{{COVERAGE_MATRIX}}</div>
+      <div class="coverage-stats">
+        {{COVERAGE_STATS}}
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ 评分详情 -->
+  <div id="dimensions" class="section">
+    <div class="section-title">
+      <span class="num">⑤</span>
+      评分详情（10 维度 + D10 子项）
+    </div>
+    <div class="section-hint">
+      指令 / 约束 / 冗余 三维是综合分的主要构成；D0-D9 是结构静态项；D10 是实测可验证性附加维度（不计入主分）。
+    </div>
+
+    <h4 style="font-size:13px; font-weight:700; color:var(--ink-s); margin:18px 0 10px;">三维诊断</h4>
+    <table class="dim-table">
+      <thead>
+        <tr><th>维度</th><th>优化前</th><th>优化后</th><th>Δ</th><th>主要发现</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>指令 (40%)</strong></td>
+          <td><span class="score-pill b">{{DIM_DIRECTIVE_BEFORE}}</span></td>
+          <td><span class="score-pill b">{{DIM_DIRECTIVE_AFTER}}</span></td>
+          <td>{{DIM_DIRECTIVE_DELTA}}</td>
+          <td>{{DIM_DIRECTIVE_NOTE}}</td>
+        </tr>
+        <tr>
+          <td><strong>约束 (30%)</strong></td>
+          <td><span class="score-pill b">{{DIM_CONSTRAINT_BEFORE}}</span></td>
+          <td><span class="score-pill b">{{DIM_CONSTRAINT_AFTER}}</span></td>
+          <td>{{DIM_CONSTRAINT_DELTA}}</td>
+          <td>{{DIM_CONSTRAINT_NOTE}}</td>
+        </tr>
+        <tr>
+          <td><strong>冗余率 (30%)</strong></td>
+          <td>{{REDUNDANCY_BEFORE}}%</td>
+          <td>{{REDUNDANCY_AFTER}}%</td>
+          <td>{{REDUNDANCY_DELTA}}</td>
+          <td>{{DIM_REDUNDANCY_NOTE}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4 style="font-size:13px; font-weight:700; color:var(--ink-s); margin:24px 0 10px;">10 维度逐项</h4>
+    <table class="dim-table">
+      <thead>
+        <tr><th>维度</th><th>得分</th><th>权重</th><th>评分依据</th></tr>
+      </thead>
+      <tbody>
+        {{D_DIMENSIONS_ROWS}}
+      </tbody>
+    </table>
+
+    <h4 style="font-size:13px; font-weight:700; color:var(--ink-s); margin:24px 0 10px;">D10 实测可验证性（附加，不计入主分）</h4>
+    <table class="dim-table">
+      <thead>
+        <tr><th>子项</th><th>得分</th><th>满分</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        {{D10_SUB_ROWS}}
+      </tbody>
+    </table>
+
+    <div style="margin-top:20px; font-size:14px; line-height:1.8; color:var(--ink-s);">
+      <strong>知识比例</strong>：Expert {{EXPERT_PCT}}% · Activation {{ACTIVATION_PCT}}% · Redundant {{REDUNDANT_PCT}}%
+      <br>
+      <strong>病症检测</strong>：{{SYMPTOMS}}
+      <br>
+      <strong>帕累托状态</strong>：{{PARETO_STATUS}}
+    </div>
+  </div>
+
+  <!-- ⑥ 测试数据与结果 -->
+  <div id="evals" class="section">
+    <div class="section-title">
+      <span class="num">⑥</span>
+      测试数据与结果
+      <button class="toggle-all" data-state="" style="margin-left:auto; font-size:12px; padding:4px 10px; border-radius:4px; border:1px solid var(--line); background:var(--bg-card); cursor:pointer;">展开全部</button>
+    </div>
+    <div class="section-hint">
+      下面是每条测试用例的：① 输入 prompt 和 judgements；② baseline 输出（不加载 skill）vs with_skill 输出（加载新版 skill）的对比；③ 每条 judgement 的通过情况（含 evidence）；④ 完整 transcript（默认折叠）。
+    </div>
+    {{EVAL_RESULTS_DETAIL}}
+  </div>
+
+  <!-- ⑦ 改动详情 -->
+  <div id="changes" class="section">
+    <div class="section-title">
+      <span class="num">⑦</span>
+      改动详情
+      <span class="badge dry" style="margin-left:auto; font-weight:600">{{GIT_COMMIT}}</span>
+    </div>
+
+    <div style="margin-bottom:14px; font-size:14px; color:var(--ink-s);">
+      <strong>改动原因</strong>：{{CHANGE_REASON}}
+    </div>
+
+    <div class="diff-block">{{GIT_DIFF}}</div>
+
+    <h4 style="margin:24px 0 10px; font-size:13px;">🛡️ NEVER 规则检查</h4>
+    <div class="never-list">
+      {{NEVER_CHECKS}}
+    </div>
+
+    <h4 style="margin:24px 0 10px; font-size:13px;">🚀 下一步建议</h4>
+    <div class="next-steps">
+      {{NEXT_STEPS}}
+    </div>
+  </div>
+
+  <!-- ⑧ 评分标准参考（附录） -->
+  <div id="criteria" class="section">
+    <div class="section-title">
+      <span class="num">⑧</span>
+      评分标准参考（附录）
+    </div>
+    <div class="section-hint">
+      理解每个维度的评分准绳——为什么这条 skill 拿了 78 分而不是 82。下表说明各维度的 A/B/C/D/F 标准与权重来源。
+    </div>
+
+    <h4 style="font-size:13px; margin-top:18px; margin-bottom:10px;">综合分等级</h4>
+    <table class="criteria-table">
+      <thead>
+        <tr><th>等级</th><th>分数区间</th><th>含义</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="criteria-grade a">A</span></td><td>90-100</td><td>优秀，可直接交付/入库</td></tr>
+        <tr><td><span class="criteria-grade b">B</span></td><td>75-89</td><td>良好，小幅改进后可交付</td></tr>
+        <tr><td><span class="criteria-grade c">C</span></td><td>60-74</td><td>及格，需补充关键内容</td></tr>
+        <tr><td><span class="criteria-grade d">D</span></td><td>40-59</td><td>不合格，需要大幅修改</td></tr>
+        <tr><td><span class="criteria-grade f">F</span></td><td>0-39</td><td>严重不合格，建议重写</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="font-size:13px; margin-top:24px; margin-bottom:10px;">10 维度权重与含义</h4>
+    <table class="criteria-table">
+      <thead>
+        <tr><th>维度</th><th>权重</th><th>检查重点</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>D0 知识增量</strong></td><td>15%</td><td>Expert / Activation / Redundant 三类知识比例。优秀 Skill 的 Expert 占比 ≥ 70%</td></tr>
+        <tr><td><strong>D1 元数据规范</strong></td><td>10%</td><td>frontmatter 完整性 + description 含 WHAT/WHEN/关键词</td></tr>
+        <tr><td><strong>D2 概述与定位</strong></td><td>10%</td><td>目标清晰度、场景定义、思维模式 vs 机械流程的取舍</td></tr>
+        <tr><td><strong>D3 执行流程</strong></td><td>15%</td><td>步骤完整性、可操作性、逻辑连贯性</td></tr>
+        <tr><td><strong>D4 输入输出契约</strong></td><td>10%</td><td>参数定义、输出格式规范、示例覆盖</td></tr>
+        <tr><td><strong>D5 反模式清单</strong></td><td>10%</td><td>NEVER 列表的具体性、原因、专家经验</td></tr>
+        <tr><td><strong>D6 工程规范</strong></td><td>5%</td><td>错误处理、性能约束、幂等性</td></tr>
+        <tr><td><strong>D7 渐进式披露</strong></td><td>10%</td><td>三层加载设计、references 拆分、加载触发器</td></tr>
+        <tr><td><strong>D8 安全审计</strong></td><td>10%</td><td>Prompt 注入防护、声明-行为一致性（OWASP LLM Top 10）</td></tr>
+        <tr><td><strong>D9 自由度校准</strong></td><td>5%</td><td>创意任务 → 高自由 / 脆弱操作 → 低自由</td></tr>
+        <tr><td colspan="3" style="background:var(--bg);"><strong>D10 实测可验证性</strong>（附加，不计入主分，满分 125）</td></tr>
+        <tr><td><strong>├─ D10.1 输出质量</strong></td><td>50</td><td>是否有 test-prompts.json + baseline 对比标准</td></tr>
+        <tr><td><strong>├─ D10.2 触发率</strong></td><td>50</td><td>是否有 trigger-queries.json + 三类查询覆盖</td></tr>
+        <tr><td><strong>└─ D10.3 测试集判别力</strong></td><td>25</td><td>Grader critique evals：assertion 是否太宽松/太严苛/缺关键校验</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="font-size:13px; margin-top:24px; margin-bottom:10px;">三维诊断框架（综合分计算公式）</h4>
+    <div style="background:var(--bg); border-radius:8px; padding:14px 18px; font-family:monospace; font-size:13px; line-height:1.8;">
+      综合效能分 = 指令评级 × 40 + 约束评级 × 30 + (1 − 冗余率) × 30
+    </div>
+    <table class="criteria-table" style="margin-top:14px;">
+      <thead>
+        <tr><th>三维</th><th>权重</th><th>评估方法</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>指令 (Directive)</strong></td><td>40%</td><td>驱动 LLM 做对事的 token：激活 / 注入 / 锚定。缺指令 = Skill 加载后 LLM 行为几乎没变化</td></tr>
+        <tr><td><strong>约束 (Constraint)</strong></td><td>30%</td><td>防止 LLM 犯错的 token：NEVER 列表、边界条件、反模式。缺约束 = LLM 会犯设计者已知但未声明的错误</td></tr>
+        <tr><td><strong>冗余 (Redundancy)</strong></td><td>30%</td><td>对任务无贡献的 token（类似死代码）。低冗余意味着每个 token 都在工作</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="font-size:13px; margin-top:24px; margin-bottom:10px;">测试集完整性标准（v2.0.1）</h4>
+    <table class="criteria-table">
+      <thead>
+        <tr><th>检查项</th><th>Pass 标准</th><th>备注</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>功能覆盖率</td><td>100%（每个功能模块至少 1 条 P0 prompt）</td><td>不通过自动补 happy_path P0 prompt</td></tr>
+        <tr><td>P0 场景覆盖率</td><td>≥ 95%</td><td>P0 单元格不可缺</td></tr>
+        <tr><td>P0+P1 场景覆盖率</td><td>≥ 70%</td><td>警告但不阻断</td></tr>
+        <tr><td>每条 P0 prompt 的 category 覆盖</td><td>≥ 4 个 category（A/B/C/E 必含）</td><td>不通过自动补</td></tr>
+        <tr><td>判别力</td><td>每条 prompt 至少 1 条 skill 专属 judgement</td><td>避免 baseline 也能全过</td></tr>
+        <tr><td>negative_judgements 比例</td><td>至少 1 条 P0 prompt 有 negative</td><td>防"全 happy 路径"偏置</td></tr>
+        <tr><td>场景类型分布</td><td>happy + complex 各 ≥ 1，edge/negative/error 至少 2 类有覆盖</td><td>避免单一场景</td></tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:18px; font-size:12px; color:var(--ink-m); line-height:1.6;">
+      详细评分细则见 <a href="https://github.com/" style="color:var(--brand);">references/quality-dimensions.md</a> ·
+      诊断校准参考见 references/diagnosis-calibration.md ·
+      测试集设计标准见 references/auto-judgement-generator.md
+    </p>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+const sections = document.querySelectorAll('.main [id]');
+const links = document.querySelectorAll('.topbar-nav a');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.style.borderBottomColor = '');
+      const a = document.querySelector(`.topbar-nav a[href="#${e.target.id}"]`);
+      if (a) { a.style.color = '#fff'; a.style.borderBottomColor = 'var(--brand-l)'; }
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(s => io.observe(s));
+
+document.querySelectorAll('.toggle-all').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const open = btn.dataset.state !== 'open';
+    document.querySelectorAll('details').forEach(d => d.open = open);
+    btn.dataset.state = open ? 'open' : '';
+    btn.textContent = open ? '折叠全部' : '展开全部';
+  });
+});
+</script>
+</body>
+</html>

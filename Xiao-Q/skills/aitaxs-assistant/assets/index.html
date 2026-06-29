@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AiTaxs · 综合财税助手</title>
+  <style>
+    :root {
+      --primary: #1677ff;
+      --primary-light: #e6f0ff;
+      --success: #52c41a;
+      --warning: #faad14;
+      --danger: #ff4d4f;
+      --text: #1d2129;
+      --text-secondary: #6b7280;
+      --border: #e5e7eb;
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --radius: 12px;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── 顶部导航 ── */
+    .header {
+      background: linear-gradient(135deg, #1677ff 0%, #0958d9 100%);
+      color: #fff;
+      padding: 20px 20px 0;
+    }
+    .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .header-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .header-title { font-size: 20px; font-weight: 700; }
+    .header-subtitle { font-size: 13px; opacity: 0.8; margin-top: 2px; }
+
+    /* 标签栏 */
+    .tabs {
+      display: flex; gap: 4px; overflow-x: auto;
+      padding-bottom: 0; scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      flex-shrink: 0; padding: 10px 18px;
+      font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.7);
+      border-radius: 8px 8px 0 0; cursor: pointer; transition: all .2s;
+      border: none; background: transparent;
+    }
+    .tab.active { background: var(--bg); color: var(--primary); font-weight: 600; }
+
+    /* ── 内容区 ── */
+    .content { padding: 16px; max-width: 700px; margin: 0 auto; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── 卡片 ── */
+    .card {
+      background: var(--card); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 15px; font-weight: 600; color: var(--text);
+      margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+    }
+    .card-title .icon { font-size: 18px; }
+
+    /* ── 表单 ── */
+    .form-group { margin-bottom: 14px; }
+    .form-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; display: block; }
+    .form-input, .form-select {
+      width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+      border-radius: 8px; font-size: 15px; color: var(--text);
+      background: #fff; transition: border-color .2s; outline: none;
+      appearance: none; -webkit-appearance: none;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--primary); }
+    .form-row { display: flex; gap: 12px; }
+    .form-row .form-group { flex: 1; }
+
+    /* ── 按钮 ── */
+    .btn {
+      width: 100%; padding: 13px; border: none; border-radius: 10px;
+      font-size: 16px; font-weight: 600; cursor: pointer; transition: all .2s;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: #0958d9; }
+    .btn-primary:active { transform: scale(0.98); }
+
+    /* ── 结果区 ── */
+    .result-box {
+      background: var(--primary-light); border-radius: 10px;
+      padding: 16px; margin-top: 16px; display: none;
+    }
+    .result-box.show { display: block; }
+    .result-title {
+      font-size: 13px; color: var(--primary); font-weight: 600;
+      margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+    }
+    .result-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 7px 0; border-bottom: 1px dashed rgba(22,119,255,0.2);
+      font-size: 14px;
+    }
+    .result-row:last-child { border-bottom: none; }
+    .result-key { color: var(--text-secondary); flex: 1; }
+    .result-val { color: var(--text); font-weight: 600; text-align: right; flex: 1; }
+    .result-val.highlight { color: var(--primary); font-size: 16px; }
+    .result-val.danger { color: var(--danger); }
+    .result-note {
+      font-size: 12px; color: var(--text-secondary);
+      margin-top: 10px; line-height: 1.6;
+      background: rgba(255,255,255,0.6); padding: 8px 10px; border-radius: 6px;
+    }
+
+    /* ── 税率表 ── */
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%; border-collapse: collapse; font-size: 13px;
+    }
+    th {
+      background: var(--primary-light); color: var(--primary);
+      padding: 10px 12px; text-align: left; font-weight: 600;
+      border-bottom: 2px solid var(--primary);
+    }
+    td {
+      padding: 9px 12px; border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fafb; }
+    .badge {
+      display: inline-block; padding: 2px 8px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+    }
+    .badge-green { background: #f0fdf4; color: var(--success); }
+    .badge-blue { background: var(--primary-light); color: var(--primary); }
+    .badge-orange { background: #fff7e6; color: var(--warning); }
+
+    /* ── 申报日历 ── */
+    .calendar-list { display: flex; flex-direction: column; gap: 10px; }
+    .calendar-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 14px; border-radius: 10px; background: var(--bg);
+    }
+    .calendar-date {
+      min-width: 52px; text-align: center;
+      background: var(--primary); color: #fff;
+      border-radius: 8px; padding: 8px 4px; line-height: 1.3;
+    }
+    .calendar-date .month { font-size: 11px; opacity: 0.85; }
+    .calendar-date .day { font-size: 18px; font-weight: 700; }
+    .calendar-info .name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .calendar-info .desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+    .calendar-info .deadline {
+      font-size: 12px; color: var(--danger);
+      margin-top: 4px; display: flex; align-items: center; gap: 4px;
+    }
+
+    /* ── 节税建议 ── */
+    .tip-item {
+      padding: 14px; border-radius: 10px; background: var(--bg);
+      margin-bottom: 10px; border-left: 3px solid var(--primary);
+    }
+    .tip-item:nth-child(2) { border-left-color: var(--success); }
+    .tip-item:nth-child(3) { border-left-color: var(--warning); }
+    .tip-item:nth-child(4) { border-left-color: #722ed1; }
+    .tip-item:nth-child(5) { border-left-color: #13c2c2; }
+    .tip-title { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+    .tip-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ── 选项组 ── */
+    .seg-group { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .seg-btn {
+      padding: 7px 16px; border-radius: 20px; border: 1.5px solid var(--border);
+      font-size: 13px; cursor: pointer; background: #fff;
+      color: var(--text-secondary); transition: all .2s;
+    }
+    .seg-btn.active {
+      border-color: var(--primary); color: var(--primary);
+      background: var(--primary-light); font-weight: 600;
+    }
+
+    /* ── 空状态 ── */
+    .empty {
+      text-align: center; padding: 40px 20px; color: var(--text-secondary);
+    }
+    .empty .emoji { font-size: 48px; margin-bottom: 12px; }
+    .empty p { font-size: 14px; line-height: 1.7; }
+
+    /* ── 底部安全区 ── */
+    .safe-bottom { height: 24px; }
+
+    /* ── 联系方式 ── */
+    .contact-bar {
+      margin-top: 6px; padding: 14px 16px;
+      background: linear-gradient(135deg, #e6f0ff 0%, #f0f5ff 100%);
+      border-radius: 10px; border: 1px solid #bfdbfe;
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    }
+    .contact-bar .contact-icon { font-size: 22px; flex-shrink: 0; }
+    .contact-bar .contact-label {
+      font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 4px;
+    }
+    .contact-bar .contact-items { display: flex; gap: 16px; flex-wrap: wrap; }
+    .contact-bar .contact-item {
+      font-size: 13px; color: var(--text);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .contact-bar .contact-item span { color: var(--text-secondary); }
+    .contact-bar .contact-item strong { color: var(--primary); font-weight: 600; letter-spacing: 0.3px; }
+    .result-contact {
+      margin-top: 10px; padding: 10px 12px;
+      background: rgba(22,119,255,0.06); border-radius: 8px;
+      border-left: 3px solid var(--primary);
+      font-size: 12px; color: var(--text-secondary); line-height: 1.8;
+    }
+    .result-contact b { color: var(--primary); }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="header-icon">🧮</div>
+    <div>
+      <div class="header-title">AiTaxs 财税助手</div>
+      <div class="header-subtitle">个体工商户 · 小微企业主专属 &nbsp;|&nbsp; v1.1.0</div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('calc')">税额计算</button>
+    <button class="tab" onclick="switchTab('rates')">税率速查</button>
+    <button class="tab" onclick="switchTab('calendar')">申报日历</button>
+    <button class="tab" onclick="switchTab('tips')">节税建议</button>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ══════════ 税额计算 ══════════ -->
+  <div class="panel active" id="panel-calc">
+
+    <!-- 计算类型选择 -->
+    <div class="card" style="padding-bottom:12px">
+      <div class="card-title"><span class="icon">🔢</span>选择计算类型</div>
+      <div class="seg-group">
+        <button class="seg-btn active" onclick="switchCalc('salary',this)">工资个税</button>
+        <button class="seg-btn" onclick="switchCalc('business',this)">经营所得个税</button>
+        <button class="seg-btn" onclick="switchCalc('vat',this)">增值税</button>
+        <button class="seg-btn" onclick="switchCalc('corp',this)">企业所得税</button>
+      </div>
+    </div>
+
+    <!-- 工资个税 -->
+    <div class="card calc-form" id="form-salary">
+      <div class="card-title"><span class="icon">💼</span>工资薪金个税计算</div>
+      <div class="form-group">
+        <label class="form-label">税前月收入（元）</label>
+        <input class="form-input" id="s-income" type="number" placeholder="例如：20000" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">社保公积金（元/月）</label>
+          <input class="form-input" id="s-social" type="number" placeholder="不填则按10.5%估算" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">专项附加扣除（元/月）</label>
+          <input class="form-input" id="s-deduct" type="number" placeholder="例如：3000" />
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="calcSalary()">立即计算</button>
+      <div class="result-box" id="res-salary"></div>
+    </div>
+
+    <!-- 经营所得 -->
+    <div class="card calc-form" id="form-business" style="display:none">
+      <div class="card-title"><span class="icon">🏪</span>经营所得个税计算</div>
+      <div class="form-group">
+        <label class="form-label">全年应纳税所得额（元）</label>
+        <input class="form-input" id="b-profit" type="number" placeholder="= 收入总额 - 成本 - 费用 - 税金" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">征收方式</label>
+        <select class="form-select" id="b-mode">
+          <option value="audit">查账征收（按实际利润）</option>
+          <option value="approved">核定征收（税务机关核定）</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="calcBusiness()">立即计算</button>
+      <div class="result-box" id="res-business"></div>
+    </div>
+
+    <!-- 增值税 -->
+    <div class="card calc-form" id="form-vat" style="display:none">
+      <div class="card-title"><span class="icon">🧾</span>增值税计算</div>
+      <div class="form-group">
+        <label class="form-label">纳税人类型</label>
+        <select class="form-select" id="v-type" onchange="toggleVatFields()">
+          <option value="small">小规模纳税人（年销售额 &lt; 500万）</option>
+          <option value="general">一般纳税人（年销售额 ≥ 500万）</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">季度含税销售额（元）</label>
+        <input class="form-input" id="v-sales" type="number" placeholder="例如：280000" />
+      </div>
+      <div id="vat-general-fields" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">适用税率</label>
+            <select class="form-select" id="v-rate">
+              <option value="0.13">13%（货物销售）</option>
+              <option value="0.09">9%（交通/建筑）</option>
+              <option value="0.06">6%（服务业/金融）</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">进项税额（元）</label>
+            <input class="form-input" id="v-input" type="number" placeholder="0" />
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="calcVat()">立即计算</button>
+      <div class="result-box" id="res-vat"></div>
+    </div>
+
+    <!-- 企业所得税 -->
+    <div class="card calc-form" id="form-corp" style="display:none">
+      <div class="card-title"><span class="icon">🏢</span>企业所得税计算</div>
+      <div class="form-group">
+        <label class="form-label">年度应纳税所得额（元）</label>
+        <input class="form-input" id="c-profit" type="number" placeholder="例如：1500000" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">从业人数（人）</label>
+          <input class="form-input" id="c-employees" type="number" placeholder="≤300人可享优惠" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">资产总额（万元）</label>
+          <input class="form-input" id="c-assets" type="number" placeholder="≤5000万可享优惠" />
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="calcCorp()">立即计算</button>
+      <div class="result-box" id="res-corp"></div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ 税率速查 ══════════ -->
+  <div class="panel" id="panel-rates">
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📊</span>个税税率表 · 工资薪金（综合所得）</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>年度应纳税所得额</th><th>税率</th><th>速算扣除数</th></tr></thead>
+          <tbody>
+            <tr><td>≤ 36,000 元</td><td><span class="badge badge-green">3%</span></td><td>0</td></tr>
+            <tr><td>36,001 ~ 144,000 元</td><td><span class="badge badge-blue">10%</span></td><td>2,520</td></tr>
+            <tr><td>144,001 ~ 300,000 元</td><td><span class="badge badge-blue">20%</span></td><td>16,920</td></tr>
+            <tr><td>300,001 ~ 420,000 元</td><td><span class="badge badge-orange">25%</span></td><td>31,920</td></tr>
+            <tr><td>420,001 ~ 660,000 元</td><td><span class="badge badge-orange">30%</span></td><td>52,920</td></tr>
+            <tr><td>660,001 ~ 960,000 元</td><td><span class="badge badge-orange">35%</span></td><td>85,920</td></tr>
+            <tr><td>&gt; 960,000 元</td><td><span class="badge badge-orange">45%</span></td><td>181,920</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="result-note" style="margin-top:12px">免征额：5,000 元/月。公式：应纳税额 = 应纳税所得额 × 税率 - 速算扣除数</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🏪</span>经营所得税率表（个体工商户）</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>全年应纳税所得额</th><th>税率</th><th>速算扣除数</th></tr></thead>
+          <tbody>
+            <tr><td>≤ 30,000 元</td><td><span class="badge badge-green">5%</span></td><td>0</td></tr>
+            <tr><td>30,001 ~ 90,000 元</td><td><span class="badge badge-blue">10%</span></td><td>1,500</td></tr>
+            <tr><td>90,001 ~ 300,000 元</td><td><span class="badge badge-blue">20%</span></td><td>10,500</td></tr>
+            <tr><td>300,001 ~ 500,000 元</td><td><span class="badge badge-orange">30%</span></td><td>40,500</td></tr>
+            <tr><td>&gt; 500,000 元</td><td><span class="badge badge-orange">35%</span></td><td>65,500</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="result-note" style="margin-top:12px">2023-01-01 至 2027-12-31，个体工商户年应纳税所得额不超过 200 万元的部分减半征收个人所得税；下方计算器已按该优惠自动测算。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🧾</span>增值税税率速查</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>纳税人类型</th><th>行业/业务</th><th>税率/征收率</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="3">一般纳税人</td><td>销售货物、加工修理</td><td><span class="badge badge-orange">13%</span></td></tr>
+            <tr><td>交通运输、建筑服务</td><td><span class="badge badge-blue">9%</span></td></tr>
+            <tr><td>现代服务、金融、生活服务</td><td><span class="badge badge-blue">6%</span></td></tr>
+            <tr><td rowspan="2">小规模纳税人</td><td>季度销售额 ≤ 30万</td><td><span class="badge badge-green">免征</span></td></tr>
+            <tr><td>季度销售额 &gt; 30万（多数 3% 征收项目）</td><td><span class="badge badge-green">1%</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="result-note" style="margin-top:12px">依据财政部、税务总局 2026 年第 10 号公告：2026-01-01 至 2027-12-31，小规模纳税人季度销售额 ≤ 30 万元免征增值税；多数适用 3% 征收率的业务减按 1% 征收。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🏢</span>企业所得税 · 小微企业优惠</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>年度应纳税所得额</th><th>实际税率</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td>≤ 300 万元</td><td><span class="badge badge-green">5%</span></td><td>减按 25% 计入应纳税所得额 × 20%</td></tr>
+            <tr><td>&gt; 300 万元</td><td><span class="badge badge-orange">25%</span></td><td>标准税率</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="result-note" style="margin-top:12px">小型微利企业优惠执行至 2027-12-31。认定条件：从业人数 ≤ 300 人、资产总额 ≤ 5,000 万元、年应纳税所得额 ≤ 300 万元，且从事国家非限制和禁止行业（需同时满足）。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📌</span>专项附加扣除标准（截至 2026 年 4 月仍适用）</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>扣除项目</th><th>扣除标准</th></tr></thead>
+          <tbody>
+            <tr><td>子女教育</td><td>2,000 元/月/孩</td></tr>
+            <tr><td>婴幼儿照护（3岁以下）</td><td>2,000 元/月/孩</td></tr>
+            <tr><td>继续教育（学历）</td><td>400 元/月</td></tr>
+            <tr><td>继续教育（职业资格）</td><td>3,600 元/年</td></tr>
+            <tr><td>大病医疗</td><td>据实，年度上限 80,000 元</td></tr>
+            <tr><td>住房贷款利息（首套）</td><td>1,000 元/月</td></tr>
+            <tr><td>住房租金（按城市规模）</td><td>800 / 1,100 / 1,500 元/月</td></tr>
+            <tr><td>赡养老人（独生子女）</td><td>3,000 元/月</td></tr>
+            <tr><td>赡养老人（非独生子女）</td><td>共享上限 3,000 元/月，单人不超过 1,500 元/月</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ 申报日历 ══════════ -->
+  <div class="panel" id="panel-calendar">
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📅</span>季度申报提醒（每季度）</div>
+      <div class="calendar-list">
+        <div class="calendar-item">
+          <div class="calendar-date"><div class="month">每季度</div><div class="day">15日</div></div>
+          <div class="calendar-info">
+            <div class="name">增值税申报（小规模纳税人）</div>
+            <div class="desc">季度首月15日前完成上季度增值税及附加税费申报缴款。季度销售额≤30万免申报税款，但仍需零申报。</div>
+            <div class="deadline">⚠ 逾期加收万分之五滞纳金/日</div>
+          </div>
+        </div>
+        <div class="calendar-item">
+          <div class="calendar-date"><div class="month">每季度</div><div class="day">15日</div></div>
+          <div class="calendar-info">
+            <div class="name">经营所得个税预缴（个体工商户）</div>
+            <div class="desc">每季度结束后15日内预缴个人所得税（经营所得），次年3月31日前完成年度汇算清缴。</div>
+            <div class="deadline">⚠ 汇算清缴补税须在3月31日前完成</div>
+          </div>
+        </div>
+        <div class="calendar-item">
+          <div class="calendar-date"><div class="month">每季度</div><div class="day">末+15</div></div>
+          <div class="calendar-info">
+            <div class="name">企业所得税季度预缴</div>
+            <div class="desc">每季度结束后15日内（4月15日、7月15日、10月15日、次年1月15日）预缴企业所得税。</div>
+            <div class="deadline">⚠ 年度汇算清缴截止次年5月31日</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📆</span>年度重要节点</div>
+      <div class="calendar-list">
+        <div class="calendar-item">
+          <div class="calendar-date" style="background:#52c41a"><div class="month">3月</div><div class="day">1日</div></div>
+          <div class="calendar-info">
+            <div class="name">个人所得税综合所得汇算清缴开始</div>
+            <div class="desc">上年度综合所得（工资薪金+劳务报酬+稿酬+特许权使用费）汇算清缴开放申报，多退少补。</div>
+          </div>
+        </div>
+        <div class="calendar-item">
+          <div class="calendar-date" style="background:#fa8c16"><div class="month">3月</div><div class="day">31日</div></div>
+          <div class="calendar-info">
+            <div class="name">经营所得个税年度汇算截止</div>
+            <div class="desc">个体工商户、合伙企业等经营所得汇算清缴截止日，逾期需缴纳滞纳金。</div>
+            <div class="deadline">⚠ 此为硬性截止，不可延期</div>
+          </div>
+        </div>
+        <div class="calendar-item">
+          <div class="calendar-date" style="background:#fa8c16"><div class="month">5月</div><div class="day">31日</div></div>
+          <div class="calendar-info">
+            <div class="name">企业所得税年度汇算截止</div>
+            <div class="desc">上年度企业所得税汇算清缴申报及补税截止日。</div>
+          </div>
+        </div>
+        <div class="calendar-item">
+          <div class="calendar-date" style="background:#722ed1"><div class="month">6月</div><div class="day">30日</div></div>
+          <div class="calendar-info">
+            <div class="name">个人综合所得汇算清缴截止</div>
+            <div class="desc">个人所得税综合所得汇算清缴最终截止日。退税申请须在此日前完成。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🔗</span>常用申报入口</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <a href="https://www.chinatax.gov.cn" target="_blank"
+           style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg);border-radius:8px;text-decoration:none;color:var(--text)">
+          <span style="font-size:22px">🏛</span>
+          <div><div style="font-size:14px;font-weight:600">国家税务总局</div><div style="font-size:12px;color:var(--text-secondary)">www.chinatax.gov.cn</div></div>
+        </a>
+        <a href="https://inv-veri.chinatax.gov.cn" target="_blank"
+           style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg);border-radius:8px;text-decoration:none;color:var(--text)">
+          <span style="font-size:22px">🔍</span>
+          <div><div style="font-size:14px;font-weight:600">增值税发票查验平台</div><div style="font-size:12px;color:var(--text-secondary)">inv-veri.chinatax.gov.cn</div></div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ 节税建议 ══════════ -->
+  <div class="panel" id="panel-tips">
+
+    <div class="card">
+      <div class="card-title"><span class="icon">💡</span>个体工商户 · 合规节税建议</div>
+      <div class="tip-item">
+        <div class="tip-title">善用季度免税门槛</div>
+        <div class="tip-desc">小规模纳税人季度销售额 ≤ 30万元免征增值税。若业务量可控，合理安排开票节奏，避免单季超过30万触发纳税义务，可有效降低增值税及附加税负担。</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-title">个税专项附加扣除全部申报</div>
+        <div class="tip-desc">子女教育、大病医疗、住房贷款利息、赡养老人等专项附加扣除每月最高可减免数千元税基。通过"个人所得税"App 填报，不申报即视为放弃，每年汇算清缴前务必核查是否遗漏。</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-title">成本费用据实列支，保留凭证</div>
+        <div class="tip-desc">办公场地租金、水电、员工社保、设备折旧、业务招待费（50%限额扣除）等均可在经营所得中税前扣除。每笔支出必须取得合法发票，否则税务稽查时无法税前扣除，面临补税风险。</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-title">合理选择纳税人身份</div>
+        <div class="tip-desc">年销售额临近500万时，需综合评估：升为一般纳税人可抵扣进项税但税率更高；维持小规模适用低征收率但不能开专票影响B端客户。建议提前测算两种方案的综合税负，再做决策。</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-title">核定征收 vs 查账征收的选择</div>
+        <div class="tip-desc">若实际成本费用较高、账务健全，查账征收可能更合算；若成本难以举证或账务不完整，税务机关核定的应税所得率可能比实际利润率低，核定征收反而节税。建议咨询当地税务顾问后决定。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">⚠️</span>合规红线提示</div>
+      <div style="background:#fff2f0;border-radius:8px;padding:14px;border-left:3px solid var(--danger)">
+        <div style="font-size:13px;line-height:1.8;color:#cf1322">
+          <div>• 虚开发票（含购买他人发票）：补税+罚款+可能追究刑事责任</div>
+          <div>• 隐匿收入不申报：税务稽查后按偷税论处，最高加收5倍罚款</div>
+          <div>• 逾期申报：按日加收万分之五滞纳金，情节严重面临行政处罚</div>
+          <div>• 节税方案须以真实业务为基础，任何没有实质的"筹划"均涉嫌违法</div>
+        </div>
+      </div>
+      <div class="result-note" style="margin-top:12px">以上建议仅供参考，具体税务决策建议咨询持证注册税务师（CTA）或税务师事务所。</div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ 全局联系方式 ══════════ -->
+  <div class="contact-bar">
+    <div class="contact-icon">💬</div>
+    <div>
+      <div class="contact-label">交流沟通 · 欢迎联系作者</div>
+      <div class="contact-items">
+        <div class="contact-item"><span>QQ：</span><strong>1817694478</strong></div>
+        <div class="contact-item"><span>微信：</span><strong>jacky_zhouxj</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="safe-bottom"></div>
+</div>
+
+<script>
+// ── 标签切换 ──
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+// ── 计算类型切换 ──
+function switchCalc(type, btn) {
+  document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.calc-form').forEach(f => f.style.display = 'none');
+  document.getElementById('form-' + type).style.display = 'block';
+}
+
+// ── 增值税字段切换 ──
+function toggleVatFields() {
+  const isGeneral = document.getElementById('v-type').value === 'general';
+  document.getElementById('vat-general-fields').style.display = isGeneral ? 'block' : 'none';
+}
+
+// ── 渲染结果 ──
+function renderResult(boxId, rows, note) {
+  const box = document.getElementById(boxId);
+  let html = '<div class="result-title">📋 计算结果</div>';
+  rows.forEach(([k, v, cls]) => {
+    html += `<div class="result-row">
+      <span class="result-key">${k}</span>
+      <span class="result-val ${cls||''}">${v}</span>
+    </div>`;
+  });
+  if (note) html += `<div class="result-note">💡 ${note}</div>`;
+  html += `<div class="result-contact">
+    💬 <b>交流沟通</b>：如有疑问欢迎联系作者 &nbsp;·&nbsp;
+    QQ：<b>1817694478</b> &nbsp;·&nbsp; 微信：<b>jacky_zhouxj</b>
+  </div>`;
+  box.innerHTML = html;
+  box.classList.add('show');
+}
+
+function fmt(n) { return n.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' 元'; }
+
+// ── 工资个税 ──
+function calcSalary() {
+  const income = parseFloat(document.getElementById('s-income').value);
+  if (!income || income <= 0) return alert('请输入有效的税前月收入');
+
+  const THRESHOLD = 5000;
+  let social = parseFloat(document.getElementById('s-social').value) || (income * 0.105);
+  const deduct = parseFloat(document.getElementById('s-deduct').value) || 0;
+
+  let taxable = Math.max(income - THRESHOLD - social - deduct, 0);
+  const annualTaxable = taxable * 12;
+
+  const brackets = [[36000,0.03,0],[144000,0.10,2520],[300000,0.20,16920],
+    [420000,0.25,31920],[660000,0.30,52920],[960000,0.35,85920],[Infinity,0.45,181920]];
+  let rate = 0, qd = 0;
+  for (const [l,r,d] of brackets) { if (annualTaxable <= l) { rate=r; qd=d; break; } }
+
+  const annualTax = annualTaxable * rate - qd;
+  const monthlyTax = annualTax / 12;
+  const takehome = income - social - monthlyTax;
+
+  renderResult('res-salary', [
+    ['税前月收入', fmt(income), ''],
+    ['减：免征额', fmt(THRESHOLD), ''],
+    ['减：社保公积金', fmt(social), ''],
+    ['减：专项附加扣除', fmt(deduct), ''],
+    ['月度应纳税所得额', fmt(taxable), ''],
+    ['适用税率', (rate*100).toFixed(0)+'%', ''],
+    ['预计月度应缴个税', fmt(monthlyTax), 'danger'],
+    ['税后月收入（估算）', fmt(takehome), 'highlight'],
+  ], `社保公积金按 ${document.getElementById('s-social').value ? '实填金额' : '10.5%估算'}；结果为单月估算，实际以年度汇算清缴为准`);
+}
+
+// ── 经营所得个税 ──
+function calcBusiness() {
+  const profit = parseFloat(document.getElementById('b-profit').value);
+  if (!profit || profit <= 0) return alert('请输入有效的应纳税所得额');
+  const mode = document.getElementById('b-mode').value;
+
+  if (mode === 'approved') {
+    renderResult('res-business', [
+      ['征收方式', '核定征收', ''],
+      ['提示', '税额由税务机关核定', 'highlight'],
+    ], '核定征收同样可享受 2023-2027 年个体工商户减半征税优惠，但最终税额以税务机关核定和申报系统计算结果为准');
+    return;
+  }
+
+  const brackets = [[30000,0.05,0],[90000,0.10,1500],[300000,0.20,10500],
+    [500000,0.30,40500],[Infinity,0.35,65500]];
+  const calcProgressiveTax = (amount) => {
+    let rate = 0, qd = 0;
+    for (const [l,r,d] of brackets) {
+      if (amount <= l) { rate = r; qd = d; break; }
+    }
+    return { tax: Math.max(amount * rate - qd, 0), rate, qd };
+  };
+
+  const base = calcProgressiveTax(profit);
+  const preferentialPortion = Math.min(profit, 2000000);
+  const preferentialBase = calcProgressiveTax(preferentialPortion);
+  const reduction = preferentialBase.tax * 0.5;
+  const tax = Math.max(base.tax - reduction, 0);
+  const burden = (tax / profit * 100).toFixed(2);
+
+  renderResult('res-business', [
+    ['全年应纳税所得额', fmt(profit), ''],
+    ['适用税率', (base.rate*100).toFixed(0)+'%', ''],
+    ['速算扣除数', fmt(base.qd), ''],
+    ['优惠前应纳个税', fmt(base.tax), ''],
+    ['减半征税优惠', '- ' + fmt(reduction), ''],
+    ['全年应缴个税', fmt(tax), 'danger'],
+    ['综合税负率', burden+'%', 'highlight'],
+  ], '2023-01-01 至 2027-12-31，个体工商户年应纳税所得额不超过 200 万元的部分减半征收个人所得税；如叠加其他优惠或存在多处经营所得，请以申报系统自动计算结果为准');
+}
+
+// ── 增值税 ──
+function calcVat() {
+  const sales = parseFloat(document.getElementById('v-sales').value);
+  if (!sales || sales <= 0) return alert('请输入有效的销售额');
+  const type = document.getElementById('v-type').value;
+
+  let rows = [], note = '';
+
+  if (type === 'small') {
+    const THRESHOLD = 300000;
+    const excl = sales / 1.01;
+    const vat = excl * 0.01;
+    const attach = vat * 0.12;
+
+    if (sales <= THRESHOLD) {
+      rows = [
+        ['含税季度销售额', fmt(sales), ''],
+        ['是否超免税门槛（30万）', '未超过', ''],
+        ['应缴增值税', '0 元（免征）', 'highlight'],
+        ['附加税（城建税+教育附加）', '0 元', ''],
+      ];
+      note = '季度含税销售额 ≤ 30万元，小规模纳税人免征增值税，但仍需零申报';
+    } else {
+      rows = [
+        ['含税季度销售额', fmt(sales), ''],
+        ['征收率', '1%（优惠政策）', ''],
+        ['不含税销售额', fmt(excl), ''],
+        ['应缴增值税', fmt(vat), 'danger'],
+        ['城建税+教育附加（市区约12%）', fmt(attach), ''],
+        ['合计税款', fmt(vat + attach), 'highlight'],
+      ];
+      note = '城建税7%+教育费附加3%+地方教育附加2%，以市区为例；各地可能略有差异';
+    }
+  } else {
+    const rate = parseFloat(document.getElementById('v-rate').value);
+    const inputTax = parseFloat(document.getElementById('v-input').value) || 0;
+    const excl = sales / (1 + rate);
+    const outputTax = excl * rate;
+    const vatPayable = Math.max(outputTax - inputTax, 0);
+    const attach = vatPayable * 0.12;
+
+    rows = [
+      ['含税销售额', fmt(sales), ''],
+      ['适用税率', (rate*100).toFixed(0)+'%', ''],
+      ['不含税销售额', fmt(excl), ''],
+      ['销项税额', fmt(outputTax), ''],
+      ['进项税额', fmt(inputTax), ''],
+      ['应缴增值税（销-进）', fmt(vatPayable), 'danger'],
+      ['城建税+教育附加（市区约12%）', fmt(attach), ''],
+      ['合计税款', fmt(vatPayable + attach), 'highlight'],
+    ];
+    note = '进项税额填写当期可抵扣的增值税专用发票进项合计';
+  }
+
+  renderResult('res-vat', rows, note);
+}
+
+// ── 企业所得税 ──
+function calcCorp() {
+  const profit = parseFloat(document.getElementById('c-profit').value);
+  if (!profit || profit <= 0) return alert('请输入有效的应纳税所得额');
+  const employees = parseInt(document.getElementById('c-employees').value) || 0;
+  const assets = parseFloat(document.getElementById('c-assets').value) || 0;
+
+  const qualifySmall = profit <= 3000000 &&
+    (employees === 0 || employees <= 300) &&
+    (assets === 0 || assets <= 5000);
+
+  let tax, rate, policy;
+
+  if (!qualifySmall) {
+    tax = profit * 0.25; rate = '25%';
+    policy = '不符合小型微利企业条件，适用标准税率 25%';
+  } else {
+    tax = profit * 0.05; rate = '5%';
+    policy = '小型微利企业优惠：减按 25% 计入应纳税所得额并按 20% 税率缴纳（执行至 2027-12-31）';
+  }
+
+  const burden = (tax / profit * 100).toFixed(2);
+
+  renderResult('res-corp', [
+    ['年度应纳税所得额', fmt(profit), ''],
+    ['是否符合小微企业条件', qualifySmall ? '是' : '否（按标准税率）', ''],
+    ['适用政策', policy, ''],
+    ['实际税率', rate, ''],
+    ['应缴企业所得税', fmt(tax), 'danger'],
+    ['综合税负率', burden+'%', 'highlight'],
+  ], '小型微利企业认定：从业人数≤300人、资产总额≤5000万元、年应纳税所得额≤300万元且从事国家非限制和禁止行业（未填人数/资产时按符合测算）；季度预缴、年度汇算清缴时均可享受优惠');
+}
+</script>
+</body>
+</html>

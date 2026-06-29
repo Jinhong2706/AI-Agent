@@ -1,0 +1,153 @@
+// RSDKv5 Basic Enemy Template
+// Object Name: BasicEnemy
+// Type ID: [TYPE_ID]
+// Description: Basic enemy with simple AI behavior
+
+Create:
+    // Movement
+    self.velocity.x = -2   // Initial direction: moving left
+    self.moveSpeed = 2
+    self.onGround = false
+    
+    // AI State
+    self.aiState = 0        // 0=patrol, 1=alert, 2=attack
+    self.turnTimer = 0
+    self.alertRange = 96     // Range to detect player
+    
+    // Combat
+    self.health = 1
+    self.invincibleTime = 0
+    self.contactDamage = 1   // Damage to player on contact
+    
+    // Visual
+    self.spriteIndex = [SPRITE_INDEX]
+    self.animIndex = 0       // Idle animation
+    self.drawOrder = 2
+    self.active = true
+    self.visible = true
+    self.direction = 0        // 0=left, 1=right
+    
+    // Hitbox
+    self.hitbox[0].left = -12
+    self.hitbox[0].top = -24
+    self.hitbox[0].right = 12
+    self.hitbox[0].bottom = 0
+    
+    return
+
+Update:
+    // Invincibility timer
+    if self.invincibleTime > 0
+        self.invincibleTime -= 1
+        // Flash effect
+        if (self.invincibleTime / 4) % 2 == 0
+            self.visible = false
+        else
+            self.visible = true
+        endif
+    else
+        self.visible = true
+    endif
+    
+    // AI State machine
+    if self.aiState == 0
+        // Patrol state: move back and forth
+        self.position.x += self.velocity.x
+        
+        // Turn at edges or walls
+        if !self.onGround
+            self.velocity.x = -self.velocity.x
+        endif
+        
+        // Check for player in range
+        player = GetPlayer()
+        if player
+            dx = player.position.x - self.position.x
+            dy = player.position.y - self.position.y
+            if abs(dx) < self.alertRange && abs(dy) < 64
+                self.aiState = 1  // Alert
+                self.animIndex = 1  // Alert animation
+            endif
+        endif
+        
+    elif self.aiState == 1
+        // Alert state: face player and prepare
+        player = GetPlayer()
+        if player
+            if player.position.x > self.position.x
+                self.direction = 1
+            else
+                self.direction = 0
+            endif
+        endif
+        
+        self.timer += 1
+        if self.timer > 60  // Alert for 1 second
+            self.aiState = 2  // Attack
+            self.animIndex = 2  // Attack animation
+            self.timer = 0
+        endif
+        
+    elif self.aiState == 2
+        // Attack state: move toward player
+        player = GetPlayer()
+        if player
+            dx = player.position.x - self.position.x
+            if dx > 0
+                self.velocity.x = self.moveSpeed
+                self.direction = 1
+            else
+                self.velocity.x = -self.moveSpeed
+                self.direction = 0
+            endif
+            self.position.x += self.velocity.x
+        endif
+        
+        // Return to patrol after attack
+        self.timer += 1
+        if self.timer > 120
+            self.aiState = 0
+            self.animIndex = 0
+            self.timer = 0
+        endif
+    endif
+    
+    // Check collision with player
+    if self.invincibleTime == 0
+        if PlayerCheckCollisionBox(self, 0)
+            // Damage player
+            // (Player damage logic handled by player object)
+        endif
+    endif
+    
+    // Apply gravity
+    self.velocity.y += 0.25  // Gravity
+    self.position.y += self.velocity.y
+    
+    // Ground check (simplified)
+    // In real implementation, check collision with stage tiles
+    
+    Animate()
+    return
+
+Draw:
+    if self.visible
+        DrawSprite(self.spriteIndex, self.animIndex, self.position.x, self.position.y, self.direction, 0)
+    endif
+    return
+
+// Called when enemy takes damage
+Damage:
+    self.health -= 1
+    self.invincibleTime = 60  // 1 second invincibility
+    
+    // Play hit SFX
+    PlaySfx(SFX_HIT)
+    
+    if self.health <= 0
+        // Destroy enemy
+        PlaySfx(SFX_DESTROY)
+        // TODO: Spawn destruction effect/particles
+        DestroyObject(self)
+    endif
+    return

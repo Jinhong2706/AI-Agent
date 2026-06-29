@@ -1,0 +1,7 @@
+{
+  "name": "bozo-qiniu-upload",
+  "private": true,
+  "dependencies": {
+    "qiniu": "^7.15.1"
+  }
+}

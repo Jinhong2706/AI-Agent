@@ -1,0 +1,76 @@
+{
+  "name": "news-product-stock",
+  "version": "2.0.0",
+  "description": "全时段舆情分析：量化情感评分+板块关联+操作建议，支持盘前/盘中/午盘/盘后/周末/假日",
+  "keywords": ["舆情分析", "美股", "期货", "财联社", "宏观政策", "盘前简报", "情感分析", "板块关联"],
+  "author": "qclaw",
+  "license": "MIT",
+  "main": "news_skill_handler.py",
+  "entry": "skill_handler",
+  "actions": [
+    {
+      "name": "run_now",
+      "description": "立即执行（默认盘前分析）",
+      "params": []
+    },
+    {
+      "name": "pre_market",
+      "description": "盘前分析（05:00-09:25）",
+      "params": []
+    },
+    {
+      "name": "intraday",
+      "description": "盘中分析（09:30-15:00）",
+      "params": []
+    },
+    {
+      "name": "midday",
+      "description": "午盘分析（11:30-13:00）",
+      "params": []
+    },
+    {
+      "name": "after_market",
+      "description": "盘后分析（15:00-次日盘前）",
+      "params": []
+    },
+    {
+      "name": "weekend",
+      "description": "周末分析",
+      "params": []
+    },
+    {
+      "name": "holiday",
+      "description": "假日分析",
+      "params": []
+    },
+    {
+      "name": "collect",
+      "description": "仅采集原始数据",
+      "params": []
+    },
+    {
+      "name": "help",
+      "description": "返回技能信息",
+      "params": []
+    }
+  ],
+  "features": [
+    "情感量化（连续量表 -1.0 ~ +1.0）",
+    "重要性评估（1-10分，含事件级别+来源+紧迫度+时效）",
+    "板块关联（自动映射利好/利空板块）",
+    "操作建议（保守型/稳健型/激进型）",
+    "紧急警报（高影响事件自动提醒）"
+  ],
+  "data_sources": [
+    "东方财富 API (美股指数/期货行情)",
+    "新浪财经 (行情备用源)",
+    "财联社 API (7×24电报快讯)",
+    "新浪 Feed (国际财经新闻)",
+    "akshare/Tushare (北向资金)"
+  ],
+  "config": {
+    "env_file": ".env",
+    "required": [],
+    "optional": ["WECOM_WEBHOOK_URL", "DEEPSEEK_API_KEY", "REPORT_TIME"]
+  }
+}

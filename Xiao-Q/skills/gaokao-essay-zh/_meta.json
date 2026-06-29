@@ -1,0 +1,30 @@
+{
+  "name": "gaokao-essay-zh",
+  "displayName": "高考作文结构训练",
+  "version": "1.0.0",
+  "description": "训练高考作文审题、立意、提纲、素材调用和语言润色，不代写考试作文。",
+  "author": "ikun",
+  "license": "MIT",
+  "category": "education",
+  "tags": [
+    "高考",
+    "作文",
+    "议论文",
+    "语文"
+  ],
+  "keywords": [
+    "高考作文",
+    "议论文",
+    "作文提纲",
+    "素材",
+    "审题立意"
+  ],
+  "platforms": [
+    "openclaw",
+    "skillhub",
+    "claude-code",
+    "cursor"
+  ],
+  "language": "zh-CN",
+  "minAgentVersion": "0.1.0"
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "PARA Diary Share"
+  short_description: "Initialize and run a PARA + diary Obsidian vault."
+  default_prompt: "Use $obsidian-para-workflow to initialize and manage my Obsidian vault with PARA, Diary, and Share folders."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Editable Frontend Slides"
+  short_description: "Build editable single-file HTML slide decks"
+  default_prompt: "Use $frontend-slides-editable to create an editable single-file HTML presentation with a built-in browser editor."

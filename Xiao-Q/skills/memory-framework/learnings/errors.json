@@ -1,0 +1,16 @@
+[
+  {
+    "id": "err-001",
+    "timestamp": "YYYY-MM-DDTHH:MM:SS",
+    "error_type": "错误类型",
+    "error_message": "错误描述",
+    "context": {
+      "situation": "发生场景",
+      "my_claim": "我当时认为",
+      "actual_fact": "实际情况"
+    },
+    "root_cause": "根本原因",
+    "resolution": "解决方法",
+    "status": "recorded"
+  }
+]

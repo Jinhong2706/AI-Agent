@@ -1,0 +1,14 @@
+# Workflow parameters
+max_reference_length: 10000
+output_dir: "data/"
+
+# 文章生成配置
+default_word_count:
+  min: 2000
+  max: 2500
+
+# 创作要求默认值
+default_style:
+  tone: "专业但易懂"
+  target_audience: "25-45岁，对AI和科技感兴趣的中青年"
+  structure: "开头300字+主体1500字+结尾200字"

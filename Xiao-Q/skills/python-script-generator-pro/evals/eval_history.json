@@ -1,0 +1,77 @@
+[
+  {
+    "timestamp": "2026-04-30T07:50:05Z",
+    "skill_path": "C:\\Users\\g30083038\\Desktop\\code_write_test\\2.0\\python-script-generator",
+    "skill_b_path": null,
+    "comparison_mode": "two_way",
+    "trigger_evaluation": {
+      "accuracy": 0.87,
+      "precision": 0.93,
+      "recall": 0.88,
+      "false_positives": 1,
+      "false_negatives": 2,
+      "passed_queries": 20,
+      "total_queries": 23,
+      "trigger_eval_path": "C:\\Users\\g30083038\\Desktop\\code_write_test\\2.0\\skill-eval-results\\trigger_eval.json"
+    },
+    "behavior_evaluation": {
+      "configurations": {
+        "skill_a": {
+          "weighted_pass_rate": 0.8571,
+          "mean_pass_rate": 0.8571,
+          "stddev_pass_rate": 0.378
+        },
+        "baseline": {
+          "weighted_pass_rate": 0.8357,
+          "mean_pass_rate": 0.8357,
+          "stddev_pass_rate": 0.3727
+        }
+      },
+      "delta_vs_baseline": "+0.02",
+      "pass_rate_improvement": "+2.14%",
+      "time_delta": "+3.2s",
+      "token_delta": "+371",
+      "eval_quality_score": 0.6731,
+      "statistical_significance": {
+        "p_value": 0.7015,
+        "significant_at_95": false
+      }
+    },
+    "verdict": "CONDITIONAL_APPROVE",
+    "benchmark_path": "C:\\Users\\g30083038\\Desktop\\code_write_test\\2.0\\skill-eval-results\\iteration-1\\benchmark.json",
+    "trigger_issues": [
+      "False Positive: '请帮我写一段 Python 代码实现冒泡排序' triggered when it shouldn't (algorithm code, not project generation)",
+      "False Negative: '请帮我创建一个 FastAPI 项目，名称是 myapi，需要包含用户 CRUD 接口' didn't trigger (core intent)",
+      "False Negative: '帮我写一个自动化脚本' didn't trigger (adjacent intent)"
+    ],
+    "behavior_issues": [
+      "Eval-1 (CLI tool): skill_a output truncated causing 0% pass rate vs baseline 100%",
+      "Baseline for eval-3 incorrectly triggered the skill (violated baseline condition)",
+      "Eval quality score 0.67 - many assertions trivially pass (65% always_pass rate)",
+      "Statistical significance p=0.70 - results are directional only, not statistically significant"
+    ],
+    "strengths": [
+      "Trigger accuracy 87% meets threshold (>=85%)",
+      "Excellent precision (93%) - few false triggers",
+      "FastAPI project generation: skill adds value (100% vs baseline 0%)",
+      "Flask JWT authentication: skill provides requirements.txt that baseline missed",
+      "Both configurations perform well on most test cases"
+    ],
+    "weaknesses": [
+      "Trigger recall 88% - missed 2 core/adjacent intent queries",
+      "Trigger false positive on algorithm code request",
+      "Behavior improvement marginal (+2%, not statistically significant)",
+      "Skill invocation may fail causing truncated output",
+      "Eval quality needs improvement - assertions too weak to differentiate skill value"
+    ],
+    "recommendations": [
+      "Adjust trigger description to better match core intent queries like '创建 FastAPI 项目'",
+      "Clarify trigger criteria to avoid algorithm/code snippet requests",
+      "Fix skill invocation mechanism to prevent output truncation",
+      "Strengthen verification assertions to better differentiate skill value from baseline",
+      "Increase runs-per-query to 5-7 for statistical significance",
+      "Monitor skill execution to ensure it works reliably when invoked"
+    ],
+    "notes": "Skill shows acceptable trigger accuracy (87%) and slight behavioral improvement (+2%), but issues exist: (1) trigger misses some core intent queries, (2) skill invocation may fail causing truncated output, (3) eval quality score is marginal (0.67). Recommend CONDITIONAL APPROVE with monitoring of skill execution reliability."
+  }
+]

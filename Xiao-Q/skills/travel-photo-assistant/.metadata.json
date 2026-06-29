@@ -1,0 +1,11 @@
+{
+  "assetType": "skill",
+  "name": "travel-photo-assistant",
+  "displayName": "旅游拍照万能助手",
+  "semver": "1.0.0",
+  "description": "旅游拍照万能公式，6大维度技巧，3大场景方案，单人/多人模式全覆盖。",
+  "author": "your-name",
+  "tags": ["travel", "photography", "photo", "creative"],
+  "category": "lifestyle",
+  "entry": "SKILL.md"
+}

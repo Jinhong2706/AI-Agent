@@ -1,0 +1,54 @@
+{
+  "skill_name": "newsnow",
+  "evals": [
+    {
+      "id": 1,
+      "name": "single-source-tech",
+      "prompt": "帮我获取 IT 之家（ithome）的最新科技新闻，显示前 10 条，用 markdown 格式输出。",
+      "expected_output": "Markdown 格式的 IT 之家新闻列表，包含标题、链接、发布时间",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "multi-source-concurrent",
+      "prompt": "我想了解今日热点：获取知乎、微博、GitHub 的 Trending 各 15 条新闻，汇总成报告。",
+      "expected_output": "三个新闻源的新闻列表，每个源标注名称和数量，内容完整",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "source-testing",
+      "prompt": "请测试一下知乎（zhihu）新闻源是否可用，并告诉我测试结果。",
+      "expected_output": "明确输出知乎源是否可用，如 '✅ zhihu: 可用' 或 '❌ zhihu: 不可用'",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "json-format-export",
+      "prompt": "获取百度热搜榜（baidu）的前 20 条新闻，输出为 JSON 格式，我要做数据分析。",
+      "expected_output": "有效的 JSON 字符串，包含 items 数组，每个 item 有 title、url 等字段",
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "list-all-sources",
+      "prompt": "列出所有可用的新闻源，按分类整理（科技、财经、社交媒体等）。",
+      "expected_output": "分类明确的新闻源列表，包含源ID和中文名称，总数约 39 个可用源",
+      "files": []
+    },
+    {
+      "id": 6,
+      "name": "financial-news",
+      "prompt": "我想了解最新的财经动态，请获取华尔街见闻（wallstreetcn）、金十数据（jin10）、财联社（cls）的新闻，用简洁文本格式显示前 10 条。",
+      "expected_output": "三个财经源的新闻汇总，每条包含标题、链接、时间，格式简洁易读",
+      "files": []
+    },
+    {
+      "id": 7,
+      "name": "broken-source-handling",
+      "prompt": "请尝试获取小红书（xiaohongshu）的新闻，并告诉我发生了什么。",
+      "expected_output": "明确提示该源不可用或返回错误信息（如 ERR: 不可用）",
+      "files": []
+    }
+  ]
+}

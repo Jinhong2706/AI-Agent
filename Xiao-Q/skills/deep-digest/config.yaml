@@ -1,0 +1,13 @@
+model: google/gemini-3-flash-preview
+
+mode: insight
+
+length: medium
+
+output_format: markdown
+
+options:
+  include_quotes: true
+  include_data: true
+  include_actions: true
+  multilingual: auto

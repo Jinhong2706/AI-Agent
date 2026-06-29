@@ -1,0 +1,21 @@
+{
+  "name": "ai-music-generator",
+  "version": "1.3.2",
+  "description": "AI音乐生成器，把中文创意、歌词、风格和场景描述生成歌曲、BGM 与可下载音频。",
+  "type": "module",
+  "main": "./dist/aimv.cjs",
+  "bin": {
+    "aimv": "./bin/aimv.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "README.md",
+    "runtime-defaults.json",
+    "release-manifest.json",
+    "SKILL.md"
+  ]
+}

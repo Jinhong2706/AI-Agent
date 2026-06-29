@@ -1,0 +1,118 @@
+{
+  "rules": [
+    {
+      "summary": "Parallel left-right sections must be recognized as peer panels, not collapsed into a generic chapter block.",
+      "rule": "When a slide contains equal-weight side-by-side topics such as company and product, classify it as `peer-panels`, preserve both panels in `structured_payload.panels`, and carry the parallel relationship in `layout_intent` and `connectors`.",
+      "source": "user feedback",
+      "date": "2026-04-01"
+    },
+    {
+      "summary": "Visible authoring directives should not leak into generation-ready content.",
+      "rule": "Move edit prompts, drawing requests, and revision notes such as `画一张图...` into `instruction_text`; keep them out of `main_text`, `labels`, and `structured_payload` unless they are meant to appear on the final slide.",
+      "source": "user feedback",
+      "date": "2026-04-01"
+    },
+    {
+      "summary": "Image-heavy pages need explicit incompleteness warnings when extraction may be partial.",
+      "rule": "For logo walls, project grids, flattened pictures, or pages whose lower half is mostly imagery, add concrete `missing_risk` notes instead of implying that all visual content was successfully recognized.",
+      "source": "user feedback",
+      "date": "2026-04-01"
+    },
+    {
+      "summary": "Downstream template matching depends on explicit panel semantics, not only raw text.",
+      "rule": "For peer panels and comparison pages, fill `layout_intent.panel_count`, `direction`, `dominant_visual`, and connector meanings such as `comparison` or `grouping` so renderers can choose split templates correctly.",
+      "source": "implementation review",
+      "date": "2026-04-01"
+    },
+    {
+      "summary": "Slides with sparse text but clear parallel topics still need structure, not simplification.",
+      "rule": "Do not downgrade a slide to `chapter` just because each panel has short text; if the visual composition shows balanced peer topics, preserve the peer relationship explicitly.",
+      "source": "user feedback",
+      "date": "2026-04-01"
+    },
+    {
+      "summary": "When content feels missing during PPT generation, the fix belongs in recognition output rather than in ad hoc rendering guesses.",
+      "rule": "Treat `master_deck.json` as the contract between stages: enrich or correct semantics in the recognition stage first, then let rendering consume that JSON without inventing new source content.",
+      "source": "user feedback",
+      "date": "2026-04-01"
+    },
+    {
+      "summary": "Small footer lines on cover and content pages can still matter to downstream generation and QA.",
+      "rule": "Preserve visible company-name footers, website lines, and similar small text in `footer` or `structured_payload.footer_lines` instead of dropping them as decoration.",
+      "source": "recognition audit",
+      "date": "2026-04-02"
+    },
+    {
+      "summary": "Central hub labels on comparison slides are part of the semantic structure.",
+      "rule": "For `peer-panels` slides that center a parent brand or hub between groups, keep that hub text in generation-ready structure such as `structured_payload.parent_label`, not only in `labels` or `layout_intent`.",
+      "source": "recognition audit",
+      "date": "2026-04-02"
+    },
+    {
+      "summary": "Two-line client cells encode a pair relationship that later rendering needs to split cleanly.",
+      "rule": "On logo or customer walls where each cell contains a client name plus a system or solution line, prefer structured pair objects like `name` and `system` over one flattened string item.",
+      "source": "recognition audit",
+      "date": "2026-04-02"
+    },
+    {
+      "summary": "Conflicting headcount summaries and donut-chart breakdowns need structured preservation on both sides of the conflict.",
+      "rule": "For people-matrix slides with both updated summary metrics and stale chart metrics, store both datasets explicitly in `structured_payload` and pair them with a concrete `missing_risk` note instead of hiding one set only in free-text buckets.",
+      "source": "recognition audit",
+      "date": "2026-04-02"
+    },
+    {
+      "summary": "Recognition fixes should be pushed into post-processing rules, not left as one-off JSON surgery.",
+      "rule": "After the first semantic pass, run a generic normalization layer that promotes footers, reconstructs peer panels, splits two-line client cells into pair objects, and preserves multi-dataset chart structures before deck aggregation.",
+      "source": "user feedback",
+      "date": "2026-04-02"
+    },
+    {
+      "summary": "Aggregation must be deck-agnostic rather than hard-coded to one 10-page case.",
+      "rule": "Aggregate slide results by globbing `slide_*_result.json`, normalize each slide during aggregation, and emit reusable deck metadata such as `slide_count` and `deck_outline` so the recognizer can migrate to other projects cleanly.",
+      "source": "implementation review",
+      "date": "2026-04-02"
+    },
+    {
+      "summary": "Some semantic splits depend on geometry bands, not just text order.",
+      "rule": "For sector grids, customer walls, and similar visual layouts, use the native PPT coordinates to separate top-row civil domains, lower industrial domains, and right-side metric columns before flattening them into `structured_payload`.",
+      "source": "implementation review",
+      "date": "2026-04-02"
+    },
+    {
+      "summary": "When a named region is visible but its contents remain unreadable, keep the region and surface an honest risk instead of inventing entries.",
+      "rule": "If a slide clearly contains a section such as `投资人` but neither native text extraction nor vision enhancement can recover the names reliably, preserve the section heading, leave the entry list empty, and add a concrete `missing_risk` note.",
+      "source": "user requirement",
+      "date": "2026-04-02"
+    },
+    {
+      "summary": "Whole-slide screenshots are a better vision source than embedded image assets for small footers and visually grouped walls.",
+      "rule": "When embedded-image OCR misses bottom footers, narrow side columns, or full-slide composition, prefer a whole-slide screenshot for the vision pass instead of a single extracted image asset.",
+      "source": "implementation review",
+      "date": "2026-04-02"
+    },
+    {
+      "summary": "Targeted screenshot prompts are useful for closing small but important semantic gaps.",
+      "rule": "If a generic vision pass still misses a small footer line, a narrow logo-wall column, or a chart-specific percentage mapping, run a constrained follow-up prompt on the same screenshot that asks only for that region's structure rather than guessing manually.",
+      "source": "implementation review",
+      "date": "2026-04-02"
+    },
+    {
+      "summary": "IDE-integrated recognition should treat host vision as the default completion path, not as an optional afterthought.",
+      "rule": "For IDE workflows, assume the current model can complete emitted `vision_tasks` against slide screenshots and merge the returned payloads back into deck JSON. Do not model external API keys as the only way to finish visual recovery.",
+      "source": "user feedback",
+      "date": "2026-04-07"
+    },
+    {
+      "summary": "Chronological timelines need explicit progression connectors once ordered periods are known.",
+      "rule": "When a slide is recognized as `timeline` and `structured_payload.periods` contains two or more chronological stages, synthesize adjacent `connectors` such as `from period[i] -> to period[i+1]` with `meaning: progression` even if the vision result only returns the period content.",
+      "source": "recognition audit",
+      "date": "2026-04-07"
+    },
+    {
+      "summary": "Visual list recovery must preserve screenshot reading order across every mirrored structure.",
+      "rule": "For host-vision results that return ordered collections such as awards, investors, logo-wall entries, or grouped cell lists, preserve the visual reading order from the screenshot and keep `hierarchy`, `structured_payload.*.entries`, and flattened `items` arrays in the same stable sequence. Do not alphabetize, dedupe-reorder, or reshuffle equivalent entries during merge or normalization.",
+      "source": "recognition audit",
+      "date": "2026-04-07"
+    }
+  ]
+}

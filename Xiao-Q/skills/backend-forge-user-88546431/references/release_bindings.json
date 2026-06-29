@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "description": "Backend Forge P0/P1 release bindings.",
+  "bindings": [
+    {
+      "id": "RB-BACKEND-ROUTE-001",
+      "severity": "P1",
+      "rule": "Backend Forge routing must distinguish fast, autonomous, architecture leadership, migrations, auth, and bug-fix tasks.",
+      "sources": ["SKILL.md", "references/task_routing.md", "references/forge_controller_protocol.md"],
+      "runtime": ["scripts/classify_task.sh", "scripts/route_golden_tests.py"],
+      "release_checks": [
+        {
+          "file": "scripts/validate_release.sh",
+          "needles": ["route_golden_tests.py"]
+        }
+      ],
+      "positive_cases": ["route golden cases pass for common backend task modes"],
+      "negative_cases": ["unexpected mode or policy fails route_golden_tests.py"]
+    },
+    {
+      "id": "RB-BACKEND-GATE-001",
+      "severity": "P1",
+      "rule": "Backend implementation writes require confirmed goal, architecture, data impact, security boundary, test closure, frozen work unit, and confirmed change contract.",
+      "sources": ["SKILL.md", "references/script_contracts.md", "references/forge_controller_protocol.md"],
+      "runtime": ["scripts/bf_session.sh", "scripts/gate_check.py"],
+      "release_checks": [
+        {
+          "file": "scripts/validate_release.sh",
+          "needles": ["gate_check allowed implementation write without session", "confirmed S4 write"]
+        }
+      ],
+      "positive_cases": ["confirmed S4 implementation write passes gate_check.py"],
+      "negative_cases": ["implementation write without session is blocked"]
+    },
+    {
+      "id": "RB-BACKEND-OUTPUT-001",
+      "severity": "P1",
+      "rule": "Backend Forge visible workflow output must use the [backend-forge] prefix and include completion when required.",
+      "sources": ["SKILL.md", "references/forge_controller_protocol.md"],
+      "runtime": ["scripts/validate_output.sh"],
+      "release_checks": [
+        {
+          "file": "scripts/validate_release.sh",
+          "needles": ["validate_output accepted bare mode log", "output protocol validation passed"]
+        }
+      ],
+      "positive_cases": ["valid prefixed output passes validate_output.sh"],
+      "negative_cases": ["bare mode log fails validate_output.sh"]
+    }
+  ]
+}
